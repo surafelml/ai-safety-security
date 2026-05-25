@@ -1,0 +1,130 @@
+---
+title: "The AI Safety & Security Landscape"
+description: "Foundational overview of the core areas, timeline, and open problems in AI safety and security."
+created: 2026-04-26
+last-reviewed: 2026-04-26
+maturity: foundations
+---
+
+# The AI Safety & Security Landscape {#sec-landscape}
+
+This chapter provides the foundational map of the field: the core areas, how they
+emerged over time, the state of practice, and the open problems that motivate the
+rest of the book. Read it once to orient; later topic chapters deepen each thread
+chronologically.
+
+## Core Areas
+
+1.  **Alignment** — ensuring AI systems pursue the intended goals of their designers
+    and users, avoiding unintended side effects or perverse instantiations.
+2.  **Robustness & Security** — performing reliably under novel situations, adversarial
+    attacks, and out-of-distribution inputs; defending the model and its surrounding
+    system against exploitation.
+3.  **Interpretability & Explainability** — understanding internal mechanisms so
+    decision-making is transparent and auditable.
+4.  **Systemic Safety** — broader impacts of deployment: cyber-security, socio-economic
+    effects, and catastrophic risks.
+5.  **Monitoring & Control** — overseeing deployed systems and intervening or shutting
+    them down when behavior turns dangerous.
+
+## Timeline
+
+| Era | Period | Key Developments | Status |
+|-----|--------|------------------|--------|
+| **Theory** | Pre-2020 | Inverse RL, value alignment, reward specification | Foundational |
+| **Alignment Era** | 2020–2022 | RLHF, Constitutional AI, fine-tuning at scale | Deployed in LLMs |
+| **Interpretability Surge** | 2022–2024 | Mechanistic circuits, feature engineering, causal tracing | Research frontier |
+| **Scalable Oversight** | 2023–2025 | Weak-to-strong generalization, AI-supervised evals, hierarchical oversight | Emerging practice |
+| **Agentic Focus** | 2025+ | Agent evaluation, tool-use guardrails, multi-agent safety | New frontier |
+
+## State of Practice (2025)
+
+- **RLHF & RLAIF** — reinforcement learning from human/AI feedback is the standard for
+  aligning LLMs with human preferences.
+- **Constitutional AI** — training models against an explicit set of principles, reducing
+  reliance on extensive human labeling.
+- **Mechanistic Interpretability** — reverse-engineering networks to identify the circuits
+  and features responsible for specific behaviors.
+- **Scalable Oversight** — supervising systems on tasks too complex for direct human
+  evaluation (e.g., weaker models supervising stronger ones).
+- **Automated Red Teaming** — using AI to systematically probe for vulnerabilities, biases,
+  and unsafe capabilities.
+
+## Progress Illustration
+
+```text
+       [ Theoretical Foundations ]
+               |
+               v
+       +-----------------+       +-------------------+
+       | Alignment Theory| ----> | Reward Modeling   |
+       +-----------------+       +-------------------+
+                                         |
+               [ Empirical Era ]         v
++--------------+     +-------------+    +-------------------+
+| Red Teaming  | <-- | RLHF / RLAIF|<-- | Constitutional AI |
++--------------+     +-------------+    +-------------------+
+        |                    |                  |
+        v                    v                  v
++----------------+   +---------------+  +-------------------+
+| Mechanistic    |   | Scalable      |  | Automated Red     |
+| Interpretability|  | Oversight     |  | Teaming & Defense |
++----------------+   +---------------+  +-------------------+
+             \               |                 /
+              \              |                /
+               +-----------------------------+
+               |  Robust & Aligned Systems   |
+               +-----------------------------+
+```
+
+## Open Problems & Risk Scenarios
+
+### Technical Challenges
+
+- **Scalable Oversight** — evaluating behavior on tasks humans cannot directly judge
+  (scientific discovery, long-horizon planning).
+- **Empirical Alignment** — measuring genuine goal alignment vs. behavioral mimicry;
+  avoiding reward hacking.
+- **Robustness at Scale** — preserving safety properties as capability and deployment
+  surface grow.
+- **Interpretability Trade-offs** — deep understanding without sacrificing capability or
+  inference speed.
+- **Agentic Safety × Security** — guardrails that survive tool-use, multi-step reasoning,
+  and adversarial prompts.
+
+### Real-World Risk Scenarios
+
+| Scenario | Affected System | Core Area | Mitigation |
+|----------|-----------------|-----------|-----------|
+| Supply-chain automation agent misuses supplier data | Agentic systems | Alignment, Monitoring | Tool-use firewall, audit logs |
+| LLM generates biased loan decisions at scale | Deployed LLM | Robustness, Systemic Safety | Red teaming, explainability |
+| Prompt injection bypasses Constitutional AI rules | Fine-tuned model | Robustness, Alignment | Adversarial training, input filters |
+| Multi-agent coordination yields emergent unsafe behavior | Multi-agent systems | Systemic Safety, Monitoring | Inter-agent oversight, rollback |
+| Embodied robot receives contradictory commands | Robotic agent | Alignment, Monitoring & Control | Safety layer, human-override |
+
+## Governance & Compliance
+
+### Regulatory Context
+
+- **EU AI Act** — risk-based classification; guardrails required for "high-risk" systems.
+- **US Executive Order 14110** — guidance on safety evaluations, red teaming, responsible
+  disclosure.
+- **NIST AI RMF** — framework for managing AI risk across the development lifecycle.
+- **Corporate Governance** — internal safety reviews and pre-submission quality gates.
+
+### Practices for Practitioners
+
+1. **Evaluation** — use multiple benchmarks (not just task accuracy; include robustness,
+   fairness, interpretability).
+2. **Red Teaming** — systematically probe failure modes; document adversarial examples.
+3. **Audit Trail** — log decisions, guardrail triggers, human interventions.
+4. **Transparency** — document assumptions, limitations, regulatory constraints.
+5. **Continuous Monitoring** — track safety metrics post-deployment; escalate anomalies.
+
+## Connection to the Research Program
+
+This landscape is the reference frame for the review papers compiled from this book:
+
+- **P1 (Agentic AI Evaluation)** — evaluation frameworks for agent behavior across the core areas.
+- **P2 (Safety & Guardrails)** — operationalizes Alignment, Robustness, and Monitoring & Control for multi-step agents.
+- **P3 (Multimodal & Embodied)** — extends safety principles to physical and cross-modal contexts.

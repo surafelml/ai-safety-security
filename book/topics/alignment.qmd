@@ -1,0 +1,13 @@
+---
+title: "Alignment"
+description: "Ensuring agentic systems pursue intended goals; chronological from theory to agentic alignment."
+created: 2026-04-26
+last-reviewed: 2026-04-26
+maturity: topic
+---
+
+# Alignment {#sec-alignment}
+
+> **Stub.** Chronological deep-dive: alignment theory → reward modeling → RLHF/RLAIF →
+> Constitutional AI → scalable oversight → alignment of agentic, tool-using systems.
+> Capture core concepts, formalizations, and impact — not source text.

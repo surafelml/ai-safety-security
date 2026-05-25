@@ -1,0 +1,46 @@
+---
+title: "Preface"
+created: 2026-04-26
+last-reviewed: 2026-04-26
+---
+
+# Preface {.unnumbered}
+
+**AI Safety & Security** is a living, continuously evolving reference for the
+**safety and security of agentic systems** — where *agentic* is the bridge between
+the two fields: tool-use is the security surface, and autonomy is the safety problem.
+As systems are increasingly optimized to be agentic, this intersection is where the
+most consequential and impactful problems now sit.
+
+## What this book is
+
+A distilled synthesis — **core concepts, illustrations, and formalizations**, not a
+literature dump. Each entry captures the essential idea, a clear illustration or
+formalization, and its potential impact or applications. Sources are cited; their full
+text is not reproduced.
+
+## How to read it
+
+The book is organized **by topic (primary axis), chronologically within each topic**:
+
+- **Part I — Foundations:** a read-once narrative orienting you in the field.
+- **Part II — Topics:** the living core. Each chapter runs foundations → frontier in
+  chronological order, so a reader can pick up the background needed to engage a
+  recent, technically novel result.
+- **Part III — Frontier:** rolling intake of the last ~12 months. When a frontier item
+  is superseded or matures, it migrates into its topic chapter — this is what makes the
+  book continuously evolving.
+
+## The field at a glance
+
+```text
+  Pre-2020      2020─2022       2022─2024        2023─2025        2025 ►
+ ───┬───────────────┬───────────────┬───────────────┬───────────────┬──────►
+    │               │               │               │               │
+  Theory      Alignment Era   Interpretability  Scalable        Agentic
+  (inverse RL,  (RLHF, RLAIF,    Surge (mech.    Oversight       Safety ×
+  value         Constitutional   interp:         (weak→strong,   Security
+  alignment)    AI)              circuits)       AI-eval)        (this book)
+```
+
+Each topic chapter expands one thread of this timeline in depth.

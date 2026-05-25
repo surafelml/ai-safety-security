@@ -1,0 +1,23 @@
+# Quarto
+/_site/
+/book/_site/
+/.quarto/
+**/.quarto/
+*_files/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# OS / editor
+.DS_Store
+
+# Private working dirs (governance + tracker)
+/.claude/
+/.tracker/

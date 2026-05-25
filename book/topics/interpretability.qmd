@@ -1,0 +1,13 @@
+---
+title: "Interpretability & Explainability"
+description: "Understanding internal mechanisms so agent decisions are transparent and auditable."
+created: 2026-04-26
+last-reviewed: 2026-04-26
+maturity: topic
+---
+
+# Interpretability & Explainability {#sec-interpretability}
+
+> **Stub.** Chronological deep-dive: saliency/attribution → probing → mechanistic
+> interpretability (circuits, features, causal tracing) → interpreting agent reasoning
+> traces and tool-use decisions. Capture formalizations and illustrations.

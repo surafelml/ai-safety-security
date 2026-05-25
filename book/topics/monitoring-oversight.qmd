@@ -1,0 +1,13 @@
+---
+title: "Monitoring & Oversight"
+description: "Overseeing deployed agents and intervening when behavior turns dangerous."
+created: 2026-04-26
+last-reviewed: 2026-04-26
+maturity: topic
+---
+
+# Monitoring & Oversight {#sec-monitoring-oversight}
+
+> **Stub.** Chronological deep-dive: runtime monitors → scalable oversight
+> (weak-to-strong, debate, AI-supervised evals) → kill switches and rollback →
+> multi-agent oversight and audit trails for autonomous systems.

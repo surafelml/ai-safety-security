@@ -1,0 +1,14 @@
+---
+title: "Robustness & Security"
+description: "Reliable behavior under adversarial and OOD conditions; securing the model and surrounding system."
+created: 2026-04-26
+last-reviewed: 2026-04-26
+maturity: topic
+---
+
+# Robustness & Security {#sec-robustness-security}
+
+> **Stub.** Chronological deep-dive: adversarial examples → distribution shift →
+> prompt injection and jailbreaks → tool-use / agent attack surface → adversarial
+> training and system-level defenses. This chapter is where the *security* half of the
+> thesis is grounded.

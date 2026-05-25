@@ -1,0 +1,17 @@
+---
+title: "Agentic Safety × Security"
+description: "The flagship bridge: safety and security of autonomous, tool-using agents."
+created: 2026-04-26
+last-reviewed: 2026-04-26
+maturity: topic
+---
+
+# Agentic Safety × Security {#sec-agentic}
+
+> **Flagship chapter — stub.** The synthesis the whole book points at: where autonomy
+> (safety) meets tool-use and external action (security).
+>
+> Chronological deep-dive: single-agent tool-use risk → guardrail architectures
+> (input / planning / action / output / systemic) → prompt-injection and
+> permission-scoping defenses → multi-agent trust and emergent-behavior control →
+> evaluation of agentic safety. Feeds the **evaluation** and **guardrails** review papers.
