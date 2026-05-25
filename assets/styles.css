@@ -1,0 +1,54 @@
+/* AI Safety & Security — illustration + era-palette styles.
+   Diagrams are inline SVG inside ```{=html} blocks, CSS-classed.
+   Mermaid is banned (brittle in Quarto books). */
+
+:root {
+  /* Era palette — chronological safety eras (analogous to the NN-timeline scheme).
+     Red is reserved for the "today" marker and never used as an era band. */
+  --era-theory:        #d97706; /* amber  — Theory (pre-2020) */
+  --era-alignment:     #2563eb; /* blue   — Alignment Era (2020–2022) */
+  --era-interp:        #7c3aed; /* purple — Interpretability Surge (2022–2024) */
+  --era-oversight:     #0d9488; /* teal   — Scalable Oversight (2023–2025) */
+  --era-agentic:       #059669; /* green  — Agentic Frontier (2025+) */
+  --marker-today:      #dc2626; /* red    — reserved: "today" marker only */
+
+  --node-stroke:       #334155;
+  --node-fill:         #f8fafc;
+  --axis:              #94a3b8;
+  --label:             #1e293b;
+}
+
+/* Inline SVG figures */
+.illustration {
+  display: block;
+  margin: 1.5rem auto;
+  max-width: 100%;
+  height: auto;
+  font-family: var(--bs-body-font-family, system-ui, sans-serif);
+}
+.illustration text { fill: var(--label); }
+.illustration .axis { stroke: var(--axis); stroke-width: 1.5; }
+.illustration .node { fill: var(--node-fill); stroke: var(--node-stroke); stroke-width: 1.5; }
+.illustration .node-label { font-size: 12px; }
+.illustration .era-label { font-size: 11px; font-weight: 600; letter-spacing: .02em; }
+
+/* Era band fills (use as class on rects/paths) */
+.band-theory    { fill: var(--era-theory);    opacity: .12; }
+.band-alignment { fill: var(--era-alignment); opacity: .12; }
+.band-interp    { fill: var(--era-interp);    opacity: .12; }
+.band-oversight { fill: var(--era-oversight); opacity: .12; }
+.band-agentic   { fill: var(--era-agentic);   opacity: .12; }
+
+/* Era stroke variants (for nodes/edges keyed to an era) */
+.stroke-theory    { stroke: var(--era-theory); }
+.stroke-alignment { stroke: var(--era-alignment); }
+.stroke-interp    { stroke: var(--era-interp); }
+.stroke-oversight { stroke: var(--era-oversight); }
+.stroke-agentic   { stroke: var(--era-agentic); }
+
+/* "Today" marker */
+.marker-today { stroke: var(--marker-today); stroke-width: 2; stroke-dasharray: 4 3; }
+.marker-today-label { fill: var(--marker-today); font-size: 11px; font-weight: 700; }
+
+/* Clickable timeline nodes */
+.illustration a:hover .node { stroke-width: 2.5; cursor: pointer; }

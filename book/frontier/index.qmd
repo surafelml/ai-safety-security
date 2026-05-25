@@ -8,12 +8,6 @@ maturity: frontier
 
 # Frontier {#sec-frontier}
 
-Rolling intake of recent work (roughly the last 12 months), captured before it is
-distilled into a topic chapter.
-
-**Migration rule:** when a frontier item is *superseded by a new approach* or has matured,
-move it into its topic chapter's chronological timeline (Part II). This keeps the book
-continuously evolving and prevents the frontier from becoming a junk drawer.
-
-> **Stub.** Add dated entries below, newest first. Each: one-line claim, why it matters,
-> target topic chapter, citation key.
+Recent work (roughly the last 12 months), newest first. Entries graduate into a topic
+chapter's chronological timeline (Part II) once superseded or matured — keeping the book
+continuously evolving.

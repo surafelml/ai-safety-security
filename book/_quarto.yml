@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: ../_site
+  output-dir: _site
 
 book:
   title: "AI Safety & Security"
@@ -27,13 +27,17 @@ book:
     - part: "III — Frontier"
       chapters:
         - frontier/index.qmd
+    - references.qmd
 
 bibliography: references.bib
+csl: apa.csl
 
 format:
   html:
     theme: cosmo
+    css: ../assets/styles.css
     toc: true
     number-sections: true
+    html-math-method: mathjax
   pdf:
     documentclass: scrreport

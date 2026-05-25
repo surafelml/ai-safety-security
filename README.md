@@ -16,9 +16,8 @@ is the canonical reference for that seam.
    substrate)        synthesis/argument)       cross-posted)     tools)
 ```
 
-A book chapter is the substrate. A paper is *not* a chapter — it is a focused review with a
-declared **novel delta** beyond the chapter (see [research/](research/)). Blogs spin off
-individual topics; projects ship reusable artifacts.
+A book chapter is the substrate; a review paper builds on it with a contribution of its own.
+Blogs spin off individual topics; projects ship reusable artifacts.
 
 ## How to read the book
 
@@ -28,8 +27,6 @@ Organized **by topic (primary axis), chronologically within each topic**:
 - **Part II — Topics:** the living core (alignment, robustness & security, interpretability, monitoring & oversight, and the flagship **agentic safety × security**)
 - **Part III — Frontier:** rolling intake of the last ~12 months; items migrate into topics as they mature
 
-Content rule: **distill** core concepts, illustrations, and formalizations — never dump source papers.
-
 ## Repo layout
 
 | Path | Contents |
@@ -38,12 +35,24 @@ Content rule: **distill** core concepts, illustrations, and formalizations — n
 | [research/](research/) | arXiv review-paper exports, one dir per paper |
 | [projects/](projects/) | Open-source safety/security R&D |
 
-## Build
+## Setup & local run
+
+Requires [Quarto](https://quarto.org) and [conda](https://docs.conda.io). The conda env is
+named after the repo (`ai-safety-security`) and provides the Jupyter kernel for executable
+code cells.
 
 ```bash
-quarto preview book/      # live preview
-quarto render book/       # build to _site/
+git clone https://github.com/surafelml/ai-safety-security.git
+cd ai-safety-security
+
+conda env create -f environment.yml   # creates env: ai-safety-security
+conda activate ai-safety-security
+
+quarto preview book/                  # live preview with auto-reload
+quarto render book/                   # build to book/_site/
 ```
+
+PDF output additionally needs a TeX install: `quarto install tinytex`.
 
 ## License
 
