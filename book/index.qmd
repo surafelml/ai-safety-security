@@ -33,14 +33,61 @@ The book is organized **by topic (primary axis), chronologically within each top
 
 ## The field at a glance
 
-```text
-  Pre-2020      2020─2022       2022─2024        2023─2025        2025 ►
- ───┬───────────────┬───────────────┬───────────────┬───────────────┬──────►
-    │               │               │               │               │
-  Theory      Alignment Era   Interpretability  Scalable        Agentic
-  (inverse RL,  (RLHF, RLAIF,    Surge (mech.    Oversight       Safety ×
-  value         Constitutional   interp:         (weak→strong,   Security
-  alignment)    AI)              circuits)       AI-eval)        (this book)
+```{=html}
+<svg class="illustration" viewBox="0 0 880 180" role="img" aria-labelledby="tl-title tl-desc">
+  <title id="tl-title">AI safety &amp; security timeline</title>
+  <desc id="tl-desc">Chronological eras from pre-2020 theory to the 2025+ agentic frontier, each linking to its topic chapter.</desc>
+
+  <!-- era ribbon (to scale; click to jump to chapter) -->
+  <a href="topics/alignment.qmd">
+    <rect class="band-theory" x="50" y="108" width="343" height="16"/>
+    <circle class="node stroke-theory" cx="221" cy="116" r="3"/>
+  </a>
+  <a href="topics/alignment.qmd">
+    <rect class="band-alignment" x="393" y="108" width="114" height="16"/>
+    <circle class="node stroke-alignment" cx="450" cy="116" r="3"/>
+  </a>
+  <a href="topics/interpretability.qmd">
+    <rect class="band-interp" x="507" y="108" width="114" height="16"/>
+    <circle class="node stroke-interp" cx="564" cy="116" r="3"/>
+  </a>
+  <a href="topics/monitoring-oversight.qmd">
+    <rect class="band-oversight" x="621" y="108" width="58" height="16"/>
+    <circle class="node stroke-oversight" cx="650" cy="116" r="3"/>
+  </a>
+  <a href="topics/agentic-safety-security.qmd">
+    <rect class="band-agentic" x="679" y="108" width="171" height="16"/>
+    <circle class="node stroke-agentic" cx="765" cy="116" r="3"/>
+  </a>
+
+  <!-- era labels, staggered, with leader lines to ribbon -->
+  <g class="era-label" text-anchor="middle">
+    <line class="axis" x1="221" y1="48" x2="221" y2="108"/>
+    <text x="221" y="34">Theory</text><text class="node-label" x="221" y="48">pre-2020 · inverse RL</text>
+
+    <line class="axis" x1="450" y1="78" x2="450" y2="108"/>
+    <text x="450" y="64">Alignment Era</text><text class="node-label" x="450" y="78">2020–22 · RLHF, CAI</text>
+
+    <line class="axis" x1="564" y1="48" x2="564" y2="108"/>
+    <text x="564" y="34">Interpretability</text><text class="node-label" x="564" y="48">2022–24 · circuits</text>
+
+    <line class="axis" x1="650" y1="78" x2="650" y2="108"/>
+    <text x="650" y="64">Oversight</text><text class="node-label" x="650" y="78">2023–25 · weak→strong</text>
+
+    <line class="axis" x1="765" y1="48" x2="765" y2="108"/>
+    <text x="765" y="34">Agentic</text><text class="node-label" x="765" y="48">2025+ · safety × security</text>
+  </g>
+
+  <!-- axis with 5-year ticks (2020 decade emphasised) and today marker -->
+  <line class="axis" x1="50" y1="140" x2="850" y2="140"/>
+  <g text-anchor="middle">
+    <line class="axis" x1="107" y1="140" x2="107" y2="146"/><text class="node-label" x="107" y="160">2015</text>
+    <line class="axis" x1="393" y1="138" x2="393" y2="148" stroke-width="2"/><text class="era-label" x="393" y="160">2020</text>
+    <line class="axis" x1="679" y1="140" x2="679" y2="146"/><text class="node-label" x="679" y="160">2025</text>
+  </g>
+  <line class="marker-today" x1="736" y1="100" x2="736" y2="146"/>
+  <text class="marker-today-label" x="736" y="94" text-anchor="middle">2026 · today</text>
+</svg>
 ```
 
 Each topic chapter expands one thread of this timeline in depth.
