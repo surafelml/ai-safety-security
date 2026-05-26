@@ -1,0 +1,91 @@
+---
+title: "Safety & Security: A Two-Track Foundation"
+description: "The structural taxonomy of AI safety vs. security, the agentic attack surface, and the architectural patterns that contain stochastic systems."
+created: 2026-05-25
+last-reviewed: 2026-05-25
+maturity: foundations
+---
+
+# Safety & Security: A Two-Track Foundation {#sec-two-track}
+
+The [landscape chapter](landscape.qmd) traced *how the field arrived here*. This chapter
+gives the *structural* baseline: how AI **safety** and AI **security** divide and interlock,
+where the attack surface actually lives, and the engineering patterns that make stochastic
+systems governable. It is the taxonomy the deep-dive topic chapters build on.
+
+## Motivation
+
+Traditional software security protects static logic and predictable data structures. AI
+breaks that paradigm with stochastic behavior, black-box decisions, and dynamic execution.
+As models evolve from passive text generators into agents that call tools, execute APIs, and
+retrieve from long-term memory, **the line between code and data dissolves**: a malicious
+prompt is no longer just text, it is an executable instruction [@greshake2023not].
+
+That shift moves the dominant failure mode from "model says something wrong" to
+system-level compromise — tool poisoning, environmental injection, privilege escalation
+across an agent's action space [@kim2026landscape]. A unified safety-and-security frame is
+therefore an engineering mandate, not an academic exercise.
+
+## The two tracks
+
+**Safety** concerns the system doing the *intended* thing — alignment, control, and
+systemic risk. **Security** concerns defending the system against *adversaries* — the
+confidentiality, integrity, and availability of the AI stack. They overlap precisely at
+agentic systems, where an aligned agent with a compromised tool is as dangerous as a
+misaligned one.
+
+<!-- SVG-TWO-TRACK: schematic added in illustration pass -->
+
+| Foundational dimension | AI Safety — *alignment, control, systemic risk* | AI Security — *vulnerability, defense, integrity* |
+|---|---|---|
+| **Taxonomy** | Socio-technical failure / behavioral drift — structural misalignment between optimization target and human intent | Adversarial failure modes — exploits against the data pipeline, supply chain, and inference boundary |
+| **Structural focus** | Model capabilities & control boundaries — predictability, fairness, non-toxicity, staying within operational bounds | Data & architectural hardening — the CIA triad (confidentiality, integrity, availability) of the AI stack |
+| **Active research** | Scalable oversight [@bowman2022measuring; @burns2023weak]; mechanistic interpretability & weight auditing [@olah2020zoom; @lieberum2024gemmascope; @templeton2024monosemanticity] | Adversarial ML — indirect prompt-injection propagation [@chang2026retrieval]; data provenance / watermarking; model inversion & extraction defense |
+| **Industry practice** | Responsible-AI GRC & red teaming — eval suites, toxicity filtering, compliance benchmarking, compute rate-limiting | AI-native DevSecOps (LLMOps) — runtime I/O firewalls, static model-file scanning, sandboxed execution |
+| **Reference standards** | NIST AI RMF [@nist2023airmf]; ISO/IEC 42001 [@iso42001]; EU AI Act [@euaiact2024] | OWASP Top 10 for LLMs/Agents [@owasp2025llm]; MITRE ATLAS [@mitreatlas]; Google SAIF [@googlesaif] |
+
+## Three architectural truths
+
+These hold across nearly every real deployment and shape the rest of the book.
+
+::: {.callout-note}
+**1. The orchestration layer is the primary attack surface.** Modern risk rarely lives in
+the weights. It emerges where the model meets external data, memory, and tools — the
+orchestration layer (LangChain, LlamaIndex, AutoGen-style frameworks) [@kim2026landscape].
+:::
+
+::: {.callout-note}
+**2. Deterministic wrappers around a stochastic core.** Because the model is
+non-deterministic, safety cannot come from tuning alone. Rigid, deterministic controls —
+schema enforcement, input validation, output firewalls — must bracket the model
+[@huang2025firewalls].
+:::
+
+::: {.callout-warning}
+**3. State corruption is semi-permanent.** Classical security resets to a known-good state.
+RAG systems and dynamic vector stores can be poisoned such that malicious data persists and
+is re-retrieved, making incident response far harder [@chang2026retrieval].
+:::
+
+## What the foundation must cover
+
+These four areas are introduced here and expanded in the topic chapters they point to.
+
+- **The AI attack surface** — training-data poisoning, supply chain (model-file scanning),
+  inference (direct/indirect injection), and downstream actions (privilege escalation).
+  Anchored in the agentic vulnerability taxonomy of @kim2026landscape. → [Robustness & Security](../topics/robustness-security.qmd)
+- **The alignment problem** — RLHF [@ouyang2022training], DPO [@rafailov2023direct], and why
+  behavioral alignment degrades under adversarial stress. → [Alignment](../topics/alignment.qmd)
+- **Trust & interpretability basics** — why deep networks are black boxes and how feature
+  attribution and activation patching peer inside [@olah2020zoom; @templeton2024monosemanticity].
+  → [Interpretability](../topics/interpretability.qmd)
+- **Enterprise defense architectures** — dual-LLM / firewall patterns (a cheaper auditor
+  model guarding a frontier model) and zero-trust API design [@huang2025firewalls].
+  → [Monitoring & Oversight](../topics/monitoring-oversight.qmd)
+
+<!-- SVG-ATTACK-SURFACE and SVG-DUAL-LLM: added in illustration pass -->
+
+The global synthesis in the *International AI Safety Report* [@intlaisafety2025] frames why
+this matters at scale: risk spans malicious use, malfunction, and structural systemic
+failure — the same three bands the topic chapters return to. The systemic, catastrophic end
+of that spectrum is mapped in detail by the Center for AI Safety [@hendrycks2023catastrophic].

@@ -17,6 +17,7 @@ book:
     - part: "I — Foundations"
       chapters:
         - foundations/landscape.qmd
+        - foundations/security-foundations.qmd
     - part: "II — Topics"
       chapters:
         - topics/alignment.qmd
