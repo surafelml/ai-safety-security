@@ -1,0 +1,22 @@
+---
+title: "Systemic Safety & Governance"
+description: "Society-scale risk, governance frameworks, and the policy/standards layer around deployed AI."
+created: 2026-05-26
+last-reviewed: 2026-05-26
+maturity: topic
+---
+
+# Systemic Safety & Governance {#sec-systemic-safety}
+
+> **Stub.** The fifth core pillar — risk beyond a single model or agent. Chronological
+> deep-dive:
+>
+> - **Catastrophic & systemic risk** — malicious use (CBRN, cyber), malfunction, and
+>   structural societal risk [@hendrycks2023catastrophic; @intlaisafety2025].
+> - **Frontier safety frameworks** — Anthropic Responsible Scaling Policy, OpenAI
+>   Preparedness Framework, DeepMind Frontier Safety Framework; capability thresholds and
+>   commitments.
+> - **Standards & regulation** — NIST AI RMF (+ GenAI Profile), ISO/IEC 42001, EU AI Act;
+>   *US EO 14110 (2023) rescinded Jan 2025 → NIST/CAISI track*.
+> - **Disclosure** — model cards, system cards, safety cases [@hilton2025safetycases].
+> - **Compute & ecosystem governance** — provenance/watermarking, hardware-enabled mechanisms.

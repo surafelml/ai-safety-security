@@ -1,0 +1,24 @@
+---
+title: "Tools & Frameworks"
+description: "Open-source and commercial tooling for AI safety and security — guardrails, eval harnesses, red-teaming, and provenance."
+created: 2026-05-26
+last-reviewed: 2026-05-26
+maturity: topic
+---
+
+# Tools & Frameworks {#sec-tooling}
+
+> **Stub.** The applied layer — what practitioners actually deploy. To catalog (with what
+> each does, where it sits in the [attack surface](../foundations/security-foundations.qmd),
+> and maturity):
+>
+> - **Guardrails / runtime** — NVIDIA NeMo Guardrails, Llama Guard [@inan2023llamaguard],
+>   ShieldGemma, Guardrails AI, Constitutional Classifiers [@sharma2025constitutional],
+>   interface firewalls [@huang2025firewalls].
+> - **Evaluation harnesses** — Inspect (UK AISI), AgentDojo [@debenedetti2024agentdojo],
+>   Agent Security Bench [@zhang2024asb], HELM, lm-evaluation-harness.
+> - **Red-teaming / attack** — garak, PyRIT, Giskard.
+> - **Interpretability** — TransformerLens, Gemma Scope SAEs [@lieberum2024gemmascope].
+> - **Provenance / content authenticity** — C2PA, watermarking toolkits.
+>
+> Selection criteria, integration patterns, and a maturity rating per tool to follow.

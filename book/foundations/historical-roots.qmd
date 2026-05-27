@@ -1,0 +1,91 @@
+---
+title: "Historical Roots (1950–2015)"
+description: "The 65-year lineage of AI safety thinking — control, system-safety engineering, and x-risk — before the empirical ML era."
+created: 2026-05-26
+last-reviewed: 2026-05-26
+maturity: foundations
+---
+
+# Historical Roots (1950–2015) {#sec-historical-roots}
+
+AI safety is not new — the problem was named decades before the methods. Three lineages
+converge into today's field.
+
+## Control & alignment
+
+Wiener (1960) gave the first clear statement of the *control problem*: a machine optimizing a
+literal goal faster than we can follow, which "we may not know, until too late, when to turn
+off" [@wiener1960]. Good (1965) added the *intelligence explosion* — the last invention
+"provided the machine is docile enough… to keep under control" [@good1965] — the direct
+ancestor of recursive self-improvement.
+
+## System-safety engineering
+
+Long before ML, Leveson established that safety is a *system* property, not a component one:
+end-to-end hazard analysis, not a safe algorithm [@leveson1995]. This is the root of today's
+safety cases and defense-in-depth [@dobbe2022].
+
+## Philosophy & x-risk
+
+Omohundro's basic AI drives [@omohundro2008] and Bostrom's instrumental convergence
+[@bostrom2014] argued capable agents converge on self-preservation and resource acquisition
+*regardless* of their goal.
+
+```{=html}
+<svg class="illustration" viewBox="0 0 880 210" role="img" aria-labelledby="hist-title">
+  <title id="hist-title">Deep history of AI safety, 1950–2016</title>
+  <defs>
+    <marker id="harr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <line class="axis" x1="40" y1="150" x2="860" y2="150" marker-end="url(#harr)"/>
+
+  <circle class="node stroke-theory" cx="50" cy="150" r="4"/>
+  <text class="node-label" x="50" y="170" text-anchor="start">1950 · Turing</text>
+
+  <line class="axis" x1="171" y1="66" x2="171" y2="150"/>
+  <circle class="node stroke-alignment" cx="171" cy="150" r="4"/>
+  <text class="era-label" x="171" y="52" text-anchor="middle">1960 · Wiener</text>
+  <text class="node-label" x="171" y="66" text-anchor="middle">control problem</text>
+
+  <line class="axis" x1="232" y1="110" x2="232" y2="150"/>
+  <circle class="node stroke-alignment" cx="232" cy="150" r="4"/>
+  <text class="era-label" x="232" y="96" text-anchor="middle">1965 · Good</text>
+  <text class="node-label" x="232" y="110" text-anchor="middle">intelligence explosion</text>
+
+  <line class="axis" x1="595" y1="66" x2="595" y2="150"/>
+  <circle class="node stroke-oversight" cx="595" cy="150" r="4"/>
+  <text class="era-label" x="595" y="52" text-anchor="middle">1995 · Leveson</text>
+  <text class="node-label" x="595" y="66" text-anchor="middle">system safety</text>
+
+  <line class="axis" x1="745" y1="110" x2="745" y2="150"/>
+  <circle class="node stroke-theory" cx="745" cy="150" r="4"/>
+  <text class="era-label" x="745" y="96" text-anchor="middle">2008 · Omohundro</text>
+  <text class="node-label" x="745" y="110" text-anchor="middle">basic AI drives</text>
+
+  <line class="axis" x1="820" y1="178" x2="820" y2="150"/>
+  <circle class="node stroke-theory" cx="820" cy="150" r="4"/>
+  <text class="node-label" x="820" y="192" text-anchor="middle">2014 · Bostrom</text>
+
+  <line class="axis" x1="858" y1="40" x2="858" y2="150"/>
+  <circle class="node stroke-agentic" cx="858" cy="150" r="4"/>
+  <text class="era-label" x="858" y="26" text-anchor="end">2016 · Amodei →</text>
+  <text class="node-label" x="858" y="40" text-anchor="end">Concrete Problems</text>
+</svg>
+```
+
+::: {.callout-note}
+**Cultural background.** Fiction framed these ideas long before the research: Asimov's
+**Three Laws of Robotics** (1942) — constraint-based safety; **2001: A Space Odyssey** /
+HAL 9000 (1968) — an agent pursuing its objective to lethal ends; **The Terminator** /
+Skynet (1984) — loss of control and runaway capability; **Ex Machina** (2014) — containment
+and deceptive alignment. Intuition pumps, not engineering — but they shaped how the public
+frames every problem in this book.
+:::
+
+## Handoff to the empirical era
+
+These threads hand off to **Concrete Problems in AI Safety** [@amodei2016concrete], which
+reframed them as tractable empirical ML problems — where the
+[modern landscape](landscape.qmd) and its timeline begin.

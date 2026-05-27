@@ -29,15 +29,21 @@ The panoramic map of the field — read once to orient; topic chapters deepen ea
 5.  **Monitoring & Control** — overseeing deployed systems and intervening or shutting
     them down when behavior turns dangerous.
 
+For the deeper lineage these areas grew from, see [Historical Roots (1950–2015)](historical-roots.qmd).
+
 ## Timeline
+
+The eras are *threads*, not a strict partition — they overlap and run in parallel (notably the
+safety and security lineages), which is why the field has more than a single line of descent.
 
 | Era | Period | Key Developments | Status |
 |-----|--------|------------------|--------|
-| **Theory** | Pre-2020 | Inverse RL, value alignment, reward specification; adversarial examples | Foundational |
-| **Alignment Era** | 2020–2022 | RLHF, Constitutional AI, fine-tuning at scale | Deployed in LLMs |
+| **Foundations / Theory** | Pre-2015 | Value alignment, inverse RL, reward specification | Foundational |
+| **Adversarial ML & Security** | 2014–2019 | Adversarial examples, robustness, model extraction/inversion — the *security* lineage | Foundational |
+| **Alignment Era** | 2019–2022 | RLHF, RLAIF, Constitutional AI, fine-tuning at scale | Deployed in LLMs |
 | **Interpretability Surge** | 2022–2024 | Mechanistic circuits, causal tracing; jailbreaks & prompt injection emerge | Research frontier |
 | **Scalable Oversight** | 2023–2025 | Weak-to-strong generalization, AI-supervised evals; guardrail models & injection defenses | Emerging practice |
-| **Agentic Focus** | 2025+ | Agent evaluation, tool-use guardrails, multi-agent safety, agent attack surface | New frontier |
+| **Agentic Frontier** | 2025+ | Agent evaluation, tool-use guardrails, multi-agent safety, agent attack surface | New frontier |
 
 ## State of Practice (2025)
 
@@ -151,10 +157,13 @@ The panoramic map of the field — read once to orient; topic chapters deepen ea
 ### Regulatory Context
 
 - **EU AI Act** — risk-based classification; guardrails required for "high-risk" systems.
-- **US Executive Order 14110** — guidance on safety evaluations, red teaming, responsible
-  disclosure.
-- **NIST AI RMF** — framework for managing AI risk across the development lifecycle.
-- **Corporate Governance** — internal safety reviews and pre-submission quality gates.
+- **US executive action** — EO 14110 (2023) set safety-evaluation and red-teaming guidance.
+  *[Updated 2026: EO 14110 was rescinded in Jan 2025; US posture shifted toward the
+  NIST/CAISI (Center for AI Standards and Innovation) standards track.]*
+- **NIST AI RMF** (+ Generative AI Profile, AI 600-1) — managing AI risk across the lifecycle.
+- **Frontier safety frameworks** — lab-side: Anthropic Responsible Scaling Policy, OpenAI
+  Preparedness Framework, DeepMind Frontier Safety Framework.
+- **Corporate Governance** — internal safety reviews, model/system cards, pre-submission gates.
 
 ### Practices for Practitioners
 

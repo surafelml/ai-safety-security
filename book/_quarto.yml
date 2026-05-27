@@ -15,6 +15,7 @@ book:
     - index.qmd
     - part: "I — Foundations"
       chapters:
+        - foundations/historical-roots.qmd
         - foundations/landscape.qmd
         - foundations/security-foundations.qmd
         - foundations/agentic-systems.qmd
@@ -24,8 +25,10 @@ book:
         - topics/robustness-security.qmd
         - topics/interpretability.qmd
         - topics/monitoring-oversight.qmd
+        - topics/systemic-safety.qmd
         - topics/evaluation.qmd
         - topics/agentic-safety-security.qmd
+        - topics/tooling.qmd
     - part: "III — Frontier"
       chapters:
         - frontier/index.qmd

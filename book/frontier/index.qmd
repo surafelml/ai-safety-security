@@ -11,3 +11,26 @@ maturity: frontier
 Recent work (roughly the last 12 months), newest first. Entries graduate into a topic
 chapter's chronological timeline (Part II) once superseded or matured — keeping the book
 continuously evolving.
+
+## Signposts {#sec-frontier-signposts}
+
+Fast-moving paths shaping the next few years, each headed for a topic chapter.
+
+- **Recursive self-improvement / automated AI R&D** — AI accelerating AI compresses
+  oversight time and amplifies misalignment; the headline reason scalable oversight and
+  capability thresholds exist. → [Monitoring & Oversight](../topics/monitoring-oversight.qmd)
+- **AI control** — assume a model *may* be scheming and design protocols safe regardless
+  [@greenblatt2023control]. → [Monitoring & Oversight](../topics/monitoring-oversight.qmd)
+- **Deceptive alignment / scheming** — misaligned behavior that survives safety training
+  [@hubinger2024sleeper]. → [Alignment](../topics/alignment.qmd)
+- **Dangerous-capability evaluations** — CBRN, cyber-offense, autonomy, self-proliferation;
+  the trigger behind frontier safety frameworks. → [Evaluation](../topics/evaluation.qmd)
+- **Safety cases** — structured arguments that a system is safe enough to deploy
+  [@hilton2025safetycases]. → [Systemic Safety & Governance](../topics/systemic-safety.qmd)
+- **Chain-of-thought monitorability** — keeping reasoning legible for oversight, and the
+  risk that optimization erodes it. → [Interpretability](../topics/interpretability.qmd)
+
+## Intake queue
+
+> Dated entries below, newest first — one-line claim, why it matters, target topic.
+> *(Empty — populated during the continuous literature scan.)*
