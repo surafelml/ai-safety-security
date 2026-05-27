@@ -2,6 +2,15 @@
    Diagrams are inline SVG inside ```{=html} blocks, CSS-classed.
    Mermaid is banned (brittle in Quarto books). */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Body text in Inter; compact heading sizes for a tighter, book-like feel */
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 0.92rem; }
+h1, .title { font-size: 1.45rem; font-weight: 700; }
+h2 { font-size: 1.18rem; font-weight: 600; }
+h3 { font-size: 1.02rem; font-weight: 600; }
+h4 { font-size: 0.92rem; font-weight: 600; }
+
 :root {
   /* Era palette — chronological safety eras (analogous to the NN-timeline scheme).
      Red is reserved for the "today" marker and never used as an era band. */
@@ -24,7 +33,7 @@
   margin: 1.5rem auto;
   max-width: 100%;
   height: auto;
-  font-family: var(--bs-body-font-family, system-ui, sans-serif);
+  font-family: 'Inter', system-ui, sans-serif;
 }
 .illustration text { fill: var(--label); }
 .illustration .axis { stroke: var(--axis); stroke-width: 1.5; }
@@ -32,12 +41,12 @@
 .illustration .node-label { font-size: 12px; }
 .illustration .era-label { font-size: 11px; font-weight: 600; letter-spacing: .02em; }
 
-/* Era band fills (use as class on rects/paths) */
-.band-theory    { fill: var(--era-theory);    opacity: .12; }
-.band-alignment { fill: var(--era-alignment); opacity: .12; }
-.band-interp    { fill: var(--era-interp);    opacity: .12; }
-.band-oversight { fill: var(--era-oversight); opacity: .12; }
-.band-agentic   { fill: var(--era-agentic);   opacity: .12; }
+/* Era band fills (use as class on rects/paths) — bolder fill for legibility */
+.band-theory    { fill: var(--era-theory);    opacity: .37; }
+.band-alignment { fill: var(--era-alignment); opacity: .37; }
+.band-interp    { fill: var(--era-interp);    opacity: .37; }
+.band-oversight { fill: var(--era-oversight); opacity: .37; }
+.band-agentic   { fill: var(--era-agentic);   opacity: .37; }
 
 /* Era stroke variants (for nodes/edges keyed to an era) */
 .stroke-theory    { stroke: var(--era-theory); }

@@ -8,32 +8,22 @@ security surface, autonomy is the safety problem. As systems are increasingly op
 to be agentic, this intersection is where the most impactful problems now sit. This repo
 is the canonical reference for that seam.
 
-## The four-mode pipeline
+![AI safety & security timeline](assets/timeline.svg)
 
-```
-  book chapter  ──►  arXiv review paper  ──►  topic blog  ──►  OSS R&D project
-  (distilled        (adds a novel             (spin-off,        (best practices,
-   substrate)        synthesis/argument)       cross-posted)     tools)
-```
+## Updates
 
-A book chapter is the substrate; a review paper builds on it with a contribution of its own.
-Blogs spin off individual topics; projects ship reusable artifacts.
+- **2026-05-27** — Foundation of the book is now available: the *landscape* (core areas, timeline), the *safety × security two-track* taxonomy (attack surface, defensive architectures, formalization), and *agentic systems* (the bridge), plus a supplementary technical-notes part.
 
-## How to read the book
+## Structure & pipeline
 
-Organized **by topic (primary axis), chronologically within each topic**:
+A book chapter is the distilled substrate; everything else flows from it.
 
-- **Part I — Foundations:** read-once orientation → [book/foundations/landscape.qmd](book/foundations/landscape.qmd)
-- **Part II — Topics:** the living core (alignment, robustness & security, interpretability, monitoring & oversight, and the flagship **agentic safety × security**)
-- **Part III — Frontier:** rolling intake of the last ~12 months; items migrate into topics as they mature
-
-## Repo layout
-
-| Path | Contents |
-|------|----------|
-| [book/](book/) | Quarto book (`quarto preview book/` to build) |
-| [research/](research/) | arXiv review-paper exports, one dir per paper |
-| [projects/](projects/) | Open-source safety/security R&D |
+| Path | Pipeline role |
+|------|---------------|
+| [book/](book/) | **The living book** (Quarto) — distilled core concepts, illustrations, formalizations. Organized by topic, chronological within each: Part I Foundations · Part II Topics · Part III Frontier · Part IV Supplement. |
+| [research/](research/) | **arXiv review papers** built on chapters, each adding a novel contribution of its own. |
+| *(blog)* | **Topic spin-offs** cross-posted to [surafelml.github.io](https://surafelml.github.io). |
+| [projects/](projects/) | **Open-source R&D** — reusable tools and best-practice guides. |
 
 ## Setup & local run
 

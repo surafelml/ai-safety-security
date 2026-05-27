@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 180" role="img" aria-label="AI safety and security timeline">
+  <style>
+    text { font-family: 'Inter', system-ui, sans-serif; fill: #1e293b; }
+    .axis { stroke: #94a3b8; stroke-width: 1.5; }
+    .node { fill: #f8fafc; stroke-width: 1.5; }
+    .nl { font-size: 12px; }
+    .el { font-size: 13px; font-weight: 600; }
+    .today { stroke: #dc2626; stroke-width: 2; stroke-dasharray: 4 3; }
+    .todaylbl { fill: #dc2626; font-size: 11px; font-weight: 700; }
+  </style>
+  <line class="axis" x1="20" y1="118" x2="120" y2="118"/>
+  <!-- era nodes -->
+  <g>
+    <line class="axis" x1="120" y1="48" x2="120" y2="108"/>
+    <circle class="node" cx="120" cy="118" r="4" stroke="#d97706"/>
+    <text class="el" x="120" y="34" text-anchor="middle">Theory</text>
+    <text class="nl" x="120" y="50" text-anchor="middle">pre-2020 · inverse RL</text>
+  </g>
+  <g>
+    <line class="axis" x1="320" y1="78" x2="320" y2="108"/>
+    <circle class="node" cx="320" cy="118" r="4" stroke="#2563eb"/>
+    <text class="el" x="320" y="64" text-anchor="middle">Alignment Era</text>
+    <text class="nl" x="320" y="80" text-anchor="middle">2020–22 · RLHF, CAI</text>
+  </g>
+  <g>
+    <line class="axis" x1="500" y1="48" x2="500" y2="108"/>
+    <circle class="node" cx="500" cy="118" r="4" stroke="#7c3aed"/>
+    <text class="el" x="500" y="34" text-anchor="middle">Interpretability</text>
+    <text class="nl" x="500" y="50" text-anchor="middle">2022–24 · circuits</text>
+  </g>
+  <g>
+    <line class="axis" x1="650" y1="78" x2="650" y2="108"/>
+    <circle class="node" cx="650" cy="118" r="4" stroke="#0d9488"/>
+    <text class="el" x="650" y="64" text-anchor="middle">Oversight</text>
+    <text class="nl" x="650" y="80" text-anchor="middle">2023–25 · weak→strong</text>
+  </g>
+  <g>
+    <line class="axis" x1="800" y1="48" x2="800" y2="108"/>
+    <circle class="node" cx="800" cy="118" r="4" stroke="#059669"/>
+    <text class="el" x="800" y="34" text-anchor="middle">Agentic</text>
+    <text class="nl" x="800" y="50" text-anchor="middle">2025+ · safety × security</text>
+  </g>
+  <!-- axis -->
+  <line class="axis" x1="120" y1="118" x2="860" y2="118"/>
+  <g text-anchor="middle">
+    <line class="axis" x1="240" y1="118" x2="240" y2="124"/><text class="nl" x="240" y="140">2015</text>
+    <line class="axis" x1="430" y1="116" x2="430" y2="126" stroke-width="2"/><text class="el" x="430" y="140">2020</text>
+    <line class="axis" x1="690" y1="118" x2="690" y2="124"/><text class="nl" x="690" y="140">2025</text>
+  </g>
+  <line class="today" x1="745" y1="100" x2="745" y2="126"/>
+  <text class="todaylbl" x="745" y="94" text-anchor="middle">2026 · today</text>
+</svg>
