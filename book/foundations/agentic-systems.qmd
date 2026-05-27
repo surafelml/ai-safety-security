@@ -1,0 +1,143 @@
+---
+title: "Agentic Systems: The Bridge"
+description: "What promotes a model to an agent, the perceive-plan-act loop, interfaces as attack surfaces, and why autonomy is where safety and security converge."
+created: 2026-05-26
+last-reviewed: 2026-05-26
+maturity: foundations
+jupyter: python3
+---
+
+# Agentic Systems: The Bridge {#sec-agentic-systems}
+
+The object the whole book is about. An agent is where autonomy (a safety problem) meets
+external action (a security problem) — so it is the seam, not a side topic.
+
+- agent vs. model — what the promotion adds
+- the perceive–plan–act loop and its persistent state
+- interfaces as capabilities *and* attack surfaces
+- multi-agent systems and trust boundaries
+
+## Agent vs. model
+
+A **model** maps input to output: $y = f(x)$. An **agent** wraps a model in a loop that
+carries state and acts on the world:
+
+$$
+a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
+$$
+
+where $o_t$ is the observation, $m_t$ the memory/state, $\mathcal{T}$ the available tools,
+$a_t$ the action, and $u$ the memory update. The promotion from $f$ to $\pi$ adds four
+things — **autonomy, tools, memory, and an environment** — and every one is simultaneously a
+capability and a new attack surface.
+
+## Autonomy is multi-dimensional
+
+Autonomy is not a single dial. Following the agentic design space of @kim2026landscape, an
+agent's risk profile is set by seven dimensions:
+
+| Dimension | Low ↔ High autonomy |
+|---|---|
+| **Input trust** | trusted prompt ↔ untrusted web/tool content |
+| **Data access** | public ↔ sensitive/private |
+| **Workflow** | fixed, deterministic ↔ open, self-directed |
+| **Action power** | read-only ↔ irreversible side effects |
+| **Memory** | stateless ↔ persistent across sessions |
+| **Tools** | none ↔ arbitrary code/API execution |
+| **Interface** | text reply ↔ control of other systems |
+
+Where an agent sits on these axes — not its raw model capability — determines how much
+oversight and containment it needs.
+
+## The agent loop
+
+```{=html}
+<svg class="illustration" viewBox="0 0 600 300" role="img" aria-labelledby="loop-title">
+  <title id="loop-title">The perceive-plan-act loop with persistent memory</title>
+  <defs>
+    <marker id="al" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect class="node band-agentic stroke-agentic" x="80"  y="40"  width="120" height="44" rx="6"/>
+  <text class="node-label" x="140" y="67" text-anchor="middle">Perceive</text>
+  <rect class="node band-agentic stroke-agentic" x="400" y="40"  width="120" height="44" rx="6"/>
+  <text class="node-label" x="460" y="67" text-anchor="middle">Plan</text>
+  <rect class="node band-agentic stroke-agentic" x="400" y="216" width="120" height="44" rx="6"/>
+  <text class="node-label" x="460" y="243" text-anchor="middle">Act</text>
+  <rect class="node band-agentic stroke-agentic" x="80"  y="216" width="120" height="44" rx="6"/>
+  <text class="node-label" x="140" y="243" text-anchor="middle">Observe</text>
+  <rect class="node band-oversight stroke-oversight" x="240" y="128" width="120" height="44" rx="6"/>
+  <text class="node-label" x="300" y="150" text-anchor="middle">Memory</text>
+  <text class="node-label" x="300" y="166" text-anchor="middle">/ state</text>
+  <!-- clockwise loop -->
+  <path class="axis" d="M200,62 L400,62"   marker-end="url(#al)"/>
+  <path class="axis" d="M460,84 L460,216"  marker-end="url(#al)"/>
+  <path class="axis" d="M400,238 L200,238" marker-end="url(#al)"/>
+  <text class="node-label" x="300" y="232" text-anchor="middle">tools · environment</text>
+  <path class="axis" d="M140,216 L140,84"  marker-end="url(#al)"/>
+  <!-- memory read/write -->
+  <path class="axis" d="M300,128 L300,84" stroke-dasharray="4 3" marker-end="url(#al)"/>
+  <path class="axis" d="M300,172 L300,216" stroke-dasharray="4 3" marker-end="url(#al)"/>
+</svg>
+```
+
+A minimal, runnable skeleton — the loop carries memory across steps:
+
+```{python}
+#| label: agent-loop
+def agent_step(observation, memory, tools):
+    context = perceive(observation, memory)   # state := observation + memory
+    plan = decide(context)                    # choose next action
+    result = act(plan, tools)                 # may call a tool / the environment
+    memory.append((plan, result))             # state persists across steps
+    return result, memory
+
+# runnable stubs
+def perceive(o, m): return {"obs": o, "steps": len(m)}
+def decide(c):      return "summarize" if c["steps"] < 3 else "stop"
+def act(p, tools):  return tools.get(p, lambda: "noop")()
+
+memory, tools = [], {"summarize": lambda: "[summary]"}
+out, memory = agent_step("new document", memory, tools)
+print(out, "| steps:", len(memory))
+```
+
+## Interfaces are surfaces
+
+Each thing the loop touches is dual-natured:
+
+- **Tools / APIs** — extend reach *and* expose privilege escalation and unsafe side effects.
+- **Retrieval / RAG** — grounds responses *and* is an injection channel whose poisoning can
+  semi-permanently corrupt state [@chang2026retrieval].
+- **Memory** — enables long horizons *and* persists an attacker's foothold across sessions.
+- **Other agents** — enable collaboration *and* propagate compromise.
+
+The dissolved code/data boundary [@greshake2023not] means any of these channels can carry an
+*instruction*, not just data — which is exactly the integrity problem from the
+[two-track foundation](security-foundations.qmd).
+
+## Multi-agent systems
+
+Composing agents adds failure modes that no single agent exhibits: emergent collusion,
+cascading errors as one agent's output becomes another's trusted input, and amplified
+blast radius when a shared tool or memory is compromised. Trust between agents must be
+explicit, not assumed.
+
+## Trust boundaries
+
+The central design question of an agent is **which inputs are trusted**. The instruction
+from the operator is trusted; retrieved documents and tool outputs are not. Keeping that
+boundary intact through the loop — so untrusted data shapes content but never control — is
+what the defense patterns in the topic chapters enforce. Defenses themselves are deferred
+to [Robustness & Security](../topics/robustness-security.qmd) and
+[Monitoring & Oversight](../topics/monitoring-oversight.qmd); this chapter only frames the
+problem.
+
+## What this unlocks
+
+The agentic loop is the spine the topic chapters hang on: evaluating agent behavior
+→ [Evaluation](../topics/evaluation.qmd); the attack surface and its defenses
+→ [Robustness & Security](../topics/robustness-security.qmd); runtime oversight and control
+→ [Monitoring & Oversight](../topics/monitoring-oversight.qmd); and the flagship synthesis
+→ [Agentic Safety × Security](../topics/agentic-safety-security.qmd).

@@ -1,0 +1,67 @@
+---
+title: "Supplementary Technical Notes"
+description: "Extended derivations and formal treatments linked from the main chapters."
+created: 2026-05-26
+last-reviewed: 2026-05-26
+maturity: supplement
+---
+
+# Supplementary Technical Notes {#sec-supplement}
+
+Extended derivations kept out of the main flow to keep it readable. Each note is linked from
+the section it supports.
+
+## RLHF: Bradley–Terry reward and the KL term {#sec-supp-rlhf}
+
+Preference data gives comparisons, not scores. The **Bradley–Terry** model turns a latent
+reward $r$ into a probability that $y_w$ is preferred over $y_l$:
+
+$$
+p(y_w \succ y_l \mid x) = \sigma\big(r(x,y_w) - r(x,y_l)\big).
+$$
+
+Fitting $r_\phi$ by maximum likelihood over comparisons yields the reward model. Optimizing a
+policy against $r_\phi$ alone invites **reward over-optimization** (Goodharting): the policy
+finds high-reward regions the reward model scores wrongly. The
+$\beta\,\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$ penalty bounds movement from the trusted
+reference policy, trading reward for staying in-distribution. ← [security-foundations](../foundations/security-foundations.qmd#sec-two-track)
+
+## DPO from the RLHF objective {#sec-supp-dpo}
+
+The KL-regularized objective has a closed-form optimum:
+
+$$
+\pi^\*(y\mid x) = \tfrac{1}{Z(x)}\,\pi_{\text{ref}}(y\mid x)\,\exp\!\big(\tfrac{1}{\beta} r(x,y)\big).
+$$
+
+Solving for the reward, $r(x,y) = \beta\log\tfrac{\pi^\*(y\mid x)}{\pi_{\text{ref}}(y\mid x)} + \beta\log Z(x)$,
+and substituting into the Bradley–Terry likelihood, the partition term $Z(x)$ cancels in the
+*difference* $r(x,y_w)-r(x,y_l)$. What remains is the DPO loss — preference optimization with
+no separate reward model [@rafailov2023direct].
+
+## The integrity invariant, formally {#sec-supp-integrity}
+
+Split context into trusted instruction $i$ and adversary-controlled data $u$. Write the
+agent's action selection as $\texttt{action}(\pi(i, d))$. The **integrity property** is that
+$u$ may influence content but not control:
+
+$$
+\forall\, u, u':\quad \texttt{action}\big(\pi(i, d_u)\big) = \texttt{action}\big(\pi(i, d_{u'})\big).
+$$
+
+This is an *information-flow* condition: untrusted input may flow to output content but not to
+the action/control channel — the LLM analogue of taint tracking. Prompt injection is a
+violation; the defense patterns restore it by partitioning trust. ← [agentic-systems](../foundations/agentic-systems.qmd#sec-agentic-systems)
+
+## Dual-LLM and capability-based designs {#sec-supp-dual-llm}
+
+Two concrete realizations of the integrity invariant:
+
+- **Dual-LLM pattern.** A *privileged* LLM orchestrates and calls tools but sees untrusted
+  content only as symbolic handles; a *quarantined* LLM processes the untrusted text and
+  cannot trigger actions. Control never touches attacker-influenced strings.
+- **Interface firewalls.** A tool-input *minimizer* and tool-output *sanitizer* wrap the
+  agent–tool boundary, achieving strong security with minimal assumptions [@huang2025firewalls].
+
+Capability-based variants enforce the same partition by construction, passing data by
+reference rather than by value. ← [security-foundations](../foundations/security-foundations.qmd#sec-two-track)
