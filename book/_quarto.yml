@@ -6,7 +6,6 @@ book:
   title: "AI Safety & Security"
   subtitle: "Foundations to the Agentic Frontier"
   author: "Surafel M. Lakew"
-  date: today
   search: true
   repo-url: https://github.com/surafelml/ai-safety-security
   repo-actions: [edit, issue]
@@ -18,16 +17,21 @@ book:
       chapters:
         - foundations/landscape.qmd
         - foundations/security-foundations.qmd
+        - foundations/agentic-systems.qmd
     - part: "II — Topics"
       chapters:
         - topics/alignment.qmd
         - topics/robustness-security.qmd
         - topics/interpretability.qmd
         - topics/monitoring-oversight.qmd
+        - topics/evaluation.qmd
         - topics/agentic-safety-security.qmd
     - part: "III — Frontier"
       chapters:
         - frontier/index.qmd
+    - part: "IV — Supplementary"
+      chapters:
+        - supplement/technical-notes.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -36,7 +40,7 @@ csl: apa.csl
 format:
   html:
     theme: cosmo
-    css: ../assets/styles.css
+    css: assets/styles.css
     toc: true
     number-sections: true
     html-math-method: mathjax

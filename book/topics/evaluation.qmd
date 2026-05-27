@@ -1,0 +1,15 @@
+---
+title: "Evaluation & Benchmarks"
+description: "Measuring safety, security, and capability — from static benchmarks to agentic and dangerous-capability evaluations."
+created: 2026-05-26
+last-reviewed: 2026-05-26
+maturity: topic
+---
+
+# Evaluation & Benchmarks {#sec-evaluation}
+
+> **Stub.** Chronological deep-dive: static accuracy benchmarks → holistic evaluation
+> (HELM) → safety/red-teaming evals → agentic benchmarks (AgentDojo, τ-bench, Agent
+> Security Bench) → dangerous-capability evaluations (CBRN, cyber, autonomy,
+> self-proliferation) and the frontier-policy thresholds they trigger. The methodological
+> backbone of the **evaluation** review paper.

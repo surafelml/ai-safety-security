@@ -50,6 +50,7 @@ conda activate ai-safety-security
 
 quarto preview book/                  # live preview with auto-reload
 quarto render book/                   # build to book/_site/
+scripts/check.sh                      # render + integrity checks (citations, xrefs, code, css)
 ```
 
 PDF output additionally needs a TeX install: `quarto install tinytex`.
