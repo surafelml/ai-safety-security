@@ -14,8 +14,9 @@ h4 { font-size: 0.92rem; font-weight: 600; }
 :root {
   /* Era palette — chronological safety eras (analogous to the NN-timeline scheme).
      Red is reserved for the "today" marker and never used as an era band. */
-  --era-theory:        #d97706; /* amber  — Theory (pre-2020) */
-  --era-alignment:     #2563eb; /* blue   — Alignment Era (2020–2022) */
+  --era-theory:        #d97706; /* amber  — Foundations / Theory (pre-2015) */
+  --era-adversarial:   #0891b2; /* cyan   — Adversarial ML & Security (2014–2019) */
+  --era-alignment:     #2563eb; /* blue   — Alignment Era (2019–2022) */
   --era-interp:        #7c3aed; /* purple — Interpretability Surge (2022–2024) */
   --era-oversight:     #0d9488; /* teal   — Scalable Oversight (2023–2025) */
   --era-agentic:       #059669; /* green  — Agentic Frontier (2025+) */
@@ -42,15 +43,17 @@ h4 { font-size: 0.92rem; font-weight: 600; }
 .illustration .era-label { font-size: 11px; font-weight: 600; letter-spacing: .02em; }
 
 /* Era band fills (use as class on rects/paths) — bolder fill for legibility */
-.band-theory    { fill: var(--era-theory);    opacity: .37; }
-.band-alignment { fill: var(--era-alignment); opacity: .37; }
+.band-theory      { fill: var(--era-theory);      opacity: .37; }
+.band-adversarial { fill: var(--era-adversarial); opacity: .37; }
+.band-alignment   { fill: var(--era-alignment);   opacity: .37; }
 .band-interp    { fill: var(--era-interp);    opacity: .37; }
 .band-oversight { fill: var(--era-oversight); opacity: .37; }
 .band-agentic   { fill: var(--era-agentic);   opacity: .37; }
 
 /* Era stroke variants (for nodes/edges keyed to an era) */
-.stroke-theory    { stroke: var(--era-theory); }
-.stroke-alignment { stroke: var(--era-alignment); }
+.stroke-theory      { stroke: var(--era-theory); }
+.stroke-adversarial { stroke: var(--era-adversarial); }
+.stroke-alignment   { stroke: var(--era-alignment); }
 .stroke-interp    { stroke: var(--era-interp); }
 .stroke-oversight { stroke: var(--era-oversight); }
 .stroke-agentic   { stroke: var(--era-agentic); }
@@ -61,3 +64,14 @@ h4 { font-size: 0.92rem; font-weight: 600; }
 
 /* Clickable timeline nodes */
 .illustration a:hover .node { stroke-width: 2.5; cursor: pointer; }
+
+/* References — looser, scannable bibliography (hanging indent + breathing room) */
+#refs, .csl-bib-body { line-height: 1.6; }
+.csl-entry {
+  margin-bottom: 0.85rem;
+  padding-left: 1.6rem;
+  text-indent: -1.6rem;   /* hanging indent: author/year start flush left */
+}
+/* lift the author + year that lead each APA entry */
+.csl-entry { color: #0f172a; }
+.csl-entry a { font-weight: 500; }   /* DOIs/links a touch stronger */

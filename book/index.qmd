@@ -36,59 +36,50 @@ The book is organized **by topic (primary axis), chronologically within each top
 ## The field at a glance
 
 ```{=html}
-<svg class="illustration" viewBox="0 0 880 180" role="img" aria-labelledby="tl-title tl-desc">
+<svg class="illustration" viewBox="0 0 880 185" role="img" aria-labelledby="tl-title tl-desc">
   <title id="tl-title">AI safety &amp; security timeline</title>
-  <desc id="tl-desc">Chronological eras from pre-2020 theory to the 2025+ agentic frontier, each linking to its topic chapter.</desc>
+  <desc id="tl-desc">Six overlapping eras from pre-2015 foundations to the 2025+ agentic frontier, each linking to a topic chapter.</desc>
+  <defs>
+    <marker id="tarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
 
-  <!-- era ribbon (to scale; click to jump to chapter) -->
+  <!-- era ribbon segments (click to jump to chapter) -->
   <a href="topics/alignment.qmd">
-    <rect class="band-theory" x="50" y="108" width="343" height="16"/>
-    <circle class="node stroke-theory" cx="221" cy="116" r="3"/>
+    <rect class="band-theory" x="50" y="108" width="131" height="16"/><circle class="node stroke-theory" cx="116" cy="116" r="3"/>
+  </a>
+  <a href="topics/robustness-security.qmd">
+    <rect class="band-adversarial" x="183" y="108" width="131" height="16"/><circle class="node stroke-adversarial" cx="250" cy="116" r="3"/>
   </a>
   <a href="topics/alignment.qmd">
-    <rect class="band-alignment" x="393" y="108" width="114" height="16"/>
-    <circle class="node stroke-alignment" cx="450" cy="116" r="3"/>
+    <rect class="band-alignment" x="316" y="108" width="131" height="16"/><circle class="node stroke-alignment" cx="383" cy="116" r="3"/>
   </a>
   <a href="topics/interpretability.qmd">
-    <rect class="band-interp" x="507" y="108" width="114" height="16"/>
-    <circle class="node stroke-interp" cx="564" cy="116" r="3"/>
+    <rect class="band-interp" x="449" y="108" width="131" height="16"/><circle class="node stroke-interp" cx="516" cy="116" r="3"/>
   </a>
   <a href="topics/monitoring-oversight.qmd">
-    <rect class="band-oversight" x="621" y="108" width="58" height="16"/>
-    <circle class="node stroke-oversight" cx="650" cy="116" r="3"/>
+    <rect class="band-oversight" x="582" y="108" width="131" height="16"/><circle class="node stroke-oversight" cx="649" cy="116" r="3"/>
   </a>
   <a href="topics/agentic-safety-security.qmd">
-    <rect class="band-agentic" x="679" y="108" width="171" height="16"/>
-    <circle class="node stroke-agentic" cx="765" cy="116" r="3"/>
+    <rect class="band-agentic" x="715" y="108" width="135" height="16"/><circle class="node stroke-agentic" cx="782" cy="116" r="3"/>
   </a>
 
-  <!-- era labels, staggered, with leader lines to ribbon -->
+  <!-- staggered labels with leader lines -->
   <g class="era-label" text-anchor="middle">
-    <line class="axis" x1="221" y1="48" x2="221" y2="108"/>
-    <text x="221" y="34">Theory</text><text class="node-label" x="221" y="48">pre-2020 · inverse RL</text>
-
-    <line class="axis" x1="450" y1="78" x2="450" y2="108"/>
-    <text x="450" y="64">Alignment Era</text><text class="node-label" x="450" y="78">2020–22 · RLHF, CAI</text>
-
-    <line class="axis" x1="564" y1="48" x2="564" y2="108"/>
-    <text x="564" y="34">Interpretability</text><text class="node-label" x="564" y="48">2022–24 · circuits</text>
-
-    <line class="axis" x1="650" y1="78" x2="650" y2="108"/>
-    <text x="650" y="64">Oversight</text><text class="node-label" x="650" y="78">2023–25 · weak→strong</text>
-
-    <line class="axis" x1="765" y1="48" x2="765" y2="108"/>
-    <text x="765" y="34">Agentic</text><text class="node-label" x="765" y="48">2025+ · safety × security</text>
+    <line class="axis" x1="116" y1="48" x2="116" y2="108"/><text x="116" y="34">Foundations</text><text class="node-label" x="116" y="48">pre-2015 · inverse RL</text>
+    <line class="axis" x1="250" y1="78" x2="250" y2="108"/><text x="250" y="64">Adversarial ML</text><text class="node-label" x="250" y="78">2014–19 · robustness</text>
+    <line class="axis" x1="383" y1="48" x2="383" y2="108"/><text x="383" y="34">Alignment Era</text><text class="node-label" x="383" y="48">2019–22 · RLHF, CAI</text>
+    <line class="axis" x1="516" y1="78" x2="516" y2="108"/><text x="516" y="64">Interpretability</text><text class="node-label" x="516" y="78">2022–24 · circuits</text>
+    <line class="axis" x1="649" y1="48" x2="649" y2="108"/><text x="649" y="34">Oversight</text><text class="node-label" x="649" y="48">2023–25 · weak→strong</text>
+    <line class="axis" x1="782" y1="78" x2="782" y2="108"/><text x="782" y="64">Agentic</text><text class="node-label" x="782" y="78">2025+ · safety × security</text>
   </g>
 
-  <!-- axis with 5-year ticks (2020 decade emphasised) and today marker -->
-  <line class="axis" x1="50" y1="140" x2="850" y2="140"/>
-  <g text-anchor="middle">
-    <line class="axis" x1="107" y1="140" x2="107" y2="146"/><text class="node-label" x="107" y="160">2015</text>
-    <line class="axis" x1="393" y1="138" x2="393" y2="148" stroke-width="2"/><text class="era-label" x="393" y="160">2020</text>
-    <line class="axis" x1="679" y1="140" x2="679" y2="146"/><text class="node-label" x="679" y="160">2025</text>
-  </g>
-  <line class="marker-today" x1="736" y1="100" x2="736" y2="146"/>
-  <text class="marker-today-label" x="736" y="94" text-anchor="middle">2026 · today</text>
+  <!-- time arrow + today marker -->
+  <line class="axis" x1="50" y1="140" x2="852" y2="140" marker-end="url(#tarr)"/>
+  <text class="node-label" x="50" y="158" text-anchor="start">time →</text>
+  <line class="marker-today" x1="725" y1="100" x2="725" y2="146"/>
+  <text class="marker-today-label" x="725" y="158" text-anchor="middle">2026 · today</text>
 </svg>
 ```
 
