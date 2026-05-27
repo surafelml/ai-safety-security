@@ -2,16 +2,18 @@
 title: "The AI Safety & Security Landscape"
 description: "Foundational overview of the core areas, timeline, and open problems in AI safety and security."
 created: 2026-04-26
-last-reviewed: 2026-04-26
+last-reviewed: 2026-05-26
 maturity: foundations
 ---
 
 # The AI Safety & Security Landscape {#sec-landscape}
 
-This chapter provides the foundational map of the field: the core areas, how they
-emerged over time, the state of practice, and the open problems that motivate the
-rest of the book. Read it once to orient; later topic chapters deepen each thread
-chronologically.
+The panoramic map of the field — read once to orient; topic chapters deepen each thread chronologically.
+
+- **Core areas** — five pillars and how they interlock.
+- **Timeline** — theory → the agentic frontier.
+- **State of practice** — what is deployed today.
+- **Open problems** — what motivates the rest of the book.
 
 ## Core Areas
 
@@ -31,11 +33,11 @@ chronologically.
 
 | Era | Period | Key Developments | Status |
 |-----|--------|------------------|--------|
-| **Theory** | Pre-2020 | Inverse RL, value alignment, reward specification | Foundational |
+| **Theory** | Pre-2020 | Inverse RL, value alignment, reward specification; adversarial examples | Foundational |
 | **Alignment Era** | 2020–2022 | RLHF, Constitutional AI, fine-tuning at scale | Deployed in LLMs |
-| **Interpretability Surge** | 2022–2024 | Mechanistic circuits, feature engineering, causal tracing | Research frontier |
-| **Scalable Oversight** | 2023–2025 | Weak-to-strong generalization, AI-supervised evals, hierarchical oversight | Emerging practice |
-| **Agentic Focus** | 2025+ | Agent evaluation, tool-use guardrails, multi-agent safety | New frontier |
+| **Interpretability Surge** | 2022–2024 | Mechanistic circuits, causal tracing; jailbreaks & prompt injection emerge | Research frontier |
+| **Scalable Oversight** | 2023–2025 | Weak-to-strong generalization, AI-supervised evals; guardrail models & injection defenses | Emerging practice |
+| **Agentic Focus** | 2025+ | Agent evaluation, tool-use guardrails, multi-agent safety, agent attack surface | New frontier |
 
 ## State of Practice (2025)
 
@@ -50,31 +52,73 @@ chronologically.
 - **Automated Red Teaming** — using AI to systematically probe for vulnerabilities, biases,
   and unsafe capabilities.
 
-## Progress Illustration
+## The field at a glance
 
-```text
-       [ Theoretical Foundations ]
-               |
-               v
-       +-----------------+       +-------------------+
-       | Alignment Theory| ----> | Reward Modeling   |
-       +-----------------+       +-------------------+
-                                         |
-               [ Empirical Era ]         v
-+--------------+     +-------------+    +-------------------+
-| Red Teaming  | <-- | RLHF / RLAIF|<-- | Constitutional AI |
-+--------------+     +-------------+    +-------------------+
-        |                    |                  |
-        v                    v                  v
-+----------------+   +---------------+  +-------------------+
-| Mechanistic    |   | Scalable      |  | Automated Red     |
-| Interpretability|  | Oversight     |  | Teaming & Defense |
-+----------------+   +---------------+  +-------------------+
-             \               |                 /
-              \              |                /
-               +-----------------------------+
-               |  Robust & Aligned Systems   |
-               +-----------------------------+
+```{=html}
+<svg class="illustration" viewBox="0 0 880 300" role="img" aria-labelledby="map-title">
+  <title id="map-title">The AI safety and security landscape: five pillars on shared foundations</title>
+  <defs>
+    <marker id="amap" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- foundations band -->
+  <rect class="node" x="20" y="20" width="840" height="36" rx="6"/>
+  <text class="era-label" x="440" y="42" text-anchor="middle">Theoretical foundations — value alignment · inverse RL · adversarial ML</text>
+
+  <!-- five pillars -->
+  <g>
+    <rect class="node band-alignment stroke-alignment" x="20"  y="92" width="150" height="150" rx="6"/>
+    <text class="era-label" x="95" y="116" text-anchor="middle">Alignment</text>
+    <text class="node-label" x="95" y="140" text-anchor="middle">RLHF · DPO</text>
+    <text class="node-label" x="95" y="156" text-anchor="middle">Constitutional AI</text>
+  </g>
+  <g>
+    <rect class="node band-oversight stroke-oversight" x="192" y="92" width="150" height="150" rx="6"/>
+    <text class="era-label" x="267" y="116" text-anchor="middle">Robustness</text>
+    <text class="node-label" x="267" y="140" text-anchor="middle">adversarial ML</text>
+    <text class="node-label" x="267" y="156" text-anchor="middle">injection defense</text>
+  </g>
+  <g>
+    <rect class="node band-interp stroke-interp" x="364" y="92" width="150" height="150" rx="6"/>
+    <text class="era-label" x="439" y="116" text-anchor="middle">Interpretability</text>
+    <text class="node-label" x="439" y="140" text-anchor="middle">circuits · SAEs</text>
+    <text class="node-label" x="439" y="156" text-anchor="middle">probing</text>
+  </g>
+  <g>
+    <rect class="node band-agentic stroke-agentic" x="536" y="92" width="150" height="150" rx="6"/>
+    <text class="era-label" x="611" y="116" text-anchor="middle">Monitoring</text>
+    <text class="node-label" x="611" y="140" text-anchor="middle">scalable oversight</text>
+    <text class="node-label" x="611" y="156" text-anchor="middle">red team · control</text>
+  </g>
+  <g>
+    <rect class="node band-theory stroke-theory" x="708" y="92" width="150" height="150" rx="6"/>
+    <text class="era-label" x="783" y="116" text-anchor="middle">Systemic</text>
+    <text class="node-label" x="783" y="140" text-anchor="middle">governance · evals</text>
+    <text class="node-label" x="783" y="156" text-anchor="middle">catastrophic risk</text>
+  </g>
+
+  <!-- foundations -> pillars -->
+  <g class="axis">
+    <line x1="95"  y1="56" x2="95"  y2="92"/>
+    <line x1="267" y1="56" x2="267" y2="92"/>
+    <line x1="439" y1="56" x2="439" y2="92"/>
+    <line x1="611" y1="56" x2="611" y2="92"/>
+    <line x1="783" y1="56" x2="783" y2="92"/>
+  </g>
+
+  <!-- convergence band -->
+  <rect class="node band-agentic stroke-agentic" x="240" y="258" width="400" height="34" rx="6"/>
+  <text class="era-label" x="440" y="280" text-anchor="middle">Aligned &amp; secure agentic systems</text>
+  <g class="axis">
+    <path d="M95,242 C95,258 360,250 410,258"  fill="none" marker-end="url(#amap)"/>
+    <path d="M267,242 C267,254 380,254 420,258" fill="none" marker-end="url(#amap)"/>
+    <path d="M439,242 L439,258" marker-end="url(#amap)"/>
+    <path d="M611,242 C611,254 500,254 460,258" fill="none" marker-end="url(#amap)"/>
+    <path d="M783,242 C783,258 520,250 470,258" fill="none" marker-end="url(#amap)"/>
+  </g>
+</svg>
 ```
 
 ## Open Problems & Risk Scenarios
@@ -120,11 +164,3 @@ chronologically.
 3. **Audit Trail** — log decisions, guardrail triggers, human interventions.
 4. **Transparency** — document assumptions, limitations, regulatory constraints.
 5. **Continuous Monitoring** — track safety metrics post-deployment; escalate anomalies.
-
-## Connection to the Research Program
-
-This landscape is the reference frame for the review papers compiled from this book:
-
-- **P1 (Agentic AI Evaluation)** — evaluation frameworks for agent behavior across the core areas.
-- **P2 (Safety & Guardrails)** — operationalizes Alignment, Robustness, and Monitoring & Control for multi-step agents.
-- **P3 (Multimodal & Embodied)** — extends safety principles to physical and cross-modal contexts.

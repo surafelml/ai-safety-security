@@ -6,6 +6,8 @@ last-reviewed: 2026-04-26
 
 # Preface {.unnumbered}
 
+*Published May 27, 2026 (updated: May 27, 2026)*
+
 **AI Safety & Security** is a living, continuously evolving reference for the
 **safety and security of agentic systems** — where *agentic* is the bridge between
 the two fields: tool-use is the security surface, and autonomy is the safety problem.
