@@ -81,7 +81,7 @@ misaligned one.
 |---|---|---|
 | **Taxonomy** | Socio-technical failure / behavioral drift — structural misalignment between optimization target and human intent | Adversarial failure modes — exploits against the data pipeline, supply chain, and inference boundary |
 | **Structural focus** | Model capabilities & control boundaries — predictability, fairness, non-toxicity, staying within operational bounds | Data & architectural hardening — the CIA triad (confidentiality, integrity, availability) of the AI stack |
-| **Active research** | Scalable oversight [@bowman2022measuring; @burns2023weak]; mechanistic interpretability & weight auditing [@olah2020zoom; @lieberum2024gemmascope; @templeton2024monosemanticity] | Adversarial ML — jailbreaks [@zou2024circuitbreakers], indirect prompt-injection propagation [@chang2026retrieval]; data provenance; model inversion & extraction defense |
+| **Active research** | Scalable oversight [@bowman2022measuring; @burns2023weak]; mechanistic interpretability & weight auditing [@olah2020zoom; @lieberum2024gemmascope; @templeton2024monosemanticity] | Adversarial ML — jailbreaks [@zou2023universal], indirect prompt-injection propagation [@chang2026retrieval]; agentic attack benchmarks [@debenedetti2024agentdojo; @zhang2024asb]; data provenance; model inversion & extraction defense |
 | **Industry practice** | Responsible-AI GRC & red teaming — eval suites, toxicity filtering, compliance benchmarking, compute rate-limiting | AI-native DevSecOps (LLMOps) — runtime I/O firewalls, static model-file scanning, sandboxed execution |
 | **Reference standards** | NIST AI RMF [@nist2023airmf]; ISO/IEC 42001 [@iso42001]; EU AI Act [@euaiact2024]; frontier safety frameworks (RSP, Preparedness, FSF); model/system cards | OWASP Top 10 for LLMs/Agents [@owasp2025llm]; MITRE ATLAS [@mitreatlas]; Google SAIF [@googlesaif] |
 
@@ -198,10 +198,29 @@ injection), and downstream actions (privilege escalation) each open a distinct f
 anchored in the agentic vulnerability taxonomy of @kim2026landscape.
 → [Robustness & Security](../topics/robustness-security.qmd)
 
+### Who are the adversaries
+
+The same surface looks different by attacker. @kim2026landscape separate **external /
+environmental** adversaries (poisoning a web page or tool output the agent will read) from
+**user-level** adversaries (the operator jailbreaking their own agent). Add **insider** and
+**supply-chain** actors (a poisoned model or dependency) and the four map cleanly onto the
+pipeline above — each controls a different stage.
+
+### Privacy & data protection
+
+A distinct security concern from injection: the model leaking what it should not. **Training-data
+extraction** and **membership inference** recover memorized records; **model inversion** and
+**extraction** steal data or the model itself. These motivate the confidentiality leg of the
+CIA triad and defenses like differential privacy, output filtering, and rate-limiting.
+
 ## Defensive modeling architectures
 
 Defenses are themselves *models and architectures*, not just policies. They fall into
 inference-time gates and representation-level training, wrapped by system-level isolation.
+No single layer suffices — empirically, agent defenses are often bypassed (Agent Security
+Bench reports attack-success rates above 80% against many configurations
+[@zhang2024asb]) — so the goal is **defense-in-depth**: stack independent layers so a bypass
+of one is caught by the next.
 
 - **Guardrail classifiers.** A guardrail is a gate $g(x,y) = \mathbb{1}\!\left[p_\phi(\text{harm}\mid x,y) < \tau\right]$
   that emits output only when a harm classifier falls below threshold $\tau$. Llama Guard
@@ -299,7 +318,9 @@ These threads are introduced here and deepened in the topic chapters: the **alig
 problem (RLHF/DPO and why behavioral alignment degrades under stress)
 → [Alignment](../topics/alignment.qmd); **trust & interpretability** (why networks are black
 boxes; feature attribution, activation patching) → [Interpretability](../topics/interpretability.qmd);
-and the full **attack surface and defenses** → [Robustness & Security](../topics/robustness-security.qmd).
+the full **attack surface and defenses** → [Robustness & Security](../topics/robustness-security.qmd);
+how all of this is **measured** → [Evaluation & Benchmarks](../topics/evaluation.qmd); and
+society-scale risk and **governance** → [Systemic Safety & Governance](../topics/systemic-safety.qmd).
 
 The global synthesis in the *International AI Safety Report* [@intlaisafety2025] frames why
 this matters at scale: risk spans malicious use, malfunction, and structural systemic

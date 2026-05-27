@@ -12,7 +12,7 @@ is the canonical reference for that seam.
 
 ## Updates
 
-- **2026-05-27** — Foundation of the book is now available: the *landscape* (core areas, timeline), the *safety × security two-track* taxonomy (attack surface, defensive architectures, formalization), and *agentic systems* (the bridge), plus a supplementary technical-notes part.
+- 🚀 **2026-05-27** — Foundation now available: landscape, safety × security taxonomy, and agentic systems.
 
 ## Structure & pipeline
 
@@ -22,7 +22,6 @@ A book chapter is the distilled substrate; everything else flows from it.
 |------|---------------|
 | [book/](book/) | **The living book** (Quarto) — distilled core concepts, illustrations, formalizations. Organized by topic, chronological within each: Part I Foundations · Part II Topics · Part III Frontier · Part IV Supplement. |
 | [research/](research/) | **arXiv review papers** built on chapters, each adding a novel contribution of its own. |
-| *(blog)* | **Topic spin-offs** cross-posted to [surafelml.github.io](https://surafelml.github.io). |
 | [projects/](projects/) | **Open-source R&D** — reusable tools and best-practice guides. |
 
 ## Setup & local run
