@@ -47,5 +47,6 @@ format:
     toc: true
     number-sections: true
     html-math-method: mathjax
+    page-layout: full
   pdf:
     documentclass: scrreport

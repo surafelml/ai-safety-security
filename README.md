@@ -14,6 +14,8 @@ is the canonical reference for that seam.
 
 - 🚀 **2026-05-27** — Foundation now available: landscape, safety × security taxonomy, and agentic systems.
 
+📖 **Read the book online:** <https://surafelml.github.io/ai-safety-security/>
+
 ## Structure & pipeline
 
 A book chapter is the distilled substrate; everything else flows from it.
