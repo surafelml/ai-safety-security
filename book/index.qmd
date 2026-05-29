@@ -6,7 +6,12 @@ last-reviewed: 2026-04-26
 
 # Preface {.unnumbered}
 
-*Published May 27, 2026 (updated: May 27, 2026)*
+*Published May 27, 2026 (updated: May 29, 2026)*
+
+::: {.callout-tip title="Status — May 2026"}
+**Part I (Foundations) is now available.** Parts II (Topics) and III (Frontier) roll out in
+weekly increments — check back.
+:::
 
 **AI Safety & Security** is a living, continuously evolving reference for the
 **safety and security of agentic systems** — where *agentic* is the bridge between
