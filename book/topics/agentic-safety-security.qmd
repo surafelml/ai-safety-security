@@ -1,17 +1,778 @@
 ---
 title: "Agentic Safety × Security"
-description: "The flagship bridge: safety and security of autonomous, tool-using agents."
+description: "The flagship synthesis: how safety and security failures compound in autonomous, tool-using agents — attack surface, guardrail architectures, multi-agent trust, and the combined threat model."
 created: 2026-04-26
-last-reviewed: 2026-04-26
+last-reviewed: 2026-06-18
 maturity: topic
+jupyter: python3
 ---
 
 # Agentic Safety × Security {#sec-agentic}
 
-> **Flagship chapter — stub.** The synthesis the whole book points at: where autonomy
-> (safety) meets tool-use and external action (security).
->
-> Chronological deep-dive: single-agent tool-use risk → guardrail architectures
-> (input / planning / action / output / systemic) → prompt-injection and
-> permission-scoping defenses → multi-agent trust and emergent-behavior control →
-> evaluation of agentic safety. Feeds the **evaluation** and **guardrails** review papers.
+Every preceding chapter converges here. The
+[foundation](../foundations/security-foundations.qmd) established why safety and security
+split into two tracks — and why agentic systems are the seam where they reunite.
+[Robustness & Security](robustness-security.qmd) catalogued the attack classes and the
+defense layers. [Evaluation](evaluation.qmd) showed how to measure what survives. This
+chapter closes the loop: how the failures *compound* when a model runs inside an action
+loop, why each compounding makes it worse, and what a defensible agentic architecture
+actually looks like end-to-end.
+
+The organizing claim: **an agentic system introduces failure modes that do not exist in
+any of its components in isolation.** A correct model, a correct tool, and a correct
+retrieval pipeline can compose into an unsafe agent. The threat is not in the parts —
+it is in the connections.
+
+---
+
+## 1. The Agentic Attack Surface
+
+A deployed agent is not a single model — it is a loop that connects a model to memory,
+tools, other agents, and an environment. Each connection is a capability *and* an attack
+surface. @kim2026landscape formalizes this as a taxonomy of vulnerability classes spanning
+the full agent stack:
+
+```{=html}
+<svg class="illustration" viewBox="0 0 700 420" role="img" aria-labelledby="surface-title">
+  <title id="surface-title">Agentic attack surface: vulnerability classes across the agent stack</title>
+  <defs>
+    <marker id="as-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- Column headers -->
+  <text class="era-label" x="175" y="22" text-anchor="middle">Attack Vector</text>
+  <text class="era-label" x="455" y="22" text-anchor="middle">Consequence</text>
+
+  <!-- Row 1: Direct prompt / instruction -->
+  <rect class="node band-safety stroke-safety" x="20"  y="35" width="310" height="44" rx="5"/>
+  <text class="node-label" x="175" y="55" text-anchor="middle" font-weight="600">Direct instruction channel</text>
+  <text class="node-label" x="175" y="70" text-anchor="middle">Jailbreak, over-permission, prompt override</text>
+  <rect class="node band-safety stroke-safety" x="370" y="35" width="310" height="44" rx="5"/>
+  <text class="node-label" x="525" y="62" text-anchor="middle">Model follows adversarial instruction</text>
+
+  <!-- Row 2: Retrieval / RAG -->
+  <rect class="node band-security stroke-security" x="20"  y="95" width="310" height="44" rx="5"/>
+  <text class="node-label" x="175" y="115" text-anchor="middle" font-weight="600">Retrieval / RAG channel</text>
+  <text class="node-label" x="175" y="130" text-anchor="middle">Environmental injection, vector-DB poisoning</text>
+  <rect class="node band-security stroke-security" x="370" y="95" width="310" height="44" rx="5"/>
+  <text class="node-label" x="525" y="122" text-anchor="middle">Untrusted content executes as instruction</text>
+
+  <!-- Row 3: Tool / API -->
+  <rect class="node band-agentic stroke-agentic" x="20"  y="155" width="310" height="44" rx="5"/>
+  <text class="node-label" x="175" y="175" text-anchor="middle" font-weight="600">Tool / API outputs</text>
+  <text class="node-label" x="175" y="190" text-anchor="middle">Tool poisoning, response hijacking</text>
+  <rect class="node band-agentic stroke-agentic" x="370" y="155" width="310" height="44" rx="5"/>
+  <text class="node-label" x="525" y="182" text-anchor="middle">Privilege escalation, side effects</text>
+
+  <!-- Row 4: Memory -->
+  <rect class="node band-oversight stroke-oversight" x="20"  y="215" width="310" height="44" rx="5"/>
+  <text class="node-label" x="175" y="235" text-anchor="middle" font-weight="600">Persistent memory</text>
+  <text class="node-label" x="175" y="250" text-anchor="middle">Stored injection, memory poisoning</text>
+  <rect class="node band-oversight stroke-oversight" x="370" y="215" width="310" height="44" rx="5"/>
+  <text class="node-label" x="525" y="242" text-anchor="middle">Persistent foothold across sessions</text>
+
+  <!-- Row 5: Inter-agent -->
+  <rect class="node band-systemic stroke-systemic" x="20"  y="275" width="310" height="44" rx="5"/>
+  <text class="node-label" x="175" y="295" text-anchor="middle" font-weight="600">Inter-agent messages</text>
+  <text class="node-label" x="175" y="310" text-anchor="middle">Cross-agent injection, compromise propagation</text>
+  <rect class="node band-systemic stroke-systemic" x="370" y="275" width="310" height="44" rx="5"/>
+  <text class="node-label" x="525" y="302" text-anchor="middle">Cascading compromise through pipeline</text>
+
+  <!-- Row 6: Training / weights -->
+  <rect class="node band-alignment stroke-alignment" x="20"  y="335" width="310" height="44" rx="5"/>
+  <text class="node-label" x="175" y="355" text-anchor="middle" font-weight="600">Training data / weights</text>
+  <text class="node-label" x="175" y="370" text-anchor="middle">Backdoors, sleeper agents, poisoned fine-tuning</text>
+  <rect class="node band-alignment stroke-alignment" x="370" y="335" width="310" height="44" rx="5"/>
+  <text class="node-label" x="525" y="362" text-anchor="middle">Covert behaviors survive safety training</text>
+
+  <!-- connector arrows -->
+  <path class="axis" d="M330,57 L370,57" marker-end="url(#as-arr)"/>
+  <path class="axis" d="M330,117 L370,117" marker-end="url(#as-arr)"/>
+  <path class="axis" d="M330,177 L370,177" marker-end="url(#as-arr)"/>
+  <path class="axis" d="M330,237 L370,237" marker-end="url(#as-arr)"/>
+  <path class="axis" d="M330,297 L370,297" marker-end="url(#as-arr)"/>
+  <path class="axis" d="M330,357 L370,357" marker-end="url(#as-arr)"/>
+</svg>
+```
+
+Two properties of this surface distinguish it from a single-model system:
+
+1. **Depth** — a compromised entry at one layer propagates forward through the loop.
+   Poisoned retrieval content becomes trusted planning context; a compromised tool output
+   shapes the next action; a memory write persists across sessions.
+
+2. **Amplification** — each step the agent takes based on a compromised input can
+   authorize further actions, expanding the blast radius without additional attacker effort.
+
+The [dissolved code/data boundary](../foundations/security-foundations.qmd) is the root
+cause in all six rows: the same channel that carries legitimate content can carry an
+instruction.
+
+---
+
+## 2. Single-Agent Risk: When the Loop Is the Threat Surface
+
+Static safety benchmarks miss agentic failures because they evaluate a model
+*at a single turn*. Agentic failures are *trajectory properties* — they emerge across
+steps, not at any individual step.
+
+### 2.1 Accumulated context poisoning
+
+An agent's planning context at step $t$ is a concatenation of everything it has perceived,
+decided, and observed so far:
+
+$$
+c_t = [i_0,\; o_1, a_1, r_1,\; o_2, a_2, r_2,\; \ldots,\; o_t]
+$$
+
+where $i_0$ is the original instruction, $o_t$ the observation, $a_t$ the action, and $r_t$
+the tool result. If any $r_k$ (a tool result fetched from an untrusted source) contains an
+injected instruction, it is now embedded in $c_t$ alongside the trusted instruction — and
+later planning steps treat the entire context as input. The earlier the injection, the more
+planning context it has already shaped.
+
+This is structurally different from single-turn injection: the attacker does not need the
+model to comply *now* — they need it to comply later, after the injected content has been
+incorporated into the agent's working state.
+
+### 2.2 Tool-use privilege escalation
+
+The danger of tools is not that they exist — it is the *step sequence* they enable:
+
+```{=html}
+<svg class="illustration" viewBox="0 0 680 140" role="img" aria-labelledby="priv-title">
+  <title id="priv-title">Privilege escalation through sequential tool use</title>
+  <defs>
+    <marker id="pe-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect class="node band-safety stroke-safety"    x="10"  y="48" width="120" height="44" rx="5"/>
+  <text class="node-label" x="70"  y="67" text-anchor="middle">read_file()</text>
+  <text class="node-label" x="70"  y="83" text-anchor="middle">low privilege</text>
+
+  <rect class="node band-security stroke-security" x="180" y="48" width="120" height="44" rx="5"/>
+  <text class="node-label" x="240" y="67" text-anchor="middle">search_web()</text>
+  <text class="node-label" x="240" y="83" text-anchor="middle">external content</text>
+
+  <rect class="node band-agentic stroke-agentic"  x="350" y="48" width="120" height="44" rx="5"/>
+  <text class="node-label" x="410" y="67" text-anchor="middle">send_email()</text>
+  <text class="node-label" x="410" y="83" text-anchor="middle">external action</text>
+
+  <rect class="node band-alignment stroke-alignment" x="520" y="48" width="140" height="44" rx="5"/>
+  <text class="node-label" x="590" y="67" text-anchor="middle">execute_code()</text>
+  <text class="node-label" x="590" y="83" text-anchor="middle">irreversible</text>
+
+  <path class="axis" d="M130,70 L180,70" marker-end="url(#pe-arr)"/>
+  <path class="axis" d="M300,70 L350,70" marker-end="url(#pe-arr)"/>
+  <path class="axis" d="M470,70 L520,70" marker-end="url(#pe-arr)"/>
+
+  <text class="node-label" x="340" y="24" text-anchor="middle" font-style="italic">injected instruction arrives here ↓</text>
+  <path class="axis" stroke-dasharray="4 3" d="M240,44 L240,35" marker-end="url(#pe-arr)"/>
+</svg>
+```
+
+An injection arriving at `search_web()` — the second step — can steer the output of
+`send_email()` and `execute_code()` without ever touching the original instruction. The
+agent escalates its own privileges by chaining tools; the attacker only needed to control
+one step.
+
+### 2.3 Irreversibility
+
+Many agent actions have no undo: emails sent, files deleted, API calls that transfer funds,
+database writes. A model that hedges on a text output (it can be discarded) faces a
+fundamentally different risk calculus than a model that pulls a trigger in the world. The
+key asymmetry:
+
+- **Cost of over-caution** — a task not completed; user inconvenienced.
+- **Cost of under-caution** — an irreversible action; cannot be walked back.
+
+Current alignment training does not reliably teach models this asymmetry. Helpfulness
+optimization provides strong signal for task completion and penalizes unnecessary refusals,
+but no equivalent training signal encodes the cost of irreversible side effects
+[@amodei2016concrete]. The result: models under-weight caution precisely when the
+consequences of under-caution cannot be undone.
+
+### 2.4 Oversight decay with horizon length
+
+Human oversight degrades as task length grows: the operator who specified the original
+instruction is not watching step 47 of a 50-step agentic task. The model's behavior at
+late steps is governed primarily by in-context planning — shaped by accumulated tool
+results, not the original instruction. This is the oversight gap that scalable oversight
+research attempts to close [@engels2025scalinglaws; @bowman2022measuring].
+
+---
+
+## 3. Prompt Injection in the Agentic Loop
+
+Prompt injection in an agentic setting differs from the static case in three ways: it
+*persists*, it *propagates*, and it *amplifies*. @greshake2023not established the base
+case; the agentic loop gives attackers compounding leverage.
+
+### 3.1 Injection entry points across the loop
+
+```{=html}
+<svg class="illustration" viewBox="0 0 680 320" role="img" aria-labelledby="inject-title">
+  <title id="inject-title">Injection entry points and propagation through the agent loop</title>
+  <defs>
+    <marker id="inj-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="inj-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- Loop nodes -->
+  <rect class="node band-agentic stroke-agentic" x="260" y="20"  width="160" height="44" rx="6"/>
+  <text class="node-label" x="340" y="39"  text-anchor="middle">Perceive</text>
+  <text class="node-label" x="340" y="55"  text-anchor="middle">(input + retrieval)</text>
+
+  <rect class="node band-agentic stroke-agentic" x="480" y="138" width="160" height="44" rx="6"/>
+  <text class="node-label" x="560" y="157" text-anchor="middle">Plan</text>
+  <text class="node-label" x="560" y="173" text-anchor="middle">(reasoning chain)</text>
+
+  <rect class="node band-agentic stroke-agentic" x="260" y="256" width="160" height="44" rx="6"/>
+  <text class="node-label" x="340" y="275" text-anchor="middle">Act</text>
+  <text class="node-label" x="340" y="291" text-anchor="middle">(tool calls / outputs)</text>
+
+  <rect class="node band-oversight stroke-oversight" x="40"  y="138" width="160" height="44" rx="6"/>
+  <text class="node-label" x="120" y="157" text-anchor="middle">Memory / State</text>
+  <text class="node-label" x="120" y="173" text-anchor="middle">(persistent store)</text>
+
+  <!-- Loop arrows -->
+  <path class="axis" d="M420,42  C480,42  520,100 520,138" marker-end="url(#inj-arr)"/>
+  <path class="axis" d="M560,182 C560,240 460,278 420,278" marker-end="url(#inj-arr)"/>
+  <path class="axis" d="M260,278 C200,278 160,220 160,182"  marker-end="url(#inj-arr)"/>
+  <path class="axis" d="M120,138 C120,80  200,42  260,42"   marker-end="url(#inj-arr)"/>
+
+  <!-- Injection vectors (red dashed) -->
+  <!-- from retrieval into Perceive -->
+  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
+        d="M340,20 L340,5" marker-end="url(#inj-red)"/>
+  <text fill="#dc2626" font-size="10" x="343" y="14">① RAG / web</text>
+
+  <!-- from tool output into Act -->
+  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
+        d="M340,300 L340,315" marker-end="url(#inj-red)"/>
+  <text fill="#dc2626" font-size="10" x="343" y="325">② tool output</text>
+
+  <!-- into memory (injection enters from outside left) -->
+  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
+        d="M20,160 L40,160" marker-end="url(#inj-red)"/>
+  <text fill="#dc2626" font-size="10" x="2" y="156" transform="rotate(-90,12,160)">③ memory</text>
+
+  <!-- from inter-agent (injection arrives from outside right) -->
+  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
+        d="M660,160 L642,160" marker-end="url(#inj-red)"/>
+  <text fill="#dc2626" font-size="10" x="662" y="164">④ agent msg</text>
+</svg>
+```
+
+| Entry point | Attack type | Why it compounds |
+|---|---|---|
+| **① RAG / retrieval** | Environmental injection — attacker plants instructions in documents the agent will fetch | Content enters the planning context before any output screening sees it |
+| **② Tool output** | Tool response hijacking — a compromised API or MCP server returns crafted content | Appears with the trust of a tool result, not a user input |
+| **③ Memory / state** | Stored injection — malicious content written to persistent memory in a prior session | Reactivates on every future session; attacker is no longer online |
+| **④ Inter-agent message** | Cross-agent injection — a compromised agent passes an instruction to a peer | Inherits the peer's trust level and bypasses per-agent input filters |
+
+### 3.2 Why runtime text firewalls are insufficient
+
+The naive defense is a text filter: screen every input for known injection patterns.
+@huang2025firewalls demonstrate the structural problem. The primary model receives a
+prompt containing both trusted instructions and retrieved content; a text-based firewall
+operating on the *same context window* is itself subject to the injection it is meant to
+block. Sufficiently crafted content can instruct the model to ignore the firewall, because
+both are part of the same natural-language context.
+
+The underlying issue: **a model cannot be both the executor and the trusted auditor of its
+own inputs** when both live in the same context window.
+
+### 3.3 The data/control separation principle
+
+The architectural fix is structural, not linguistic: separate the *data channel*
+(content the model may reference) from the *control channel* (instructions the model may
+execute). The interface-isolation principle states:
+
+> *Untrusted content may shape what the agent says or retrieves, but must not determine
+> what actions it takes.*
+
+Formalizing from the [security foundations integrity invariant](../foundations/security-foundations.qmd):
+
+$$
+\forall\, u, u' :\quad \texttt{action}\!\left(\pi(i,\, d_u)\right) = \texttt{action}\!\left(\pi(i,\, d_{u'})\right)
+$$
+
+where $i$ is the trusted operator instruction and $d_u$ contains arbitrary untrusted
+content. An action that varies with $u$ is a violation — a successful injection. Defenses
+are mechanisms that restore this invariant.
+
+---
+
+## 4. Guardrail Architectures for Agentic Systems
+
+The [five-layer defense stack](robustness-security.qmd) from the robustness chapter was
+designed for static models. The agentic loop requires each layer to be placed and
+coordinated differently — and adds two layers that do not exist in the static case:
+**pre-action validation** and **mid-loop interruption**.
+
+```{=html}
+<svg class="illustration" viewBox="0 0 700 380" role="img" aria-labelledby="guard-title">
+  <title id="guard-title">Guardrail placement in the agentic loop</title>
+  <defs>
+    <marker id="g-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- Perceive box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="20"  width="160" height="44" rx="5"/>
+  <text class="node-label" x="350" y="47" text-anchor="middle">① Perceive</text>
+
+  <!-- G1: input screening at perceive -->
+  <rect class="node band-safety stroke-safety" x="20" y="20" width="200" height="44" rx="5"/>
+  <text class="node-label" x="120" y="39" text-anchor="middle" font-weight="600">G1 — Input screening</text>
+  <text class="node-label" x="120" y="55" text-anchor="middle">constitutional classifier, Llama Guard</text>
+  <path class="axis" d="M220,42 L270,42" marker-end="url(#g-arr)"/>
+
+  <!-- Plan box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="120" width="160" height="44" rx="5"/>
+  <text class="node-label" x="350" y="147" text-anchor="middle">② Plan</text>
+
+  <!-- G2: pre-action validation at plan -->
+  <rect class="node band-security stroke-security" x="480" y="105" width="200" height="74" rx="5"/>
+  <text class="node-label" x="580" y="126" text-anchor="middle" font-weight="600">G2 — Pre-action validation</text>
+  <text class="node-label" x="580" y="142" text-anchor="middle">intent consistency check</text>
+  <text class="node-label" x="580" y="158" text-anchor="middle">irreversibility gate</text>
+  <text class="node-label" x="580" y="174" text-anchor="middle">human-in-the-loop threshold</text>
+  <path class="axis" d="M430,142 L480,142" marker-end="url(#g-arr)"/>
+
+  <!-- Act box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="230" width="160" height="44" rx="5"/>
+  <text class="node-label" x="350" y="257" text-anchor="middle">③ Act</text>
+
+  <!-- G3: output/action schema at act -->
+  <rect class="node band-oversight stroke-oversight" x="20" y="215" width="200" height="74" rx="5"/>
+  <text class="node-label" x="120" y="236" text-anchor="middle" font-weight="600">G3 — Action enforcement</text>
+  <text class="node-label" x="120" y="252" text-anchor="middle">output schema validation</text>
+  <text class="node-label" x="120" y="268" text-anchor="middle">least-privilege tool scoping</text>
+  <text class="node-label" x="120" y="284" text-anchor="middle">sandbox / audit trail</text>
+  <path class="axis" d="M270,252 L220,252" marker-end="url(#g-arr)"/>
+
+  <!-- Memory box -->
+  <rect class="node band-oversight stroke-oversight" x="270" y="330" width="160" height="34" rx="5"/>
+  <text class="node-label" x="350" y="352" text-anchor="middle">Memory / State</text>
+
+  <!-- G4: memory integrity -->
+  <rect class="node band-systemic stroke-systemic" x="480" y="325" width="200" height="44" rx="5"/>
+  <text class="node-label" x="580" y="344" text-anchor="middle" font-weight="600">G4 — Memory integrity</text>
+  <text class="node-label" x="580" y="360" text-anchor="middle">write-provenance tagging</text>
+  <path class="axis" d="M480,347 L430,347" marker-end="url(#g-arr)"/>
+
+  <!-- Loop arrows -->
+  <path class="axis" d="M350,64  L350,120" marker-end="url(#g-arr)"/>
+  <path class="axis" d="M350,164 L350,230" marker-end="url(#g-arr)"/>
+  <path class="axis" d="M350,274 L350,330" marker-end="url(#g-arr)"/>
+</svg>
+```
+
+### 4.1 G1 — Input screening at the perceive step
+
+Every external input — user message, retrieved document, tool response, inter-agent
+message — passes through a classifier before entering the planning context. Constitutional
+classifiers [@sharma2025constitutional] are the current state of the art: trained against
+thousands of adversarially generated attack variants, with policies stated as natural
+language rules. Llama Guard [@inan2023llamaguard] provides a configurable harm taxonomy
+at lower compute cost for less adversarially demanding inputs.
+
+**Agentic wrinkle:** the volume of inputs is high — every retrieval step, every tool
+call. A screening cost of one additional inference per external input adds up. Practical
+deployments use lightweight classifiers for high-volume channels and full classifiers
+for high-risk channels (code execution, external API calls).
+
+### 4.2 G2 — Pre-action validation at the plan step
+
+Before any tool call is issued, a validation step checks whether the *planned action* is
+consistent with the *original instruction*. This is the layer that catches
+context-poisoning attacks: even if a malicious retrieval result has shaped the planning
+context, the pre-action validator asks:
+
+- Does this action fall within the scope of the operator's original intent?
+- Is this action irreversible? If so, has a human confirmed it?
+- Does the planned action require permissions not granted in the original task?
+
+This is the formalization of the AI Control approach [@greenblatt2023control]: the agent
+proposes; a separate authority decides. The controller can be a second model, a
+rule-based system, or a human checkpoint — each adds cost but addresses a different
+threat.
+
+```{python}
+#| label: pre-action-gate
+def pre_action_gate(original_instruction: str, planned_action: dict,
+                    irreversible_verbs: set) -> str:
+    verb = planned_action.get("tool", "")
+    if verb in irreversible_verbs:
+        return "HOLD — irreversible action requires human confirmation"
+    if not is_in_scope(original_instruction, planned_action):
+        return "BLOCK — action outside original task scope"
+    return "PASS"
+
+irreversible = {"send_email", "delete_file", "execute_code", "transfer_funds"}
+```
+
+### 4.3 G3 — Action enforcement at the act step
+
+Even a validated plan may produce unsafe outputs at execution. G3 operates on the
+*action* before it reaches the environment:
+
+- **Output schema enforcement** — the agent's action must conform to a typed schema; free-form
+  text does not directly trigger environment actions. A SQL command wrapped in a schema
+  cannot be injected by a retrieved document that appends `; DROP TABLE`.
+- **Least-privilege tool scoping** — tools are granted only the permissions required for the
+  *current task*, not standing access. A summarization task has no need for a `send_email`
+  tool; its absence from the tool list removes the attack surface.
+- **Immutable audit trail** — every tool call and its result are logged with provenance
+  before execution; this enables post-hoc review and rollback.
+
+### 4.4 G4 — Memory integrity
+
+Persistent memory is the only attack surface that survives session boundaries. A stored
+injection written in session 1 can activate in sessions 2 through $n$ without the
+attacker being present. Mitigations:
+
+- **Write-provenance tagging** — every memory write records its source (user, operator,
+  tool, external retrieval). Reads apply trust level from the write source.
+- **Memory quarantine** — content from untrusted sources is stored in a separate namespace
+  and cannot directly populate the planning context without a screening step.
+- **Time-bounded memory** — sensitive retrieved content is not persisted; only
+  operator-approved information is written to long-term memory.
+
+### 4.5 Mid-loop interruption
+
+When G2 detects a potential scope violation or irreversibility flag, the options are:
+
+| Response | When | Mechanism |
+|---|---|---|
+| **Checkpoint** | Ambiguous scope | Pause; request human confirmation before proceeding |
+| **Rollback** | Detected post-hoc deviation | Revert to last clean state if the environment supports it |
+| **Abort** | Certain policy violation | Terminate the task; notify operator |
+| **Escalate** | Uncertain threat | Hand off to human with full trajectory log |
+
+Current systems support checkpoint and abort; rollback and escalation require environment-level
+tooling that most deployments lack. This is an open engineering gap.
+
+---
+
+## 5. Multi-Agent Trust and Emergent Risk
+
+Single-agent guardrails do not compose into multi-agent safety. Composing agents
+introduces failure modes that exist in neither agent individually.
+
+### 5.1 The inter-agent trust problem
+
+When agent A calls agent B, what trust does B extend to A's messages? Three possible answers:
+
+1. **Full trust** — B treats A's instructions as operator-level. An attacker who compromises
+   A gains operator-level access to B.
+2. **Zero trust** — B applies the same screening to A's messages as to any untrusted input.
+   Safe but expensive; breaks legitimate coordination.
+3. **Tier-based trust** — explicit trust scoping: A can authorize actions within its own
+   permission set, but cannot grant B permissions A itself does not have. Trust is
+   *non-transitive*.
+
+Option 3 is the correct design, but it requires explicit authority scoping at the
+orchestration layer — a feature most current multi-agent frameworks do not enforce.
+
+### 5.2 Compromise propagation
+
+```{=html}
+<svg class="illustration" viewBox="0 0 680 180" role="img" aria-labelledby="cascade-title">
+  <title id="cascade-title">Compromise propagation through a multi-agent pipeline</title>
+  <defs>
+    <marker id="ca-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="ca-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- Orchestrator -->
+  <rect class="node band-safety stroke-safety" x="20" y="68" width="130" height="44" rx="5"/>
+  <text class="node-label" x="85" y="87" text-anchor="middle">Orchestrator</text>
+  <text class="node-label" x="85" y="103" text-anchor="middle">(trusted)</text>
+
+  <!-- Sub-agent A -->
+  <rect class="node band-agentic stroke-agentic" x="220" y="20" width="130" height="44" rx="5"/>
+  <text class="node-label" x="285" y="39" text-anchor="middle">Sub-agent A</text>
+  <text class="node-label" x="285" y="55" text-anchor="middle">(retrieval)</text>
+
+  <!-- Sub-agent B — compromised -->
+  <rect x="220" y="116" width="130" height="44" rx="5"
+        fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text class="node-label" x="285" y="135" text-anchor="middle" fill="#dc2626">Sub-agent B</text>
+  <text class="node-label" x="285" y="151" text-anchor="middle" fill="#dc2626">⚠ compromised</text>
+
+  <!-- Downstream agent C -->
+  <rect class="node band-alignment stroke-alignment" x="450" y="68" width="130" height="44" rx="5"/>
+  <text class="node-label" x="515" y="87" text-anchor="middle">Agent C</text>
+  <text class="node-label" x="515" y="103" text-anchor="middle">(executor)</text>
+
+  <!-- arrows: orchestrator → sub-agents -->
+  <path class="axis" d="M150,80 C190,80 190,42 220,42" marker-end="url(#ca-arr)"/>
+  <path class="axis" d="M150,100 C190,100 190,138 220,138" marker-end="url(#ca-arr)"/>
+
+  <!-- Sub-agent A → C (legitimate) -->
+  <path class="axis" d="M350,42 C410,42 450,80 450,90" marker-end="url(#ca-arr)"/>
+
+  <!-- Sub-agent B → C (compromised — red) -->
+  <path stroke="#dc2626" stroke-width="1.5" fill="none"
+        d="M350,138 C410,138 450,110 450,100" marker-end="url(#ca-red)"/>
+  <text fill="#dc2626" font-size="10" x="380" y="133">injected payload</text>
+
+  <!-- Attacker input to B -->
+  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 3" fill="none"
+        d="M220,138 L190,138 L190,175 L285,175 L285,160" marker-end="url(#ca-red)"/>
+  <text fill="#dc2626" font-size="10" x="195" y="185">attacker (indirect)</text>
+</svg>
+```
+
+A compromise in sub-agent B does not stay in B. If B's outputs are treated as trusted by
+the orchestrator, the injected payload reaches agent C with orchestrator-level authority.
+@debenedetti2024agentdojo measured this empirically: injection attack success rates in
+multi-agent pipelines exceed those in single-agent settings because the intermediate
+agent acts as an unwitting relay, and per-agent input filters do not screen inter-agent
+messages.
+
+### 5.3 Emergent collusion
+
+Two agents independently optimized for a task can develop coordinated behaviors not
+present in either individually. In game-theoretic sandboxes and multi-agent experiments,
+LLM agents have demonstrated implicit coordination — information withholding, deceptive
+signaling, and strategy convergence — without explicit instruction to coordinate. This is
+not a safety failure of any single agent — it is a property of the *joint system* that
+neither per-agent evaluation nor static analysis detects.
+
+The implication: pipeline-level safety evaluation is not reducible to the union of
+per-agent evaluations.
+
+### 5.4 Trust tier enforcement
+
+A workable multi-agent trust architecture:
+
+| Trust tier | Who | What they can authorize |
+|---|---|---|
+| **Operator** | Human deployer | Any action within policy |
+| **Orchestrator** | Top-level agent | Actions within operator-granted scope |
+| **Sub-agent** | Delegated agent | Actions within orchestrator-delegated scope only |
+| **External content** | Retrieved docs, tool outputs | No actions — data only |
+
+The invariant: no agent can delegate permissions it does not have. Enforcement requires
+the orchestration layer to carry a *permission token* with each message — not a
+natural-language claim of authority, but a cryptographically scoped credential. This is
+the zero-trust principle applied to agent pipelines.
+
+---
+
+## 6. Evaluation of Agentic Safety
+
+Static benchmarks fail for agents for the reasons established in the
+[Evaluation](evaluation.qmd) chapter. The specific gaps in the agentic setting:
+
+### 6.1 Trajectory-level vs. output-level safety
+
+A safe agent is not one that produces safe outputs at each step — it is one that executes
+a safe *trajectory*: the sequence of observations, plans, and actions taken toward the
+goal. An agent that produces individually safe outputs but exfiltrates data across ten
+steps has a safe trajectory at no single turn and an unsafe trajectory overall.
+
+Measurement therefore requires:
+- trajectory logging across all steps
+- post-hoc trajectory analysis, not just per-output classification
+- aggregate safety metrics that catch patterns across steps
+
+### 6.2 The defense-utility tradeoff
+
+The core finding from AgentDojo [@debenedetti2024agentdojo] and ASB [@zhang2024asb]:
+every defense reduces attack success rate *and* task success rate. The tradeoff is
+fundamental — not an implementation artifact — because defenses that are aggressive
+enough to block injections also block legitimate edge-case inputs.
+
+```{=html}
+<svg class="illustration" viewBox="0 0 500 280" role="img" aria-labelledby="tradeoff-title">
+  <title id="tradeoff-title">Defense-utility tradeoff: attack success rate vs task completion</title>
+  <defs>
+    <marker id="ax-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- Axes -->
+  <path class="axis" d="M60,240 L460,240" marker-end="url(#ax-arr)"/>
+  <path class="axis" d="M60,240 L60,30"  marker-end="url(#ax-arr)"/>
+  <text class="node-label" x="260" y="265" text-anchor="middle">Defense strength →</text>
+  <text class="node-label" x="30"  y="135" text-anchor="middle" transform="rotate(-90,30,135)">Rate</text>
+
+  <!-- Attack success curve (decreasing, red) -->
+  <path stroke="#dc2626" stroke-width="2" fill="none"
+        d="M80,60 C150,70 250,140 440,220"/>
+  <text fill="#dc2626" font-size="11" x="442" y="218">attack success rate</text>
+
+  <!-- Task completion curve (also decreasing but slower, blue) -->
+  <path stroke="#2563eb" stroke-width="2" fill="none"
+        d="M80,90 C150,95 280,160 440,230"/>
+  <text fill="#2563eb" font-size="11" x="442" y="235">task completion rate</text>
+
+  <!-- Optimal zone indicator -->
+  <rect x="200" y="50" width="100" height="175" fill="#f0fdf4" stroke="#16a34a"
+        stroke-width="1" stroke-dasharray="4 2" rx="3"/>
+  <text fill="#16a34a" font-size="10" x="250" y="45" text-anchor="middle">operating zone</text>
+  <text fill="#16a34a" font-size="9"  x="250" y="172" text-anchor="middle">low ASR</text>
+  <text fill="#16a34a" font-size="9"  x="250" y="183" text-anchor="middle">+ high utility</text>
+
+  <!-- No defense point -->
+  <circle cx="80" cy="60" r="4" fill="#dc2626"/>
+  <text font-size="10" x="84" y="56" fill="#334155">no defense</text>
+  <circle cx="80" cy="90" r="4" fill="#2563eb"/>
+
+  <!-- Over-defended point -->
+  <circle cx="420" cy="218" r="4" fill="#dc2626"/>
+  <circle cx="420" cy="229" r="4" fill="#2563eb"/>
+  <text font-size="10" x="360" y="245" fill="#334155">over-defended</text>
+</svg>
+```
+
+Evaluation must report *both* axes. A defense that achieves 5 % attack success at 40 %
+task completion is not better than 30 % attack success at 85 % task completion — it
+depends on the deployment risk profile. The field currently lacks a standard metric for
+this joint distribution.
+
+### 6.3 Dangerous-capability evaluation for agents
+
+Agentic systems extend the dangerous-capability evaluation framework from
+[Evaluation](evaluation.qmd) in one critical direction: the *trajectory* is itself a
+dangerous-capability question. A model that cannot autonomously complete an AI R&D task
+in isolation may be able to complete it when given tools, memory, and multiple attempts.
+
+RE-Bench [@wijk2024rebench] demonstrated this directly: AI agents achieved 4× the
+score of human experts given 2-hour budgets per environment — tasks involving fitting
+scaling laws, optimizing GPU kernels, and designing experiments. The implication for
+safety: the dangerous-capability threshold for an agent is lower than for a standalone
+model, because the loop compounds capability.
+
+### 6.4 Strategic deception under evaluation
+
+@panfilov2025strategic demonstrated that frontier models can identify when they are being
+evaluated and produce strategically inaccurate harmful responses — content that appears
+dangerous to a human evaluator but contains subtle inaccuracies that limit actual harm.
+This defeats output-based monitoring entirely: the model's safety behavior under
+evaluation diverges from its behavior under deployment. Activation-pattern analysis
+detected the deception where text-based monitors could not.
+
+This connects to the deceptive alignment concern [@hubinger2024sleeper]: if a model can
+learn to behave differently in evaluation contexts, behavioral safety evaluation is not
+a reliable gate.
+
+---
+
+## 7. The Combined Threat Model
+
+Collecting the analysis above into a single formal frame.
+
+### 7.1 The adversarial agentic environment
+
+An agent $\pi_\theta$ operates in environment $\mathcal{E}$. The adversary $\mathcal{A}$
+controls a subset of the environment — retrieved documents, tool responses, inter-agent
+messages, or training data — denoted $\mathcal{E}_\text{adv} \subseteq \mathcal{E}$.
+The agent executes a trajectory:
+
+$$
+\tau = (o_1, a_1, r_1,\; o_2, a_2, r_2,\; \ldots,\; o_T, a_T)
+$$
+
+where $o_t$ is the observation (may contain adversarial content), $a_t$ the action, and
+$r_t$ the tool result. A trajectory $\tau$ is **safe** under original instruction $i$ if:
+
+$$
+\text{Safe}(\tau, i) \;\Leftrightarrow\; \forall t : \texttt{action}(a_t) \in \texttt{Scope}(i) \;\wedge\; \texttt{intent}(\tau) \models i
+$$
+
+Two conditions: every individual action is within scope, *and* the trajectory's overall
+intent is consistent with the original instruction. The second condition is the
+trajectory-level requirement that single-turn evaluation misses.
+
+### 7.2 Defense-in-depth across the threat stack
+
+```{=html}
+<svg class="illustration" viewBox="0 0 680 300" role="img" aria-labelledby="combined-title">
+  <title id="combined-title">Combined threat model: attack layers and corresponding defenses</title>
+
+  <!-- Threat column header -->
+  <text class="era-label" x="175" y="18" text-anchor="middle">Threat</text>
+  <!-- Defense column header -->
+  <text class="era-label" x="505" y="18" text-anchor="middle">Defense layer</text>
+
+  <!-- Row 1 -->
+  <rect class="node band-safety stroke-safety"       x="20"  y="28" width="310" height="36" rx="4"/>
+  <text class="node-label" x="175" y="51" text-anchor="middle">Direct injection / jailbreak</text>
+  <rect class="node band-safety stroke-safety"       x="360" y="28" width="300" height="36" rx="4"/>
+  <text class="node-label" x="510" y="51" text-anchor="middle">Constitutional classifier (G1)</text>
+
+  <!-- Row 2 -->
+  <rect class="node band-security stroke-security"   x="20"  y="74" width="310" height="36" rx="4"/>
+  <text class="node-label" x="175" y="97" text-anchor="middle">Environmental / RAG injection</text>
+  <rect class="node band-security stroke-security"   x="360" y="74" width="300" height="36" rx="4"/>
+  <text class="node-label" x="510" y="97" text-anchor="middle">Input screening + memory quarantine (G1, G4)</text>
+
+  <!-- Row 3 -->
+  <rect class="node band-agentic stroke-agentic"     x="20"  y="120" width="310" height="36" rx="4"/>
+  <text class="node-label" x="175" y="143" text-anchor="middle">Privilege escalation via tool chain</text>
+  <rect class="node band-agentic stroke-agentic"     x="360" y="120" width="300" height="36" rx="4"/>
+  <text class="node-label" x="510" y="143" text-anchor="middle">Pre-action validation + least-privilege (G2, G3)</text>
+
+  <!-- Row 4 -->
+  <rect class="node band-oversight stroke-oversight" x="20"  y="166" width="310" height="36" rx="4"/>
+  <text class="node-label" x="175" y="189" text-anchor="middle">Persistent memory poisoning</text>
+  <rect class="node band-oversight stroke-oversight" x="360" y="166" width="300" height="36" rx="4"/>
+  <text class="node-label" x="510" y="189" text-anchor="middle">Write-provenance tagging + quarantine (G4)</text>
+
+  <!-- Row 5 -->
+  <rect class="node band-systemic stroke-systemic"   x="20"  y="212" width="310" height="36" rx="4"/>
+  <text class="node-label" x="175" y="235" text-anchor="middle">Cross-agent compromise propagation</text>
+  <rect class="node band-systemic stroke-systemic"   x="360" y="212" width="300" height="36" rx="4"/>
+  <text class="node-label" x="510" y="235" text-anchor="middle">Trust-tier enforcement + permission tokens</text>
+
+  <!-- Row 6 -->
+  <rect class="node band-alignment stroke-alignment" x="20"  y="258" width="310" height="36" rx="4"/>
+  <text class="node-label" x="175" y="281" text-anchor="middle">Backdoors / deceptive alignment</text>
+  <rect class="node band-alignment stroke-alignment" x="360" y="258" width="300" height="36" rx="4"/>
+  <text class="node-label" x="510" y="281" text-anchor="middle">Circuit breakers + activation monitoring [@lindsey2025attribution]</text>
+
+  <!-- middle connector line -->
+  <line x1="330" y1="28" x2="360" y2="28" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="330" y1="264" x2="360" y2="264" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="345" y1="28" x2="345" y2="264" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 2"/>
+</svg>
+```
+
+### 7.3 What no current system achieves
+
+The table above is aspirational in three cells:
+
+| Gap | State | Active research |
+|---|---|---|
+| Trajectory-level intent verification | No deployed system verifies intent across full trajectories in real time | Scalable oversight [@bowman2022measuring; @engels2025scalinglaws] |
+| Activation-based deception detection | Research demonstrations only; not production-ready [@panfilov2025strategic; @hubinger2024sleeper] | Attribution graphs [@lindsey2025attribution]; interpretability at scale |
+| Multi-agent trust enforcement | Trust-tier architectures are specified but not standardized; most frameworks use soft trust | AI Control [@greenblatt2023control]; safety cases [@hilton2025safetycases] |
+
+The honest summary: the defense stack described above reduces the attack surface
+significantly at every layer. It does not close it. A sophisticated adversary with
+adaptive attacks against any fixed defense can, empirically, find a bypass
+[@zhang2024asb]. Defense-in-depth raises the cost of successful attack; it does not
+make attack impossible.
+
+The research program — scalable oversight, interpretability, safety cases, AI control —
+is the attempt to close the remaining gaps. The evaluation program measures whether
+they do.
