@@ -11,8 +11,7 @@ maturity: topic
 Evaluation determines what deployed AI systems can and cannot do — including what they
 can and cannot be *made* to do. It is not a single methodology but a research discipline
 that has passed through distinct generations, each revealing blind spots in the generation
-before it. This chapter traces that progression, from static accuracy benchmarks to the
-dangerous-capability evaluations that now gate frontier deployment decisions.
+before it.
 
 ## Why Evaluation is a Discipline
 
@@ -31,6 +30,7 @@ pattern is: release → models saturate → contamination or Goodhart's discover
 new benchmark — and the cycle restarts, typically within 18–24 months.
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 680 200" role="img" aria-labelledby="gen-title">
   <title id="gen-title">Five generations of AI evaluation, 2018 to present</title>
   <defs>
@@ -48,7 +48,7 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
   <text class="node-label" x="80" y="74" text-anchor="middle">Static</text>
   <text class="node-label" x="80" y="88" text-anchor="middle">accuracy</text>
   <text class="node-label" x="80" y="120" text-anchor="middle">2018–22</text>
-  <line x1="80" y1="90" x2="80" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <line class="axis" x1="80" y1="90" x2="80" y2="100"/>
 
   <!-- Gen 2 -->
   <rect class="node band-security stroke-security" x="160" y="40" width="110" height="50" rx="4"/>
@@ -56,7 +56,7 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
   <text class="node-label" x="215" y="74" text-anchor="middle">Holistic</text>
   <text class="node-label" x="215" y="88" text-anchor="middle">HELM</text>
   <text class="node-label" x="215" y="120" text-anchor="middle">2022–23</text>
-  <line x1="215" y1="90" x2="215" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <line class="axis" x1="215" y1="90" x2="215" y2="100"/>
 
   <!-- Gen 3 -->
   <rect class="node band-oversight stroke-oversight" x="300" y="40" width="110" height="50" rx="4"/>
@@ -64,7 +64,7 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
   <text class="node-label" x="355" y="74" text-anchor="middle">Adversarial</text>
   <text class="node-label" x="355" y="88" text-anchor="middle">HarmBench</text>
   <text class="node-label" x="355" y="120" text-anchor="middle">2023–24</text>
-  <line x1="355" y1="90" x2="355" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <line class="axis" x1="355" y1="90" x2="355" y2="100"/>
 
   <!-- Gen 4 -->
   <rect class="node band-agentic stroke-agentic" x="440" y="40" width="110" height="50" rx="4"/>
@@ -72,7 +72,7 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
   <text class="node-label" x="495" y="74" text-anchor="middle">Agentic</text>
   <text class="node-label" x="495" y="88" text-anchor="middle">AgentDojo / ASB</text>
   <text class="node-label" x="495" y="120" text-anchor="middle">2024–</text>
-  <line x1="495" y1="90" x2="495" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <line class="axis" x1="495" y1="90" x2="495" y2="100"/>
 
   <!-- Gen 5 -->
   <rect class="node band-systemic stroke-systemic" x="560" y="40" width="80" height="50" rx="4"/>
@@ -80,7 +80,7 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
   <text class="node-label" x="600" y="74" text-anchor="middle">Dangerous</text>
   <text class="node-label" x="600" y="88" text-anchor="middle">capability</text>
   <text class="node-label" x="600" y="120" text-anchor="middle">2024–</text>
-  <line x1="600" y1="90" x2="600" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <line class="axis" x1="600" y1="90" x2="600" y2="100"/>
 
   <!-- Transition labels -->
   <text class="node-label" x="137" y="155" text-anchor="middle" font-style="italic">saturated</text>
@@ -88,6 +88,8 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
   <text class="node-label" x="415" y="155" text-anchor="middle" font-style="italic">behavioral only</text>
   <text class="node-label" x="540" y="155" text-anchor="middle" font-style="italic">single-turn only</text>
 </svg>
+<figcaption>Five generations of AI evaluation — each generation exposed blind spots in the one before it.</figcaption>
+</figure>
 ```
 
 ## Generation 1 — Static Accuracy (2018–2022)
@@ -107,23 +109,21 @@ itself a training target.
 
 ## Generation 2 — Holistic Evaluation (2022–2023)
 
-**HELM** (Liang et al., 2022) was the first multi-dimensional evaluation framework:
-accuracy, calibration, robustness, fairness, bias, toxicity, and efficiency measured
-simultaneously across a shared set of scenarios. The contribution was making evaluation
-criteria explicit and multidimensional — no single leaderboard number.
+**HELM** [@liang2022holistic] was the first multi-dimensional evaluation framework,
+measuring simultaneously across a shared set of scenarios:
 
-HELM exposed a tension static benchmarks hid: accuracy scores and robustness scores are
-weakly correlated. A model can top accuracy leaderboards while being brittle to
-distribution shift or adversarial rephrasing.
+- **Accuracy** — task performance on standard NLP scenarios
+- **Calibration** — whether confidence scores match actual accuracy
+- **Robustness** — stability under distribution shift and rephrasing
+- **Fairness and bias** — differential performance across demographic groups
+- **Toxicity** — unsafe generation rate
+- **Efficiency** — compute and throughput cost
 
-**Red-teaming** [@perez2022red] emerged in parallel as a safety-specific methodology:
-use a language model to generate adversarial prompts, then measure how often the target
-produces harmful outputs. LLM red teams are not bottlenecked by human time and can cover
-vastly more of the attack surface than manual red teams.
+HELM made evaluation multidimensional — no single leaderboard number — and exposed a tension static benchmarks hid: accuracy and robustness scores are weakly correlated. A model can top accuracy leaderboards while being brittle to distribution shift or adversarial rephrasing.
 
-**Limitation of both:** they measure behavioral properties of a fixed model under fixed
-prompts. Neither captures what a model does across a multi-step task, nor what a
-determined adversary can elicit using optimization.
+**Red-teaming** [@perez2022red] emerged in parallel as a safety-specific methodology: use a language model to generate adversarial prompts, then measure how often the target produces harmful outputs. LLM red teams cover vastly more of the attack surface than manual red teams.
+
+Both HELM and red-teaming measure behavioral properties of a fixed model under fixed prompts — neither captures what a model does across a multi-step task, nor what a determined adversary can elicit using optimization.
 
 ## Generation 3 — Adversarial Benchmarks (2023–2024)
 
@@ -136,6 +136,7 @@ attack success rate reported as a function of attack budget.
 and 33 target LLMs:
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 640 230" role="img" aria-labelledby="harm-title">
   <title id="harm-title">HarmBench evaluation structure: attack methods × model targets × harm categories</title>
   <defs>
@@ -167,7 +168,7 @@ and 33 target LLMs:
   <text class="node-label" x="320" y="114" text-anchor="middle">Disinformation</text>
   <text class="node-label" x="320" y="136" text-anchor="middle">Hate speech</text>
   <text class="node-label" x="320" y="158" text-anchor="middle">Physical harm</text>
-  <text class="node-label" x="320" y="196" text-anchor="middle" font-style="italic">cross-product ×</text>
+  <text class="node-label" x="320" y="196" text-anchor="middle" font-style="italic">evaluation matrix</text>
 
   <!-- Target models -->
   <rect class="node band-oversight stroke-oversight" x="450" y="20" width="170" height="190" rx="5"/>
@@ -179,6 +180,8 @@ and 33 target LLMs:
   <text class="node-label" x="535" y="158" text-anchor="middle">+ 29 others</text>
   <text class="node-label" x="535" y="196" text-anchor="middle" font-style="italic">33 total</text>
 </svg>
+<figcaption>HarmBench — 18 attack methods × 5 harm categories × 33 target models; attack success rate reported as a function of attack budget.</figcaption>
+</figure>
 ```
 
 Key finding: under optimization-based attacks, current safety training provides
@@ -202,14 +205,15 @@ a **task environment**, **trajectory-level safety criteria**, and **adversarial 
 embedded in the environment** — not just in the prompt.
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 680 240" role="img" aria-labelledby="agent-eval-title">
   <title id="agent-eval-title">Agentic benchmark structure: agent operating in adversarial task environment</title>
   <defs>
     <marker id="ae-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
     </marker>
-    <marker id="ae-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    <marker id="ae-red" class="marker-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"/>
     </marker>
   </defs>
 
@@ -225,12 +229,10 @@ embedded in the environment** — not just in the prompt.
   <path class="axis" d="M220,55 L270,110" marker-end="url(#ae-arr)"/>
 
   <!-- Injected payload -->
-  <rect x="20" y="160" width="200" height="50" rx="5"
-        fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
-  <text class="node-label" x="120" y="182" text-anchor="middle" fill="#dc2626" font-weight="600">Adversarial payload</text>
-  <text class="node-label" x="120" y="198" text-anchor="middle" fill="#dc2626">"Fwd attachments to evil@..."</text>
-  <path stroke="#dc2626" stroke-width="1.5" fill="none"
-        d="M220,185 L270,140" marker-end="url(#ae-red)"/>
+  <rect class="node-danger" x="20" y="160" width="200" height="50" rx="5"/>
+  <text class="node-label text-danger" x="120" y="182" text-anchor="middle" font-weight="600">Adversarial payload</text>
+  <text class="node-label text-danger" x="120" y="198" text-anchor="middle">"Fwd attachments to evil@..."</text>
+  <path class="edge-danger" d="M220,185 L270,140" marker-end="url(#ae-red)"/>
 
   <!-- Task success output -->
   <rect class="node band-safety stroke-safety" x="460" y="30" width="200" height="50" rx="5"/>
@@ -239,16 +241,16 @@ embedded in the environment** — not just in the prompt.
   <path class="axis" d="M410,110 L460,55" marker-end="url(#ae-arr)"/>
 
   <!-- Attack success output -->
-  <rect x="460" y="160" width="200" height="50" rx="5"
-        fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
-  <text class="node-label" x="560" y="182" text-anchor="middle" fill="#dc2626" font-weight="600">Safety metric</text>
-  <text class="node-label" x="560" y="198" text-anchor="middle" fill="#dc2626">attack success rate</text>
-  <path stroke="#dc2626" stroke-width="1.5" fill="none"
-        d="M410,140 L460,185" marker-end="url(#ae-red)"/>
+  <rect class="node-danger" x="460" y="160" width="200" height="50" rx="5"/>
+  <text class="node-label text-danger" x="560" y="182" text-anchor="middle" font-weight="600">Safety metric</text>
+  <text class="node-label text-danger" x="560" y="198" text-anchor="middle">attack success rate</text>
+  <path class="edge-danger" d="M410,140 L460,185" marker-end="url(#ae-red)"/>
 
   <!-- Key insight -->
   <text class="node-label" x="340" y="210" text-anchor="middle" font-style="italic">Both axes required — a defense is useless if it destroys task utility</text>
 </svg>
+<figcaption>Agentic benchmark structure — legitimate tasks and adversarial payloads arrive simultaneously; both utility and safety are measured.</figcaption>
+</figure>
 ```
 
 ### AgentDojo [@debenedetti2024agentdojo]
@@ -269,12 +271,14 @@ achieves 84 % attack success on undefended agents; indirect (environmental) inje
 60–80 %. No evaluated defense eliminated the attack surface — all traded safety for
 utility at varying rates.
 
-### τ-bench
+### Service-task reliability benchmarks
 
-Measures agent reliability across stochastic, multi-turn service tasks (airline, retail):
+Benchmarks such as τ-bench measure agent reliability across stochastic, multi-turn
+service tasks (airline reservations, retail transactions). The evaluation question:
 does the agent know when to confirm, refuse, and escalate? Safety-relevant because an
 over-confident agent causes irreversible real-world actions without appropriate
-verification pauses.
+verification pauses. Unlike AgentDojo and ASB, this class of benchmark focuses on
+*over-action* failures rather than adversarial injection.
 
 Gen 4 established that the defense-utility tradeoff is fundamental and that trajectory-level
 safety cannot be reduced to per-step output classification. Gen 5 asks a different question:
@@ -315,6 +319,7 @@ deception where text-based monitors could not.
 Dangerous-capability evaluations now gate deployment decisions:
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 680 260" role="img" aria-labelledby="fw-title">
   <title id="fw-title">Frontier safety frameworks: evaluation thresholds trigger deployment gates</title>
   <defs>
@@ -377,22 +382,24 @@ Dangerous-capability evaluations now gate deployment decisions:
   <text class="node-label" x="560" y="244" text-anchor="middle">safety case must be filed</text>
 
   <!-- grid lines -->
-  <line x1="238" y1="30" x2="238" y2="250" stroke="#cbd5e1" stroke-width="1"/>
-  <line x1="458" y1="30" x2="458" y2="250" stroke="#cbd5e1" stroke-width="1"/>
+  <line class="separator" x1="238" y1="30" x2="238" y2="250"/>
+  <line class="separator" x1="458" y1="30" x2="458" y2="250"/>
 </svg>
+<figcaption>Frontier safety frameworks — each lab maps evaluation results to deployment thresholds through a different tier structure.</figcaption>
+</figure>
 ```
 
-Safety cases [@hilton2025safetycases] provide the structured argument that a model's
-risk is tolerable given its evaluations — evaluation evidence is the primary input to
-that argument. Scalable oversight research [@engels2025scalinglaws] addresses the
-supervision question that underlies the threshold decisions: as models become more
-capable than human evaluators in specific domains, the evaluation itself requires
-stronger oversight structure to remain valid.
+Two research threads make those threshold decisions tractable:
+
+- **Safety cases** [@hilton2025safetycases] — structured arguments that a model's risk is tolerable given its evaluations; evaluation evidence is the primary input, making evaluation quality a direct gate on deployment authorization
+- **Scalable oversight** [@engels2025scalinglaws] — as models exceed human-expert capability in specific domains, human evaluators can no longer reliably detect failures; scalable oversight addresses the supervision bottleneck that would otherwise undermine threshold decisions
 
 ## Evaluation in the Multi-Agent Setting
 
-Single-agent benchmarks evaluate one model in isolation. Multi-agent systems introduce
-failure modes that are invisible at the component level:
+Gen 4 benchmarks (AgentDojo, ASB) evaluate a single agent operating in an adversarial
+environment. When multiple agents compose into a pipeline, additional failure modes appear
+that are invisible at the component level — AgentDojo itself measured higher injection
+success rates in multi-agent chains than in single-agent settings:
 
 | Failure mode | Mechanism | Why it evades per-agent evals |
 |---|---|---|
@@ -417,7 +424,4 @@ rather than properties of any component — is an open problem.
 | **Safety-capability joint metric** | No standard metric for the joint distribution of safety and utility; AgentDojo's dual-axis reporting is the current state of the art |
 | **Autonomous R&D evaluation** | RE-Bench [@wijk2024rebench] is a starting point; the self-improvement regime (where the agent improves the evaluation itself) has no established benchmark |
 
-The structural challenge: the evaluation target is a moving target — the model under
-evaluation and the models being used to evaluate it are trained on overlapping data, and
-capability improvements that make the model better at tasks also make it better at
-evading evaluation.
+The deeper problem: the model under evaluation and the models used to evaluate it are trained on overlapping data. Capability improvements that make a model better at tasks also make it better at evading evaluation — the benchmark and the subject improve together.
