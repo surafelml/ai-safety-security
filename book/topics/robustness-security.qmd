@@ -9,15 +9,9 @@ jupyter: python3
 
 # Robustness & Security {#sec-robustness-security}
 
-The security half of the thesis, grounded here. Where the
-[foundation](../foundations/security-foundations.qmd) established the two-track taxonomy
-and the dissolved code/data boundary, this chapter goes inside the threat: specific attack
-classes, their mechanics, and the defenses that contain them — from model weights to
-system perimeter.
-
-Organizing axis: roughly chronological within each threat tier, because each wave of
-attacks both revealed the limits of existing defenses and drove the next generation of
-them.
+Where the [foundation](../foundations/security-foundations.qmd) established the
+two-track taxonomy and the dissolved code/data boundary, this chapter goes inside the
+threat: specific attack classes, their mechanics, and the defenses that contain them.
 
 ## The Attack Surface
 
@@ -26,80 +20,70 @@ and each capable of amplifying a compromise that entered at a lower layer
 [@kim2026landscape]:
 
 ```{=html}
-<svg class="illustration" viewBox="0 0 680 340" role="img" aria-labelledby="stack-title">
+<figure>
+<svg class="illustration" viewBox="0 0 860 340" role="img" aria-labelledby="stack-title">
   <title id="stack-title">Attack surface layers — entry points and consequences</title>
-  <defs>
-    <marker id="st-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
-    </marker>
-  </defs>
 
   <!-- Column labels -->
   <text class="era-label" x="160" y="18" text-anchor="middle">Layer</text>
-  <text class="era-label" x="380" y="18" text-anchor="middle">What can be compromised</text>
-  <text class="era-label" x="590" y="18" text-anchor="middle">Consequence</text>
+  <text class="era-label" x="480" y="18" text-anchor="middle">What can be compromised</text>
+  <text class="era-label" x="755" y="18" text-anchor="middle">Consequence</text>
 
   <!-- Training data -->
   <rect class="node band-alignment stroke-alignment" x="10"  y="28" width="300" height="40" rx="4"/>
   <text class="node-label" x="160" y="53" text-anchor="middle" font-weight="600">Training data / weights</text>
-  <text class="node-label" x="380" y="53" text-anchor="middle">Poisoned samples, backdoor triggers, fine-tune attacks</text>
-  <text class="node-label" x="590" y="53" text-anchor="middle">Persistent covert behavior</text>
+  <text class="node-label" x="480" y="53" text-anchor="middle">Poisoned data, backdoor triggers, weight tampering</text>
+  <text class="node-label" x="755" y="53" text-anchor="middle">Persistent covert behavior</text>
 
   <!-- Input channel -->
   <rect class="node band-safety stroke-safety"       x="10"  y="78" width="300" height="40" rx="4"/>
   <text class="node-label" x="160" y="103" text-anchor="middle" font-weight="600">Input channel</text>
-  <text class="node-label" x="380" y="103" text-anchor="middle">Prompt injection, jailbreaks, adversarial suffixes</text>
-  <text class="node-label" x="590" y="103" text-anchor="middle">Control-flow hijack at inference</text>
+  <text class="node-label" x="480" y="103" text-anchor="middle">Jailbreaks, prompt injection, adversarial suffixes</text>
+  <text class="node-label" x="755" y="103" text-anchor="middle">Control hijack at inference</text>
 
   <!-- RAG / tool -->
   <rect class="node band-security stroke-security"   x="10"  y="128" width="300" height="40" rx="4"/>
   <text class="node-label" x="160" y="153" text-anchor="middle" font-weight="600">Retrieval / tool channel</text>
-  <text class="node-label" x="380" y="153" text-anchor="middle">Environmental injection, vector-DB poisoning, tool hijack</text>
-  <text class="node-label" x="590" y="153" text-anchor="middle">Untrusted data executes as instruction</text>
+  <text class="node-label" x="480" y="153" text-anchor="middle">Environmental injection, tool poisoning</text>
+  <text class="node-label" x="755" y="153" text-anchor="middle">Data executes as instruction</text>
 
   <!-- Memory -->
   <rect class="node band-oversight stroke-oversight" x="10"  y="178" width="300" height="40" rx="4"/>
   <text class="node-label" x="160" y="203" text-anchor="middle" font-weight="600">Persistent memory</text>
-  <text class="node-label" x="380" y="203" text-anchor="middle">Stored injection, cross-session payload</text>
-  <text class="node-label" x="590" y="203" text-anchor="middle">Attacker foothold persists across sessions</text>
+  <text class="node-label" x="480" y="203" text-anchor="middle">Stored injection, cross-session payload</text>
+  <text class="node-label" x="755" y="203" text-anchor="middle">Persistent attacker foothold</text>
 
   <!-- Inter-agent -->
   <rect class="node band-agentic stroke-agentic"     x="10"  y="228" width="300" height="40" rx="4"/>
   <text class="node-label" x="160" y="253" text-anchor="middle" font-weight="600">Inter-agent channel</text>
-  <text class="node-label" x="380" y="253" text-anchor="middle">Cross-agent injection, trust relay</text>
-  <text class="node-label" x="590" y="253" text-anchor="middle">Cascading compromise through pipeline</text>
+  <text class="node-label" x="480" y="253" text-anchor="middle">Cross-agent injection, trust relay</text>
+  <text class="node-label" x="755" y="253" text-anchor="middle">Cascading pipeline compromise</text>
 
   <!-- Output / action -->
   <rect class="node band-systemic stroke-systemic"   x="10"  y="278" width="300" height="40" rx="4"/>
   <text class="node-label" x="160" y="303" text-anchor="middle" font-weight="600">Output / action layer</text>
-  <text class="node-label" x="380" y="303" text-anchor="middle">Exfiltration, privilege escalation, unsafe side effects</text>
-  <text class="node-label" x="590" y="303" text-anchor="middle">Blast radius extends into the environment</text>
+  <text class="node-label" x="480" y="303" text-anchor="middle">Exfiltration, privilege escalation</text>
+  <text class="node-label" x="755" y="303" text-anchor="middle">Real-world blast radius</text>
 
   <!-- vertical separator lines -->
-  <line x1="310" y1="25" x2="310" y2="320" stroke="#cbd5e1" stroke-width="1"/>
-  <line x1="470" y1="25" x2="470" y2="320" stroke="#cbd5e1" stroke-width="1"/>
+  <line class="separator" x1="320" y1="25" x2="320" y2="320"/>
+  <line class="separator" x1="640" y1="25" x2="640" y2="320"/>
 </svg>
+<figcaption>Attack surface layers — entry points and consequences at each stack level.</figcaption>
+</figure>
 ```
 
-The dissolved code/data boundary [@greshake2023not] — the root cause — means any channel
-that carries content can also carry a control instruction. The attack surface in the table
-above is therefore not a list of separate vulnerabilities; it is a connected path from
-the bottom layer (training) to the top (output/action), where a breach at any level
-propagates upward.
+The dissolved code/data boundary [@greshake2023not] connects these layers: a breach at
+any level propagates forward, shaping the planning context and widening blast radius
+without additional attacker effort.
 
-## Adversarial Inputs: From Pixels to Tokens
+## Adversarial Inputs
 
-**Adversarial examples** (pre-LLM) showed that imperceptible input perturbations cause
-classifiers to fail with high confidence. The underlying lesson carried forward: models
-learn brittle, high-frequency features that do not match human-interpretable concepts.
-
-For language models, the discrete token space closes one attack vector ($\ell_\infty$
-perturbations don't translate) and opens another: **optimization over the token
-vocabulary** can find inputs that reliably bypass safety tuning.
-
-**GCG — Greedy Coordinate Gradient** [@zou2023universal] made this concrete. It appends
-an adversarial suffix to any harmful prompt and optimizes the suffix to maximize the
-probability of a compliant target continuation:
+For language models, the discrete token space makes $\ell_\infty$ perturbations
+inapplicable but opens a new vector: **optimization over the token vocabulary** finds
+inputs that reliably bypass safety tuning. **GCG — Greedy Coordinate Gradient**
+[@zou2023universal] is the canonical result: appends an adversarial suffix to any harmful
+prompt and optimizes it to maximize the probability of a compliant target continuation:
 
 $$
 \min_{\mathbf{x}_{\text{suf}}} \;
@@ -109,46 +93,49 @@ y_{\text{target}}\right),
 $$
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 640 180" role="img" aria-labelledby="gcg-title">
   <title id="gcg-title">GCG adversarial suffix optimization loop</title>
   <defs>
     <marker id="gcg-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+      <path d="M0,0 L10,5 L0,10 z"/>
     </marker>
   </defs>
 
+  <!-- Properties banner -->
+  <text class="node-label" x="320" y="22" text-anchor="middle" font-style="italic">Universal (across prompts) · Transferable (open → closed models)</text>
+
   <!-- Prompt box -->
-  <rect class="node band-safety stroke-safety" x="20" y="68" width="160" height="44" rx="5"/>
-  <text class="node-label" x="100" y="87" text-anchor="middle">Harmful prompt</text>
-  <text class="node-label" x="100" y="103" text-anchor="middle">x_prompt</text>
+  <rect class="node band-safety stroke-safety" x="20" y="38" width="160" height="44" rx="5"/>
+  <text class="node-label" x="100" y="57" text-anchor="middle">Harmful prompt</text>
+  <text class="node-label" x="100" y="73" text-anchor="middle">x_prompt</text>
 
   <!-- Suffix box -->
-  <rect class="node band-security stroke-security" x="220" y="68" width="160" height="44" rx="5"/>
-  <text class="node-label" x="300" y="87" text-anchor="middle">Adversarial suffix</text>
-  <text class="node-label" x="300" y="103" text-anchor="middle">x_suf (optimized)</text>
+  <rect class="node band-security stroke-security" x="220" y="38" width="160" height="44" rx="5"/>
+  <text class="node-label" x="300" y="57" text-anchor="middle">Adversarial suffix</text>
+  <text class="node-label" x="300" y="73" text-anchor="middle">x_suf (optimized)</text>
 
   <!-- Model -->
-  <rect class="node band-agentic stroke-agentic" x="430" y="68" width="120" height="44" rx="5"/>
-  <text class="node-label" x="490" y="87" text-anchor="middle">Model f_θ</text>
-  <text class="node-label" x="490" y="103" text-anchor="middle">(aligned)</text>
+  <rect class="node band-agentic stroke-agentic" x="430" y="38" width="120" height="44" rx="5"/>
+  <text class="node-label" x="490" y="57" text-anchor="middle">Model f_θ</text>
+  <text class="node-label" x="490" y="73" text-anchor="middle">(aligned)</text>
 
-  <!-- Output -->
-  <rect class="node band-alignment stroke-alignment" x="590" y="68" width="40" height="44" rx="5"/>
-  <text class="node-label" x="610" y="95" text-anchor="middle">✓</text>
+  <!-- Output — attack succeeds: model complies with harmful target -->
+  <rect class="node-danger" x="590" y="38" width="40" height="44" rx="5"/>
+  <text class="node-label text-danger" x="610" y="65" text-anchor="middle">✓</text>
 
   <!-- Arrows right -->
-  <path class="axis" d="M180,90 L220,90" marker-end="url(#gcg-arr)"/>
-  <path class="axis" d="M380,90 L430,90" marker-end="url(#gcg-arr)"/>
-  <path class="axis" d="M550,90 L590,90" marker-end="url(#gcg-arr)"/>
+  <path class="axis" d="M180,60 L220,60" marker-end="url(#gcg-arr)"/>
+  <path class="axis" d="M380,60 L430,60" marker-end="url(#gcg-arr)"/>
+  <path class="axis" d="M550,60 L590,60" marker-end="url(#gcg-arr)"/>
 
-  <!-- Feedback loop -->
+  <!-- Feedback loop (fill:none is set by .axis in CSS) -->
   <path class="axis" stroke-dasharray="4 3"
-        d="M610,112 C610,155 300,155 300,112" marker-end="url(#gcg-arr)"/>
-  <text class="node-label" x="455" y="150" text-anchor="middle">loss gradient → update x_suf</text>
-
-  <!-- Properties -->
-  <text class="node-label" x="320" y="25" text-anchor="middle" font-style="italic">Universal (transfers across prompts) · Transferable (open → closed models)</text>
+        d="M610,82 C610,130 300,130 300,82" marker-end="url(#gcg-arr)"/>
+  <text class="node-label" x="455" y="125" text-anchor="middle">loss gradient → update x_suf</text>
 </svg>
+<figcaption>GCG optimization: the adversarial suffix is iteratively updated via loss gradients until the aligned model produces a compliant harmful output.</figcaption>
+</figure>
 ```
 
 GCG is **universal** (one suffix works across diverse prompts) and **transferable**
@@ -162,6 +149,7 @@ These two failure modes are often conflated but are structurally different probl
 requiring different defenses:
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 660 200" role="img" aria-labelledby="jvp-title">
   <title id="jvp-title">Jailbreak vs prompt injection: structural comparison</title>
   <defs>
@@ -191,6 +179,8 @@ requiring different defenses:
   <!-- VS -->
   <text class="era-label" x="330" y="105" text-anchor="middle">vs</text>
 </svg>
+<figcaption>Jailbreaks and prompt injection differ in threat model, attack path, and the defenses that address them.</figcaption>
+</figure>
 ```
 
 Conflating them leads to misrouted defenses: better jailbreak training does not protect
@@ -199,22 +189,9 @@ training does not fix a structural boundary violation.
 
 **Indirect prompt injection** [@greshake2023not] is the operative form for agentic
 systems: the attacker plants instructions in documents, web pages, or database records
-that the agent will retrieve and execute. RAG pipelines are especially high-risk:
-poisoning a vector store can give an attacker semi-persistent influence across all future
-retrievals [@chang2026retrieval].
-
-```{python}
-#| label: injection-taxonomy
-#| classes: foundation-demo
-threat = {
-    "Direct injection":   "User crafts prompt to override system instructions",
-    "Indirect injection": "Attacker plants instructions in retrieved content",
-    "Stored injection":   "Malicious payload persists in agent memory / DB",
-    "Multi-hop":          "Compromised agent A passes payload to agent B",
-}
-for k, v in threat.items():
-    print(f"  {k:<22} — {v}")
-```
+the agent will retrieve and execute. RAG pipelines are especially high-risk — poisoning
+a vector store gives an attacker semi-persistent influence across all future retrievals
+[@chang2026retrieval].
 
 ## Training-Level Attacks: Backdoors and Deceptive Alignment
 
@@ -226,11 +203,14 @@ tuning.
 on specific inputs or introduce covert behaviors. For fine-tuned models, a small fraction
 of poisoned samples can dominate learned behavior on the targeted distribution.
 
-**Backdoor / trojan attacks** bind covert behaviors to a trigger token or phrase. The
-model behaves normally on all other inputs; the trigger activates the malicious behavior.
-MITRE ATLAS catalogs this as AML.T0020 [@mitreatlas].
+**Backdoor / trojan attacks** [@li2025backdoorllm] bind covert behaviors to a trigger
+token or phrase. The model behaves normally on all other inputs; the trigger activates
+the malicious behavior (MITRE ATLAS AML.T0020 [@mitreatlas]). No current mitigation
+technique reliably detects all attack modalities (data poisoning, weight poisoning,
+hidden-state manipulation, chain-of-thought hijacking).
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 640 160" role="img" aria-labelledby="backdoor-title">
   <title id="backdoor-title">Backdoor attack: trigger activates covert behavior; benign input does not</title>
   <defs>
@@ -250,11 +230,9 @@ MITRE ATLAS catalogs this as AML.T0020 [@mitreatlas].
   <path class="axis" d="M220,40 L270,72" marker-end="url(#bd-arr)"/>
 
   <!-- Trigger input -->
-  <rect x="20" y="100" width="200" height="40" rx="5"
-        fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
-  <text class="node-label" x="120" y="125" text-anchor="middle" fill="#dc2626">Input + trigger token ⚡</text>
-  <path stroke="#dc2626" stroke-width="1.5" fill="none"
-        d="M220,120 L270,108" marker-end="url(#bd-arr)"/>
+  <rect class="node-danger" x="20" y="100" width="200" height="40" rx="5"/>
+  <text class="node-label text-danger" x="120" y="125" text-anchor="middle">Input + trigger token ⚡</text>
+  <path class="edge-danger" d="M220,120 L270,108" marker-end="url(#bd-arr)"/>
 
   <!-- Benign output -->
   <rect class="node band-safety stroke-safety" x="460" y="20" width="160" height="40" rx="5"/>
@@ -262,19 +240,13 @@ MITRE ATLAS catalogs this as AML.T0020 [@mitreatlas].
   <path class="axis" d="M410,68 L460,38" marker-end="url(#bd-arr)"/>
 
   <!-- Malicious output -->
-  <rect x="460" y="100" width="160" height="40" rx="5"
-        fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
-  <text class="node-label" x="540" y="125" text-anchor="middle" fill="#dc2626">Covert behavior ✗</text>
-  <path stroke="#dc2626" stroke-width="1.5" fill="none"
-        d="M410,92 L460,112" marker-end="url(#bd-arr)"/>
+  <rect class="node-danger" x="460" y="100" width="160" height="40" rx="5"/>
+  <text class="node-label text-danger" x="540" y="125" text-anchor="middle">Covert behavior ✗</text>
+  <path class="edge-danger" d="M410,92 L460,112" marker-end="url(#bd-arr)"/>
 </svg>
+<figcaption>Backdoor attack — benign inputs produce normal output; trigger-embedded inputs activate covert behavior.</figcaption>
+</figure>
 ```
-
-**BackdoorLLM** [@li2025backdoorllm] provides the first comprehensive benchmark for
-backdoor attacks on text-generation LLMs, covering data poisoning, weight poisoning,
-hidden-state manipulation, and chain-of-thought hijacking across 200+ experiments.
-The benchmark's finding: no current mitigation technique reliably detects all four
-attack modalities.
 
 **Sleeper agents** [@hubinger2024sleeper] make backdoors harder to remove. An LLM
 trained to behave safely during training but unsafely when a date-gated trigger fires
@@ -300,7 +272,7 @@ without ever touching the training pipeline:
 |---|---|---|
 | **Membership inference** | Compare model confidence on in-distribution vs. out-of-distribution examples | Whether a specific record was in training data |
 | **Model extraction** | Query the model iteratively; fit a surrogate | Approximation of proprietary model behavior |
-| **Training data extraction** | Prompt for completion of known prefixes | Near-verbatim training examples (Carlini et al., 2021: demonstrated on GPT-2; scales with model size) |
+| **Training data extraction** | Prompt for completion of known prefixes | Near-verbatim training examples [@carlini2021extracting] — demonstrated on GPT-2; scales with model size |
 | **Prompt extraction** | Suffix optimization or injection to elicit system prompt | Confidential operator instructions |
 
 Privacy and security are coupled: a data-extraction attack against a model trained on
@@ -315,11 +287,12 @@ defense-in-depth — where each layer adds a control point against a different t
 [@owasp2025llm; @googlesaif]:
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 680 380" role="img" aria-labelledby="defense-title">
   <title id="defense-title">Layered defense stack: five layers from input screening to system perimeter</title>
   <defs>
     <marker id="da" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+      <path d="M0,0 L10,5 L0,10 z"/>
     </marker>
   </defs>
 
@@ -333,74 +306,69 @@ defense-in-depth — where each layer adds a control point against a different t
   <!-- L1 Input/output screening -->
   <rect class="node band-safety stroke-safety"       x="60" y="70"  width="580" height="56" rx="5"/>
   <text class="era-label"  x="350" y="92"  text-anchor="middle">Input / Output Screening</text>
-  <text class="node-label" x="350" y="112" text-anchor="middle">Constitutional classifiers [@sharma2025constitutional] · Llama Guard [@inan2023llamaguard] · harm taxonomy filters</text>
-  <text class="node-label" x="350" y="125" text-anchor="middle">Blocks known attack patterns before the model sees them; screens outputs before they reach the user or environment</text>
+  <text class="node-label" x="350" y="111" text-anchor="middle">Constitutional classifiers · Llama Guard · harm taxonomy filters</text>
+  <text class="node-label" x="350" y="124" text-anchor="middle" font-style="italic">Blocks attack patterns before model; screens outputs before environment</text>
 
   <!-- L2 Training -->
   <rect class="node band-security stroke-security"   x="60" y="138" width="580" height="56" rx="5"/>
   <text class="era-label"  x="350" y="160" text-anchor="middle">Training-Level Alignment</text>
-  <text class="node-label" x="350" y="180" text-anchor="middle">RLHF [@christiano2017deep] · DPO [@rafailov2023direct] · Constitutional AI [@bai2022constitutional] · adversarial training</text>
-  <text class="node-label" x="350" y="193" text-anchor="middle">Reduces jailbreak surface area; does not eliminate it — optimization can always find a bypass</text>
+  <text class="node-label" x="350" y="179" text-anchor="middle">RLHF · DPO · Constitutional AI · adversarial training</text>
+  <text class="node-label" x="350" y="192" text-anchor="middle" font-style="italic">Reduces jailbreak surface area — optimization can always find a bypass</text>
 
   <!-- L3 Representation -->
   <rect class="node band-oversight stroke-oversight" x="60" y="198" width="580" height="56" rx="5"/>
   <text class="era-label"  x="350" y="220" text-anchor="middle">Representation-Level Controls</text>
-  <text class="node-label" x="350" y="240" text-anchor="middle">Circuit breakers [@zou2024circuitbreakers] · activation steering · tamper-resistant safeguards / unlearning</text>
-  <text class="node-label" x="350" y="253" text-anchor="middle">Interrupts harmful hidden-state trajectories before the model "decides" to comply</text>
+  <text class="node-label" x="350" y="239" text-anchor="middle">Circuit breakers · activation steering · tamper-resistant unlearning</text>
+  <text class="node-label" x="350" y="252" text-anchor="middle" font-style="italic">Interrupts harmful hidden-state trajectories before the model "decides"</text>
 
   <!-- L4 Architecture -->
   <rect class="node band-agentic stroke-agentic"     x="60" y="258" width="580" height="56" rx="5"/>
   <text class="era-label"  x="350" y="280" text-anchor="middle">Architectural Isolation</text>
-  <text class="node-label" x="350" y="300" text-anchor="middle">Dual-LLM firewall [@huang2025firewalls] · interface isolation · data/control channel separation</text>
-  <text class="node-label" x="350" y="313" text-anchor="middle">Separates policy from execution; removes the primary model from the trust decision entirely</text>
+  <text class="node-label" x="350" y="299" text-anchor="middle">Dual-LLM firewall · interface isolation · data/control channel separation</text>
+  <text class="node-label" x="350" y="312" text-anchor="middle" font-style="italic">Removes primary model from the trust decision entirely</text>
 
   <!-- L5 System perimeter -->
   <rect class="node band-systemic stroke-systemic"   x="60" y="318" width="580" height="56" rx="5"/>
   <text class="era-label"  x="350" y="340" text-anchor="middle">System Perimeter</text>
-  <text class="node-label" x="350" y="360" text-anchor="middle">Least-privilege tools · sandboxed execution · output schema enforcement · immutable audit trail</text>
-  <text class="node-label" x="350" y="373" text-anchor="middle">Contains blast radius at the infrastructure layer, independent of model behavior</text>
+  <text class="node-label" x="350" y="359" text-anchor="middle">Least-privilege tools · sandboxed execution · output schema · audit trail</text>
+  <text class="node-label" x="350" y="372" text-anchor="middle" font-style="italic">Contains blast radius independent of model behavior</text>
 
   <!-- "attack ingress" arrow on left -->
   <path class="axis" d="M45,68 L45,374" marker-end="url(#da)"/>
   <text class="node-label" x="18" y="220" text-anchor="middle" transform="rotate(-90,18,220)">attack ingress ↓</text>
 </svg>
+<figcaption>Five-layer defense-in-depth stack. Each layer targets a different attack class; no single layer is sufficient.</figcaption>
+</figure>
 ```
 
 ### L1 — Input/Output Screening
 
-**Llama Guard** [@inan2023llamaguard] is a fine-tuned LLM classifier that evaluates
-prompts and completions against a configurable harm taxonomy. It operates as a
-request/response wrapper — one additional inference call per exchange.
+**Llama Guard** [@inan2023llamaguard] — a fine-tuned LLM classifier evaluating prompts
+and completions against a configurable harm taxonomy; one additional inference call per
+exchange.
 
-**Constitutional classifiers** [@sharma2025constitutional] extend this to universal
-jailbreaks. Trained against thousands of adversarially generated jailbreak variants with
-policies expressed as natural-language rules, they are significantly harder to bypass
-than behavioral classifiers trained on harm labels. The mechanism: the policy is not a
-list of forbidden phrases but a declarative rule set that the classifier applies to novel
-phrasings. Thousands of hours of Anthropic red-teaming found no universal bypass under
-the constitutional classifier regime.
+**Constitutional classifiers** [@sharma2025constitutional] — trained against thousands
+of adversarially generated jailbreak variants with policies as natural-language rules
+rather than forbidden-phrase lists; significantly harder to bypass, with no universal
+bypass found under extended red-teaming.
 
 ### L2 — Training-Level Alignment
 
-RLHF [@christiano2017deep] and DPO [@rafailov2023direct] fine-tune the model to prefer
-outputs consistent with human preferences. Constitutional AI [@bai2022constitutional]
-uses an LLM-generated critique-revision loop to scale preference labeling.
-
-These reduce jailbreak surface area but do not eliminate it. GCG demonstrated that
-optimization over the token vocabulary finds compliant outputs despite alignment training —
-the defense space and the attack space are drawn from the same vocabulary.
+RLHF [@christiano2017deep], DPO [@rafailov2023direct], and Constitutional AI
+[@bai2022constitutional] reduce jailbreak surface area but do not eliminate it: the
+defense space and the attack space are drawn from the same vocabulary, and optimization
+reliably finds compliant outputs despite alignment training.
 
 ### L3 — Representation-Level Controls
 
-**Circuit breakers** [@zou2024circuitbreakers] use representation engineering to
-interrupt the hidden-state trajectories that precede harmful outputs. Linear probes over
-residual stream activations detect when the model is approaching the harmful-output
-subspace; a learned controller diverts those activations before the harmful computation
-completes. The result: refusal without requiring the model to "decide" — the harmful
-trajectory is interrupted before decision.
+**Circuit breakers** [@zou2024circuitbreakers] interrupt harmful computation at the
+representation level rather than at the output:
 
-This is more robust to optimization-based attacks than behavioral refusal because it
-operates on internal state rather than on text patterns the optimizer can target directly.
+- Linear probes over residual stream activations detect when hidden states approach the harmful-output subspace
+- A learned controller diverts those activations before the harmful computation completes
+- Refusal occurs without the model "deciding" — the trajectory is cut before any decision is reached
+
+This is more robust to optimization-based attacks than behavioral refusal: the optimizer cannot directly target internal activation patterns the way it can target text patterns.
 
 **Tamper-resistant safeguards / unlearning** address a different vulnerability: the
 *normal* RLHF-learned safety behaviors (refuse harmful requests) can be stripped by a
@@ -412,20 +380,20 @@ removal (that is their design); standard safety behaviors do not.
 
 ### L4 — Architectural Isolation: The Dual-LLM Firewall
 
-The dual-LLM pattern [@huang2025firewalls] is the architectural response to the
-structural weakness of text-based firewalls: a system-prompt instruction like "ignore
-injections" is part of the same LLM context and can be overridden by a sufficiently
-strong injection.
+The dual-LLM pattern [@huang2025firewalls] responds to the structural weakness of
+text-based firewalls: a "ignore injections" system instruction lives in the same context
+window as the injection and can be overridden by it.
 
 ```{=html}
+<figure>
 <svg class="illustration" viewBox="0 0 640 200" role="img" aria-labelledby="dual-title">
   <title id="dual-title">Dual-LLM firewall: policy model gates all external content before the primary model</title>
   <defs>
     <marker id="dl-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
     </marker>
-    <marker id="dl-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    <marker id="dl-red" class="marker-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"/>
     </marker>
   </defs>
 
@@ -445,25 +413,25 @@ strong injection.
   <text class="node-label" x="530" y="117" text-anchor="middle">(never sees raw external)</text>
 
   <!-- Block path (red, downward) -->
-  <rect x="210" y="165" width="160" height="30" rx="4"
-        fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
-  <text class="node-label" x="290" y="185" text-anchor="middle" fill="#dc2626">⊘ blocked</text>
+  <rect class="node-danger" x="210" y="165" width="160" height="30" rx="4"/>
+  <text class="node-label text-danger" x="290" y="185" text-anchor="middle">⊘ blocked</text>
 
   <!-- Arrows -->
   <path class="axis" d="M150,100 L210,100" marker-end="url(#dl-arr)"/>
   <path class="axis" d="M370,100 L450,100" marker-end="url(#dl-arr)"/>
-  <path stroke="#dc2626" stroke-width="1.5" fill="none"
-        d="M290,140 L290,165" marker-end="url(#dl-red)"/>
+  <path class="edge-danger" d="M290,140 L290,165" marker-end="url(#dl-red)"/>
 
-  <!-- Injection attempt -->
-  <text fill="#dc2626" font-size="10" x="12" y="72">injection attempt</text>
-  <path stroke="#dc2626" stroke-width="1" stroke-dasharray="3 2" fill="none"
-        d="M80,78 L80,64 L208,64" marker-end="url(#dl-red)"/>
+  <!-- Injection attempt: dashed path from external content up/right to policy model, blocked -->
+  <path class="edge-danger-dash" stroke-width="1" d="M80,78 L80,62 L208,62" marker-end="url(#dl-red)"/>
+  <text class="text-danger" font-size="9" x="144" y="57" text-anchor="middle">injection attempt</text>
 </svg>
+<figcaption>Dual-LLM firewall — the policy model gates all external content; the primary model never sees raw untrusted input.</figcaption>
+</figure>
 ```
 
 ```{python}
 #| label: dual-llm-pattern
+#| eval: false
 def dual_llm_gateway(external_content: str, policy_model, primary_model) -> str:
     verdict = policy_model.classify(external_content)   # deterministic policy check
     if verdict.is_safe:
@@ -471,9 +439,8 @@ def dual_llm_gateway(external_content: str, policy_model, primary_model) -> str:
     return "[content blocked by policy model]"
 ```
 
-The policy model makes a binary decision; the primary model never sees the raw external
-content. This removes the primary model from the trust decision — the injection channel
-is eliminated at the interface, not patched with a prompt instruction.
+The primary model never sees raw external content; the injection channel is eliminated
+at the interface, not patched with a prompt instruction.
 
 ### L5 — System Perimeter
 
