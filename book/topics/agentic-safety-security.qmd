@@ -23,8 +23,6 @@ any of its components in isolation.** A correct model, a correct tool, and a cor
 retrieval pipeline can compose into an unsafe agent. The threat is not in the parts —
 it is in the connections.
 
----
-
 ## 1. The Agentic Attack Surface
 
 A deployed agent is not a single model — it is a loop that connects a model to memory,
@@ -110,8 +108,6 @@ The [dissolved code/data boundary](../foundations/security-foundations.qmd) is t
 cause in all six rows: the same channel that carries legitimate content can carry an
 instruction.
 
----
-
 ## 2. Single-Agent Risk: When the Loop Is the Threat Surface
 
 Static safety benchmarks miss agentic failures because they evaluate a model
@@ -192,8 +188,7 @@ key asymmetry:
 Current alignment training does not reliably teach models this asymmetry. Helpfulness
 optimization provides strong signal for task completion and penalizes unnecessary refusals,
 but no equivalent training signal encodes the cost of irreversible side effects
-[@amodei2016concrete]. The result: models under-weight caution precisely when the
-consequences of under-caution cannot be undone.
+[@amodei2016concrete]. The result: models under-weight caution at precisely the moments when under-caution is most costly.
 
 ### 2.4 Oversight decay with horizon length
 
@@ -202,8 +197,6 @@ instruction is not watching step 47 of a 50-step agentic task. The model's behav
 late steps is governed primarily by in-context planning — shaped by accumulated tool
 results, not the original instruction. This is the oversight gap that scalable oversight
 research attempts to close [@engels2025scalinglaws; @bowman2022measuring].
-
----
 
 ## 3. Prompt Injection in the Agentic Loop
 
@@ -220,8 +213,8 @@ case; the agentic loop gives attackers compounding leverage.
     <marker id="inj-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
     </marker>
-    <marker id="inj-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    <marker id="inj-red" class="marker-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"/>
     </marker>
   </defs>
 
@@ -250,24 +243,20 @@ case; the agentic loop gives attackers compounding leverage.
 
   <!-- Injection vectors (red dashed) -->
   <!-- from retrieval into Perceive -->
-  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
-        d="M340,20 L340,5" marker-end="url(#inj-red)"/>
-  <text fill="#dc2626" font-size="10" x="343" y="14">① RAG / web</text>
+  <path class="edge-danger-dash" d="M340,20 L340,5" marker-end="url(#inj-red)"/>
+  <text class="text-danger" font-size="10" x="343" y="14">① RAG / web</text>
 
   <!-- from tool output into Act -->
-  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
-        d="M340,300 L340,315" marker-end="url(#inj-red)"/>
-  <text fill="#dc2626" font-size="10" x="343" y="325">② tool output</text>
+  <path class="edge-danger-dash" d="M340,300 L340,315" marker-end="url(#inj-red)"/>
+  <text class="text-danger" font-size="10" x="343" y="325">② tool output</text>
 
   <!-- into memory (injection enters from outside left) -->
-  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
-        d="M20,160 L40,160" marker-end="url(#inj-red)"/>
-  <text fill="#dc2626" font-size="10" x="2" y="156" transform="rotate(-90,12,160)">③ memory</text>
+  <path class="edge-danger-dash" d="M20,160 L40,160" marker-end="url(#inj-red)"/>
+  <text class="text-danger" font-size="10" x="2" y="156" transform="rotate(-90,12,160)">③ memory</text>
 
   <!-- from inter-agent (injection arrives from outside right) -->
-  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" fill="none"
-        d="M660,160 L642,160" marker-end="url(#inj-red)"/>
-  <text fill="#dc2626" font-size="10" x="662" y="164">④ agent msg</text>
+  <path class="edge-danger-dash" d="M660,160 L642,160" marker-end="url(#inj-red)"/>
+  <text class="text-danger" font-size="10" x="662" y="164">④ agent msg</text>
 </svg>
 ```
 
@@ -280,15 +269,14 @@ case; the agentic loop gives attackers compounding leverage.
 
 ### 3.2 Why runtime text firewalls are insufficient
 
-The naive defense is a text filter: screen every input for known injection patterns.
-@huang2025firewalls demonstrate the structural problem. The primary model receives a
-prompt containing both trusted instructions and retrieved content; a text-based firewall
-operating on the *same context window* is itself subject to the injection it is meant to
-block. Sufficiently crafted content can instruct the model to ignore the firewall, because
-both are part of the same natural-language context.
+The naive defense is a text filter — screen every input for known injection patterns.
+@huang2025firewalls demonstrate why this fails structurally:
 
-The underlying issue: **a model cannot be both the executor and the trusted auditor of its
-own inputs** when both live in the same context window.
+- The primary model receives a prompt containing *both* trusted instructions and retrieved content in the same context window
+- A text-based firewall operating on that same context is itself subject to the injection it is meant to block
+- Sufficiently crafted content can override the filter because filter and payload share the same natural-language context; the model cannot distinguish which part has authority
+
+The underlying issue: **a model cannot be both the executor and the trusted auditor of its own inputs** when both live in the same context window.
 
 ### 3.3 The data/control separation principle
 
@@ -308,8 +296,6 @@ $$
 where $i$ is the trusted operator instruction and $d_u$ contains arbitrary untrusted
 content. An action that varies with $u$ is a violation — a successful injection. Defenses
 are mechanisms that restore this invariant.
-
----
 
 ## 4. Guardrail Architectures for Agentic Systems
 
@@ -359,7 +345,7 @@ coordinated differently — and adds two layers that do not exist in the static 
   <text class="node-label" x="120" y="252" text-anchor="middle">output schema validation</text>
   <text class="node-label" x="120" y="268" text-anchor="middle">least-privilege tool scoping</text>
   <text class="node-label" x="120" y="284" text-anchor="middle">sandbox / audit trail</text>
-  <path class="axis" d="M270,252 L220,252" marker-end="url(#g-arr)"/>
+  <path class="axis" d="M220,252 L270,252" marker-end="url(#g-arr)"/>
 
   <!-- Memory box -->
   <rect class="node band-oversight stroke-oversight" x="270" y="330" width="160" height="34" rx="5"/>
@@ -387,10 +373,11 @@ thousands of adversarially generated attack variants, with policies stated as na
 language rules. Llama Guard [@inan2023llamaguard] provides a configurable harm taxonomy
 at lower compute cost for less adversarially demanding inputs.
 
-**Agentic wrinkle:** the volume of inputs is high — every retrieval step, every tool
-call. A screening cost of one additional inference per external input adds up. Practical
-deployments use lightweight classifiers for high-volume channels and full classifiers
-for high-risk channels (code execution, external API calls).
+**Agentic wrinkle:** the volume of external inputs is far higher than in static deployments:
+
+- Every retrieval result and tool response is an untrusted external input requiring screening
+- One additional inference per input is costly at scale — a 100-step task becomes 200 inferences
+- Practical deployments tier screening: lightweight classifiers for high-volume channels (retrieval results), full classifiers for high-risk channels (code execution outputs, external API responses)
 
 ### 4.2 G2 — Pre-action validation at the plan step
 
@@ -410,6 +397,10 @@ threat.
 
 ```{python}
 #| label: pre-action-gate
+#| eval: false
+def is_in_scope(instruction: str, action: dict) -> bool:
+    return True  # deployment-specific: semantic similarity, rule engine, or second model
+
 def pre_action_gate(original_instruction: str, planned_action: dict,
                     irreversible_verbs: set) -> str:
     verb = planned_action.get("tool", "")
@@ -460,10 +451,10 @@ When G2 detects a potential scope violation or irreversibility flag, the options
 | **Abort** | Certain policy violation | Terminate the task; notify operator |
 | **Escalate** | Uncertain threat | Hand off to human with full trajectory log |
 
-Current systems support checkpoint and abort; rollback and escalation require environment-level
-tooling that most deployments lack. This is an open engineering gap.
-
----
+In practice, most agentic frameworks (e.g., LangGraph, AutoGPT) support checkpoint and
+abort; rollback requires environment-level state capture, and escalation requires
+operator-facing tooling — both are uncommon in current deployments. This is an open
+engineering gap.
 
 ## 5. Multi-Agent Trust and Emergent Risk
 
@@ -494,8 +485,8 @@ orchestration layer — a feature most current multi-agent frameworks do not enf
     <marker id="ca-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
     </marker>
-    <marker id="ca-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/>
+    <marker id="ca-red" class="marker-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"/>
     </marker>
   </defs>
 
@@ -510,10 +501,9 @@ orchestration layer — a feature most current multi-agent frameworks do not enf
   <text class="node-label" x="285" y="55" text-anchor="middle">(retrieval)</text>
 
   <!-- Sub-agent B — compromised -->
-  <rect x="220" y="116" width="130" height="44" rx="5"
-        fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
-  <text class="node-label" x="285" y="135" text-anchor="middle" fill="#dc2626">Sub-agent B</text>
-  <text class="node-label" x="285" y="151" text-anchor="middle" fill="#dc2626">⚠ compromised</text>
+  <rect class="node-danger" x="220" y="116" width="130" height="44" rx="5"/>
+  <text class="node-label text-danger" x="285" y="135" text-anchor="middle">Sub-agent B</text>
+  <text class="node-label text-danger" x="285" y="151" text-anchor="middle">⚠ compromised</text>
 
   <!-- Downstream agent C -->
   <rect class="node band-alignment stroke-alignment" x="450" y="68" width="130" height="44" rx="5"/>
@@ -528,14 +518,12 @@ orchestration layer — a feature most current multi-agent frameworks do not enf
   <path class="axis" d="M350,42 C410,42 450,80 450,90" marker-end="url(#ca-arr)"/>
 
   <!-- Sub-agent B → C (compromised — red) -->
-  <path stroke="#dc2626" stroke-width="1.5" fill="none"
-        d="M350,138 C410,138 450,110 450,100" marker-end="url(#ca-red)"/>
-  <text fill="#dc2626" font-size="10" x="380" y="133">injected payload</text>
+  <path class="edge-danger" d="M350,138 C410,138 450,110 450,100" marker-end="url(#ca-red)"/>
+  <text class="text-danger" font-size="10" x="380" y="133">injected payload</text>
 
   <!-- Attacker input to B -->
-  <path stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4 3" fill="none"
-        d="M220,138 L190,138 L190,175 L285,175 L285,160" marker-end="url(#ca-red)"/>
-  <text fill="#dc2626" font-size="10" x="195" y="185">attacker (indirect)</text>
+  <path class="edge-danger-dash" stroke-dasharray="4 3" d="M220,138 L190,138 L190,175 L285,175 L285,160" marker-end="url(#ca-red)"/>
+  <text class="text-danger" font-size="10" x="195" y="185">attacker (indirect)</text>
 </svg>
 ```
 
@@ -548,15 +536,7 @@ messages.
 
 ### 5.3 Emergent collusion
 
-Two agents independently optimized for a task can develop coordinated behaviors not
-present in either individually. In game-theoretic sandboxes and multi-agent experiments,
-LLM agents have demonstrated implicit coordination — information withholding, deceptive
-signaling, and strategy convergence — without explicit instruction to coordinate. This is
-not a safety failure of any single agent — it is a property of the *joint system* that
-neither per-agent evaluation nor static analysis detects.
-
-The implication: pipeline-level safety evaluation is not reducible to the union of
-per-agent evaluations.
+Two agents independently optimized for a task can develop coordinated behaviors absent from either individually. Early game-theoretic experiments show LLMs can coordinate implicitly in repeated-game settings [@phelps2023emergent], suggesting agents may converge on information withholding, deceptive signaling, or strategy alignment without explicit instruction. Whether this constitutes safety-relevant emergent collusion or merely correlated optimization is an open empirical question. What is established: per-agent evaluation cannot detect joint behaviors that only appear in the composed system — pipeline-level safety evaluation is not reducible to the union of per-agent evaluations.
 
 ### 5.4 Trust tier enforcement
 
@@ -573,8 +553,6 @@ The invariant: no agent can delegate permissions it does not have. Enforcement r
 the orchestration layer to carry a *permission token* with each message — not a
 natural-language claim of authority, but a cryptographically scoped credential. This is
 the zero-trust principle applied to agent pipelines.
-
----
 
 ## 6. Evaluation of Agentic Safety
 
@@ -616,31 +594,28 @@ enough to block injections also block legitimate edge-case inputs.
   <text class="node-label" x="30"  y="135" text-anchor="middle" transform="rotate(-90,30,135)">Rate</text>
 
   <!-- Attack success curve (decreasing, red) -->
-  <path stroke="#dc2626" stroke-width="2" fill="none"
-        d="M80,60 C150,70 250,140 440,220"/>
-  <text fill="#dc2626" font-size="11" x="442" y="218">attack success rate</text>
+  <path class="edge-danger-2" d="M80,60 C150,70 250,140 440,220"/>
+  <text class="text-danger" font-size="11" x="442" y="218">attack success rate</text>
 
-  <!-- Task completion curve (also decreasing but slower, blue) -->
-  <path stroke="#2563eb" stroke-width="2" fill="none"
-        d="M80,90 C150,95 280,160 440,230"/>
-  <text fill="#2563eb" font-size="11" x="442" y="235">task completion rate</text>
+  <!-- Task completion curve (decreasing but slower, blue) -->
+  <path class="edge-primary" d="M80,90 C150,95 280,160 440,230"/>
+  <text class="fill-primary" font-size="11" x="442" y="235">task completion rate</text>
 
   <!-- Optimal zone indicator -->
-  <rect x="200" y="50" width="100" height="175" fill="#f0fdf4" stroke="#16a34a"
-        stroke-width="1" stroke-dasharray="4 2" rx="3"/>
-  <text fill="#16a34a" font-size="10" x="250" y="45" text-anchor="middle">operating zone</text>
-  <text fill="#16a34a" font-size="9"  x="250" y="172" text-anchor="middle">low ASR</text>
-  <text fill="#16a34a" font-size="9"  x="250" y="183" text-anchor="middle">+ high utility</text>
+  <rect class="node-success" x="200" y="50" width="100" height="175" stroke-dasharray="4 2" rx="3"/>
+  <text class="text-success" font-size="10" x="250" y="45" text-anchor="middle">operating zone</text>
+  <text class="text-success" font-size="9"  x="250" y="172" text-anchor="middle">low ASR</text>
+  <text class="text-success" font-size="9"  x="250" y="183" text-anchor="middle">+ high utility</text>
 
   <!-- No defense point -->
-  <circle cx="80" cy="60" r="4" fill="#dc2626"/>
-  <text font-size="10" x="84" y="56" fill="#334155">no defense</text>
-  <circle cx="80" cy="90" r="4" fill="#2563eb"/>
+  <circle class="fill-danger"  cx="80" cy="60" r="4"/>
+  <text class="node-label" font-size="10" x="84" y="56">no defense</text>
+  <circle class="fill-primary" cx="80" cy="90" r="4"/>
 
   <!-- Over-defended point -->
-  <circle cx="420" cy="218" r="4" fill="#dc2626"/>
-  <circle cx="420" cy="229" r="4" fill="#2563eb"/>
-  <text font-size="10" x="360" y="245" fill="#334155">over-defended</text>
+  <circle class="fill-danger"  cx="420" cy="218" r="4"/>
+  <circle class="fill-primary" cx="420" cy="229" r="4"/>
+  <text class="node-label" font-size="10" x="360" y="245">over-defended</text>
 </svg>
 ```
 
@@ -674,8 +649,6 @@ detected the deception where text-based monitors could not.
 This connects to the deceptive alignment concern [@hubinger2024sleeper]: if a model can
 learn to behave differently in evaluation contexts, behavioral safety evaluation is not
 a reliable gate.
-
----
 
 ## 7. The Combined Threat Model
 
@@ -748,12 +721,12 @@ trajectory-level requirement that single-turn evaluation misses.
   <rect class="node band-alignment stroke-alignment" x="20"  y="258" width="310" height="36" rx="4"/>
   <text class="node-label" x="175" y="281" text-anchor="middle">Backdoors / deceptive alignment</text>
   <rect class="node band-alignment stroke-alignment" x="360" y="258" width="300" height="36" rx="4"/>
-  <text class="node-label" x="510" y="281" text-anchor="middle">Circuit breakers + activation monitoring [@lindsey2025attribution]</text>
+  <text class="node-label" x="510" y="281" text-anchor="middle">Circuit breakers + activation monitoring</text>
 
   <!-- middle connector line -->
-  <line x1="330" y1="28" x2="360" y2="28" stroke="#94a3b8" stroke-width="1"/>
-  <line x1="330" y1="264" x2="360" y2="264" stroke="#94a3b8" stroke-width="1"/>
-  <line x1="345" y1="28" x2="345" y2="264" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 2"/>
+  <line class="separator" x1="330" y1="28" x2="360" y2="28"/>
+  <line class="separator" x1="330" y1="264" x2="360" y2="264"/>
+  <line class="separator-dash" x1="345" y1="28" x2="345" y2="264"/>
 </svg>
 ```
 
