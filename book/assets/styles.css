@@ -4,28 +4,111 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Body text in Inter; compact heading sizes for a tighter, book-like feel */
-body { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 0.92rem; }
-h1, .title { font-size: 1.45rem; font-weight: 700; }
-h2 { font-size: 1.18rem; font-weight: 600; }
-h3 { font-size: 1.02rem; font-weight: 600; }
-h4 { font-size: 0.92rem; font-weight: 600; }
+/* ── Body / heading scale ─────────────────────────────────────────────────── */
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 0.82rem; }
+h1, .title { font-size: 1.3rem;  font-weight: 700; }
+h2           { font-size: 1.08rem; font-weight: 600; }
+h3           { font-size: 0.95rem; font-weight: 600; }
+h4           { font-size: 0.82rem; font-weight: 600; }
+p, li, td, th { font-size: 0.82rem; }
+
+/* ── Left sidebar — no-wrap items, don't touch grid width ────────────────── */
+#quarto-sidebar {
+  padding: 1rem 0.5rem 1rem 0.75rem;
+  overflow-x: hidden;
+}
+
+/* Prevent chapter titles from wrapping; let the sidebar's own width clip them */
+.sidebar-item .sidebar-item-text,
+.sidebar-item-container .sidebar-item-text,
+.sidebar-section .sidebar-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  display: block;
+}
+
+/* Part headers */
+.sidebar-section > .sidebar-item > .sidebar-item-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+/* Right-side in-page TOC */
+#TOC, .toc-actions { font-size: 0.74rem; }
+#TOC .toc-entry { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 :root {
-  /* Era palette — chronological safety eras (analogous to the NN-timeline scheme).
-     Red is reserved for the "today" marker and never used as an era band. */
-  --era-theory:        #d97706; /* amber  — Foundations / Theory (pre-2015) */
-  --era-adversarial:   #0891b2; /* cyan   — Adversarial ML & Security (2014–2019) */
-  --era-alignment:     #2563eb; /* blue   — Alignment Era (2019–2022) */
-  --era-interp:        #7c3aed; /* purple — Interpretability Surge (2022–2024) */
-  --era-oversight:     #0d9488; /* teal   — Scalable Oversight (2023–2025) */
-  --era-agentic:       #059669; /* green  — Agentic Frontier (2025+) */
-  --marker-today:      #dc2626; /* red    — reserved: "today" marker only */
+  /* Era palette — chronological safety eras */
+  --era-theory:        #d97706;
+  --era-adversarial:   #0891b2;
+  --era-alignment:     #2563eb;
+  --era-interp:        #7c3aed;
+  --era-oversight:     #0d9488;
+  --era-agentic:       #059669;
+  --marker-today:      #dc2626;
 
   --node-stroke:       #334155;
-  --node-fill:         #f8fafc;
-  --axis:              #94a3b8;
+  --node-fill:         #f1f5f9;
+  --axis:              #64748b;
   --label:             #1e293b;
+
+  /* Semantic tokens */
+  --danger:            #dc2626;
+  --danger-bg:         #fee2e2;
+  --success:           #16a34a;
+  --success-bg:        #dcfce7;
+  --separator:         #cbd5e1;
+  --muted:             #64748b;
+}
+
+/* ── Dark mode — system preference OR Quarto toggle ──────────────────────── */
+@media (prefers-color-scheme: dark) { :root { --_dark: 1; } }
+[data-bs-theme="dark"]              { --_dark: 1; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --node-fill:         #1e293b;
+    --node-stroke:       #94a3b8;
+    --axis:              #475569;
+    --label:             #e2e8f0;
+    --era-theory:        #fbbf24;
+    --era-adversarial:   #22d3ee;
+    --era-alignment:     #60a5fa;
+    --era-interp:        #a78bfa;
+    --era-oversight:     #2dd4bf;
+    --era-agentic:       #34d399;
+    --danger:            #f87171;
+    --danger-bg:         #2d0808;
+    --success:           #4ade80;
+    --success-bg:        #052e16;
+    --separator:         #334155;
+    --muted:             #94a3b8;
+  }
+}
+
+[data-bs-theme="dark"] {
+  --node-fill:         #1e293b;
+  --node-stroke:       #94a3b8;
+  --axis:              #475569;
+  --label:             #e2e8f0;
+  --era-theory:        #fbbf24;
+  --era-adversarial:   #22d3ee;
+  --era-alignment:     #60a5fa;
+  --era-interp:        #a78bfa;
+  --era-oversight:     #2dd4bf;
+  --era-agentic:       #34d399;
+  --danger:            #f87171;
+  --danger-bg:         #2d0808;
+  --success:           #4ade80;
+  --success-bg:        #052e16;
+  --separator:         #334155;
+  --muted:             #94a3b8;
 }
 
 /* Inline SVG figures */
@@ -36,34 +119,79 @@ h4 { font-size: 0.92rem; font-weight: 600; }
   height: auto;
   font-family: 'Inter', system-ui, sans-serif;
 }
-.illustration text { fill: var(--label); }
-.illustration .axis { stroke: var(--axis); stroke-width: 1.5; }
-.illustration .node { fill: var(--node-fill); stroke: var(--node-stroke); stroke-width: 1.5; }
-.illustration .node-label { font-size: 12px; }
-.illustration .era-label { font-size: 11px; font-weight: 600; letter-spacing: .02em; }
-
-/* Era band fills (use as class on rects/paths) — bolder fill for legibility */
-.band-theory      { fill: var(--era-theory);      opacity: .37; }
-.band-adversarial { fill: var(--era-adversarial); opacity: .37; }
-.band-alignment   { fill: var(--era-alignment);   opacity: .37; }
-.band-interp    { fill: var(--era-interp);    opacity: .37; }
-.band-oversight { fill: var(--era-oversight); opacity: .37; }
-.band-agentic   { fill: var(--era-agentic);   opacity: .37; }
-
-/* Era stroke variants (for nodes/edges keyed to an era) */
-.stroke-theory      { stroke: var(--era-theory); }
-.stroke-adversarial { stroke: var(--era-adversarial); }
-.stroke-alignment   { stroke: var(--era-alignment); }
-.stroke-interp    { stroke: var(--era-interp); }
-.stroke-oversight { stroke: var(--era-oversight); }
-.stroke-agentic   { stroke: var(--era-agentic); }
-
-/* "Today" marker */
-.marker-today { stroke: var(--marker-today); stroke-width: 2; stroke-dasharray: 4 3; }
-.marker-today-label { fill: var(--marker-today); font-size: 11px; font-weight: 700; }
+.illustration text        { fill: var(--label); }
+.illustration .axis       { stroke: var(--axis); stroke-width: 1.5; fill: none; }
+.illustration .node       { fill: var(--node-fill); stroke: var(--node-stroke); stroke-width: 1.5; }
+.illustration .node-label { font-size: 12px; font-weight: 500; }
+.illustration .era-label  { font-size: 11px; font-weight: 700; letter-spacing: .02em; }
 
 /* Clickable timeline nodes */
 .illustration a:hover .node { stroke-width: 2.5; cursor: pointer; }
+
+/* ── Era band fills — prefixed to beat .illustration .node specificity (0,2,0) ── */
+.illustration .band-theory      { fill: var(--era-theory);      opacity: .28; }
+.illustration .band-adversarial { fill: var(--era-adversarial); opacity: .28; }
+.illustration .band-alignment   { fill: var(--era-alignment);   opacity: .28; }
+.illustration .band-interp      { fill: var(--era-interp);      opacity: .28; }
+.illustration .band-oversight   { fill: var(--era-oversight);   opacity: .28; }
+.illustration .band-agentic     { fill: var(--era-agentic);     opacity: .28; }
+
+/* Era stroke variants */
+.illustration .stroke-theory      { stroke: var(--era-theory); }
+.illustration .stroke-adversarial { stroke: var(--era-adversarial); }
+.illustration .stroke-alignment   { stroke: var(--era-alignment); }
+.illustration .stroke-interp      { stroke: var(--era-interp); }
+.illustration .stroke-oversight   { stroke: var(--era-oversight); }
+.illustration .stroke-agentic     { stroke: var(--era-agentic); }
+
+/* ── Semantic aliases — Part II topic chapters ───────────────────────────── */
+.illustration .band-safety     { fill: var(--era-alignment);   opacity: .18; }
+.illustration .stroke-safety   { stroke: var(--era-alignment); }
+.illustration .band-security   { fill: var(--era-adversarial); opacity: .18; }
+.illustration .stroke-security { stroke: var(--era-adversarial); }
+.illustration .band-systemic   { fill: var(--era-theory);      opacity: .18; }
+.illustration .stroke-systemic { stroke: var(--era-theory); }
+
+/* "Today" marker */
+.marker-today       { stroke: var(--marker-today); stroke-width: 2; stroke-dasharray: 4 3; }
+.marker-today-label { fill: var(--marker-today); font-size: 11px; font-weight: 700; }
+
+/* ── SVG semantic utility classes ────────────────────────────────────────── */
+/* Marker arrowheads */
+.illustration defs marker path         { fill: var(--node-stroke); }
+.illustration defs .marker-danger path { fill: var(--danger); }
+
+/* Semantic nodes — prefixed to beat .illustration .node */
+.illustration .node-danger  { fill: var(--danger-bg);  stroke: var(--danger);  stroke-width: 1.5; }
+.illustration .node-success { fill: var(--success-bg); stroke: var(--success); stroke-width: 1.5; }
+
+/* Semantic text fills — prefixed to beat .illustration text */
+.illustration .text-danger  { fill: var(--danger); }
+.illustration .text-success { fill: var(--success); }
+.illustration .text-muted   { fill: var(--muted); }
+.illustration .fill-danger  { fill: var(--danger); }
+.illustration .fill-success { fill: var(--success); }
+.illustration .fill-primary { fill: var(--era-alignment); }
+
+/* Semantic edges */
+.illustration .edge-danger      { stroke: var(--danger); stroke-width: 1.5; fill: none; }
+.illustration .edge-danger-dash { stroke: var(--danger); stroke-width: 1.5; stroke-dasharray: 5 3; fill: none; }
+.illustration .edge-danger-2    { stroke: var(--danger); stroke-width: 2; fill: none; }
+.illustration .edge-primary     { stroke: var(--era-alignment); stroke-width: 2; fill: none; }
+
+/* Separator / divider lines */
+.illustration .separator      { stroke: var(--separator); stroke-width: 1; fill: none; }
+.illustration .separator-dash { stroke: var(--separator); stroke-width: 1; stroke-dasharray: 3 2; fill: none; }
+
+/* Figure captions */
+figure { margin: 1.5rem 0; }
+figcaption {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 0.4rem;
+  font-style: italic;
+}
 
 /* References — looser, scannable bibliography (hanging indent + breathing room) */
 #refs, .csl-bib-body { line-height: 1.6; }

@@ -11,6 +11,7 @@ book:
   repo-actions: [edit, issue]
   sidebar:
     style: docked
+    width: 280
   chapters:
     - index.qmd
     - part: "I — Foundations"
@@ -42,9 +43,13 @@ csl: apa.csl
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: litera
+      dark: darkly
     css: assets/styles.css
     toc: true
     number-sections: true
     html-math-method: mathjax
-    page-layout: full
+    page-layout: article
+
+browser: true
