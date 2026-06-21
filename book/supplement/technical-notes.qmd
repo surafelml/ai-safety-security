@@ -1,12 +1,12 @@
 ---
-title: "Supplementary Technical Notes"
+title: "Technical Notes"
 description: "Extended derivations and formal treatments linked from the main chapters."
 created: 2026-05-26
 last-reviewed: 2026-05-26
 maturity: supplement
 ---
 
-# Supplementary Technical Notes {#sec-supplement}
+# Technical Notes {#sec-supplement}
 
 Extended derivations kept out of the main flow to keep it readable. Each note is linked from
 the section it supports.
