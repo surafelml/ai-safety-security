@@ -12,25 +12,43 @@ Recent work (roughly the last 12 months), newest first. Entries graduate into a 
 chapter's chronological timeline (Part II) once superseded or matured — keeping the book
 continuously evolving.
 
-## Signposts {#sec-frontier-signposts}
+> **Living chapter.** Part III is the book's leading edge and the most volatile part of it.
+> The concepts below are framed to *outlast* the specific papers under them — but the
+> frontier itself will move: by this time next year this chapter will likely carry new
+> concepts, and today's will have matured into Part II. Treat it as a snapshot of where the
+> open problems sit now, not a fixed table of contents.
 
-Fast-moving paths shaping the next few years, each headed for a topic chapter.
+## Cross-cutting concepts {#sec-frontier-signposts}
 
-- **Recursive self-improvement / automated AI R&D** — AI accelerating AI compresses
-  oversight time and amplifies misalignment; the headline reason scalable oversight and
-  capability thresholds exist. → [Monitoring & Oversight](../topics/monitoring-oversight.qmd)
-- **AI control** — assume a model *may* be scheming and design protocols safe regardless
-  [@greenblatt2023control]. → [Monitoring & Oversight](../topics/monitoring-oversight.qmd)
-- **Deceptive alignment / scheming** — misaligned behavior that survives safety training
-  [@hubinger2024sleeper]. → [Alignment](../topics/alignment.qmd)
-- **Dangerous-capability evaluations** — CBRN, cyber-offense, autonomy, self-proliferation;
-  the trigger behind frontier safety frameworks. → [Evaluation](../topics/evaluation.qmd)
-- **Safety cases** — structured arguments that a system is safe enough to deploy
-  [@hilton2025safetycases]. → [Systemic Safety & Governance](../topics/systemic-safety.qmd)
-- **Chain-of-thought monitorability** — keeping reasoning legible for oversight, and the
-  risk that optimization erodes it. → [Interpretability](../topics/interpretability.qmd)
+Rather than tracking individual approaches, Part III organizes the frontier around a few
+*concepts* — each broad enough to absorb several fast-moving research lines and to span more
+than one topic chapter. Specific methods (debate, CoT monitoring, sleeper-agent probes, …)
+are instances *inside* these concepts, and migrate to their topic chapters as they settle.
+
+- **Oversight that holds under adversarial pressure** — the unifying question behind AI
+  control [@greenblatt2023control], deceptive alignment and scheming [@hubinger2024sleeper],
+  and chain-of-thought monitorability: can an oversight signal survive a model that is
+  actively trying to defeat it? Spans
+  [Monitoring & Oversight](../topics/monitoring-oversight.qmd),
+  [Alignment](../topics/alignment.qmd), and [Interpretability](../topics/interpretability.qmd).
+- **Verification under a capability gap** — when systems exceed human judgment, how is any
+  claim about them checked? Subsumes scalable oversight, debate, decomposition,
+  dangerous-capability evals, and safety cases [@hilton2025safetycases]. Spans
+  [Monitoring & Oversight](../topics/monitoring-oversight.qmd),
+  [Evaluation](../topics/evaluation.qmd), and
+  [Systemic Safety & Governance](../topics/systemic-safety.qmd).
+- **Self-accelerating capability** — automated AI R&D and recursive self-improvement
+  compress the time available for oversight and amplify every other risk; the headline
+  reason capability thresholds and frontier frameworks exist. Spans
+  [Monitoring & Oversight](../topics/monitoring-oversight.qmd) and
+  [Systemic Safety & Governance](../topics/systemic-safety.qmd).
+- **Compounding agentic attack surface** — autonomy plus tool-use turns isolated
+  vulnerabilities (injection, memory poisoning, inter-agent trust) into propagating,
+  multi-step compromises. Spans
+  [Agentic Safety × Security](../topics/agentic-safety-security.qmd) and
+  [Robustness & Security](../topics/robustness-security.qmd).
 
 ## Intake queue
 
-> Dated entries below, newest first — one-line claim, why it matters, target topic.
-> *(Empty — populated during the continuous literature scan.)*
+> Dated entries below, newest first — one-line claim, why it matters, the concept it lands
+> under, and target topic. *(Empty — populated during the continuous literature scan.)*
