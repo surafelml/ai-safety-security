@@ -6,8 +6,6 @@ last-reviewed: 2026-06-20
 maturity: topic
 ---
 
-# Alignment {#sec-alignment}
-
 The first of the five pillars in the [landscape](../foundations/landscape.qmd):
 making a system *want* what its designers intend. Where
 [Robustness & Security](robustness-security.qmd) defends the system against external

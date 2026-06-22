@@ -6,8 +6,6 @@ last-reviewed: 2026-06-20
 maturity: topic
 ---
 
-# Interpretability & Explainability {#sec-interpretability}
-
 [Alignment](alignment.qmd) leaves an unobserved variable: the goal the model actually
 internalized. Interpretability is the attempt to *read* that variable — to recover
 mechanism from weights and activations rather than infer it from behavior. It is the only

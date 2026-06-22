@@ -6,8 +6,6 @@ last-reviewed: 2026-05-26
 maturity: foundations
 ---
 
-# The AI Safety & Security Landscape {#sec-landscape}
-
 The panoramic map of the field — read once to orient; topic chapters deepen each thread chronologically.
 
 - **Core areas** — five pillars and how they interlock.

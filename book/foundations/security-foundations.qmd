@@ -7,8 +7,6 @@ maturity: foundations
 jupyter: python3
 ---
 
-# Safety & Security: A Two-Track Foundation {#sec-two-track}
-
 The structural baseline for the rest of the book — where [landscape](landscape.qmd) gave chronology, this gives the taxonomy topic chapters build on:
 
 - safety vs. security — how they divide and interlock

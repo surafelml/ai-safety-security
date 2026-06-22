@@ -6,8 +6,6 @@ last-reviewed: 2026-04-26
 maturity: frontier
 ---
 
-# Frontier {#sec-frontier}
-
 Recent work (roughly the last 12 months), newest first. Entries graduate into a topic
 chapter's chronological timeline (Part II) once superseded or matured — keeping the book
 continuously evolving.

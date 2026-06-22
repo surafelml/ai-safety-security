@@ -7,8 +7,6 @@ maturity: foundations
 jupyter: python3
 ---
 
-# Agentic Systems: The Bridge {#sec-agentic-systems}
-
 The object the whole book is about. An agent is where autonomy (a safety problem) meets
 external action (a security problem) — so it is the seam, not a side topic.
 

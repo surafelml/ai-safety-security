@@ -2,9 +2,8 @@
 title: "Preface"
 created: 2026-04-26
 last-reviewed: 2026-04-26
+number-sections: false
 ---
-
-# Preface {.unnumbered}
 
 *Published May 27, 2026 (updated: June 21, 2026)*
 

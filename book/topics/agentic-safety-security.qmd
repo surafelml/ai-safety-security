@@ -7,8 +7,6 @@ maturity: topic
 jupyter: python3
 ---
 
-# Agentic Safety × Security {#sec-agentic}
-
 Every preceding chapter converges here. The
 [foundation](../foundations/security-foundations.qmd) established why safety and security
 split into two tracks — and why agentic systems are the seam where they reunite.

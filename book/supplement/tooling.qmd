@@ -6,8 +6,6 @@ last-reviewed: 2026-06-21
 maturity: supplement
 ---
 
-# Tools & Frameworks {#sec-tooling}
-
 > **Living document.** This catalog covers tools prominent at the time of last review and
 > is not exhaustive. The tooling landscape evolves rapidly — products are acquired,
 > deprecated, or superseded, and new categories emerge as the attack surface grows.

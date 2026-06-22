@@ -7,8 +7,6 @@ maturity: topic
 jupyter: python3
 ---
 
-# Robustness & Security {#sec-robustness-security}
-
 Where the [foundation](../foundations/security-foundations.qmd) established the
 two-track taxonomy and the dissolved code/data boundary, this chapter goes inside the
 threat: specific attack classes, their mechanics, and the defenses that contain them.

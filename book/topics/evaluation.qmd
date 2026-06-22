@@ -6,8 +6,6 @@ last-reviewed: 2026-06-18
 maturity: topic
 ---
 
-# Evaluation & Benchmarks {#sec-evaluation}
-
 Evaluation determines what deployed AI systems can and cannot do — including what they
 can and cannot be *made* to do. It is not a single methodology but a research discipline
 that has passed through distinct generations, each revealing blind spots in the generation

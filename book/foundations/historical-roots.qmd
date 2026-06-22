@@ -6,8 +6,6 @@ last-reviewed: 2026-05-26
 maturity: foundations
 ---
 
-# Historical Roots (1950–2015) {#sec-historical-roots}
-
 AI safety is not new — the problem was named decades before the methods. Three lineages
 converge into today's field.
 

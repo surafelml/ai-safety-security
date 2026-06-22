@@ -6,8 +6,6 @@ last-reviewed: 2026-06-20
 maturity: topic
 ---
 
-# Systemic Safety & Governance {#sec-systemic-safety}
-
 The four preceding pillars work at the level of a model or an agent.
 Systemic safety is the fifth: risk that is *not* contained in any single system — harm
 that emerges from deployment at scale, from interaction with society, and from the

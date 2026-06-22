@@ -6,8 +6,6 @@ last-reviewed: 2026-05-26
 maturity: supplement
 ---
 
-# Technical Notes {#sec-supplement}
-
 Extended derivations kept out of the main flow to keep it readable. Each note is linked from
 the section it supports.
 
@@ -24,7 +22,7 @@ Fitting $r_\phi$ by maximum likelihood over comparisons yields the reward model.
 policy against $r_\phi$ alone invites **reward over-optimization** (Goodharting): the policy
 finds high-reward regions the reward model scores wrongly. The
 $\beta\,\mathrm{KL}(\pi_\theta\Vert\pi_{\text{ref}})$ penalty bounds movement from the trusted
-reference policy, trading reward for staying in-distribution. ← [security-foundations](../foundations/security-foundations.qmd#sec-two-track)
+reference policy, trading reward for staying in-distribution. ← [security-foundations](../foundations/security-foundations.qmd)
 
 ## DPO from the RLHF objective {#sec-supp-dpo}
 
@@ -51,7 +49,7 @@ $$
 
 This is an *information-flow* condition: untrusted input may flow to output content but not to
 the action/control channel — the LLM analogue of taint tracking. Prompt injection is a
-violation; the defense patterns restore it by partitioning trust. ← [agentic-systems](../foundations/agentic-systems.qmd#sec-agentic-systems)
+violation; the defense patterns restore it by partitioning trust. ← [agentic-systems](../foundations/agentic-systems.qmd)
 
 ## Dual-LLM and capability-based designs {#sec-supp-dual-llm}
 
@@ -64,4 +62,4 @@ Two concrete realizations of the integrity invariant:
   agent–tool boundary, achieving strong security with minimal assumptions [@huang2025firewalls].
 
 Capability-based variants enforce the same partition by construction, passing data by
-reference rather than by value. ← [security-foundations](../foundations/security-foundations.qmd#sec-two-track)
+reference rather than by value. ← [security-foundations](../foundations/security-foundations.qmd)

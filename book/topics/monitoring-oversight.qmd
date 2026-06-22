@@ -6,8 +6,6 @@ last-reviewed: 2026-06-20
 maturity: topic
 ---
 
-# Monitoring & Oversight {#sec-monitoring-oversight}
-
 [Alignment](alignment.qmd) shapes the objective before deployment;
 [interpretability](interpretability.qmd) reads mechanism. Monitoring is the *runtime* line
 of defense — the assumption that the first two are imperfect, and that a deployed agent
