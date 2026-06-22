@@ -62,10 +62,14 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-920f8e33c6168ac66b68b4937b16a9d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04671a10ed571c9974bbb63eeee1b285.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -98,7 +102,169 @@ div.csl-indent {
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -117,7 +283,7 @@ div.csl-indent {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -125,6 +291,7 @@ div.csl-indent {
       <a href="../">AI Safety &amp; Security</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/surafelml/ai-safety-security" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
       </div>
@@ -227,12 +394,6 @@ div.csl-indent {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Agentic Safety × Security</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../topics/tooling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -247,7 +408,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../frontier/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
   </div>
 </li>
       </ul>
@@ -264,7 +425,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../supplement/technical-notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Supplementary Technical Notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Technical Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/tooling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
   </div>
 </li>
       </ul>
@@ -272,7 +445,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></span></a>
   </div>
 </li>
     </ul>
@@ -285,18 +458,16 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-historical-roots" id="toc-sec-historical-roots" class="nav-link active" data-scroll-target="#sec-historical-roots"><span class="header-section-number">3</span> Historical Roots (1950–2015)</a>
-  <ul class="collapse">
-  <li><a href="#control-alignment" id="toc-control-alignment" class="nav-link" data-scroll-target="#control-alignment"><span class="header-section-number">3.1</span> Control &amp; alignment</a></li>
-  <li><a href="#system-safety-engineering" id="toc-system-safety-engineering" class="nav-link" data-scroll-target="#system-safety-engineering"><span class="header-section-number">3.2</span> System-safety engineering</a></li>
-  <li><a href="#philosophy-x-risk" id="toc-philosophy-x-risk" class="nav-link" data-scroll-target="#philosophy-x-risk"><span class="header-section-number">3.3</span> Philosophy &amp; x-risk</a></li>
-  <li><a href="#handoff-to-the-empirical-era" id="toc-handoff-to-the-empirical-era" class="nav-link" data-scroll-target="#handoff-to-the-empirical-era"><span class="header-section-number">3.4</span> Handoff to the empirical era</a></li>
-  </ul></li>
+  <li><a href="#control-alignment" id="toc-control-alignment" class="nav-link active" data-scroll-target="#control-alignment"><span class="header-section-number">2.1</span> Control &amp; alignment</a></li>
+  <li><a href="#system-safety-engineering" id="toc-system-safety-engineering" class="nav-link" data-scroll-target="#system-safety-engineering"><span class="header-section-number">2.2</span> System-safety engineering</a></li>
+  <li><a href="#philosophy-x-risk" id="toc-philosophy-x-risk" class="nav-link" data-scroll-target="#philosophy-x-risk"><span class="header-section-number">2.3</span> Philosophy &amp; x-risk</a></li>
+  <li><a href="#handoff-to-the-empirical-era" id="toc-handoff-to-the-empirical-era" class="nav-link" data-scroll-target="#handoff-to-the-empirical-era"><span class="header-section-number">2.4</span> Handoff to the empirical era</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/foundations/historical-roots.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../foundations/historical-roots.html">I — Foundations</a></li><li class="breadcrumb-item"><a href="../foundations/historical-roots.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Historical Roots (1950–2015)</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -305,7 +476,7 @@ div.csl-indent {
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta">
 
     
   
@@ -317,19 +488,17 @@ div.csl-indent {
 </header>
 
 
-<section id="sec-historical-roots" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Historical Roots (1950–2015)</h1>
 <p>AI safety is not new — the problem was named decades before the methods. Three lineages converge into today’s field.</p>
-<section id="control-alignment" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="control-alignment"><span class="header-section-number">3.1</span> Control &amp; alignment</h2>
+<section id="control-alignment" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="control-alignment"><span class="header-section-number">2.1</span> Control &amp; alignment</h2>
 <p>Wiener (1960) gave the first clear statement of the <em>control problem</em>: a machine optimizing a literal goal faster than we can follow, which “we may not know, until too late, when to turn off” <span class="citation" data-cites="wiener1960">(<a href="../references.html#ref-wiener1960" role="doc-biblioref">Wiener, 1960</a>)</span>. Good (1965) added the <em>intelligence explosion</em> — the last invention “provided the machine is docile enough… to keep under control” <span class="citation" data-cites="good1965">(<a href="../references.html#ref-good1965" role="doc-biblioref">Good, 1965</a>)</span> — the direct ancestor of recursive self-improvement.</p>
 </section>
-<section id="system-safety-engineering" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="system-safety-engineering"><span class="header-section-number">3.2</span> System-safety engineering</h2>
+<section id="system-safety-engineering" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="system-safety-engineering"><span class="header-section-number">2.2</span> System-safety engineering</h2>
 <p>Long before ML, Leveson established that safety is a <em>system</em> property, not a component one: end-to-end hazard analysis, not a safe algorithm <span class="citation" data-cites="leveson1995">(<a href="../references.html#ref-leveson1995" role="doc-biblioref">Leveson, 1995</a>)</span>. This is the root of today’s safety cases and defense-in-depth <span class="citation" data-cites="dobbe2022">(<a href="../references.html#ref-dobbe2022" role="doc-biblioref">Dobbe, 2022</a>)</span>.</p>
 </section>
-<section id="philosophy-x-risk" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="philosophy-x-risk"><span class="header-section-number">3.3</span> Philosophy &amp; x-risk</h2>
+<section id="philosophy-x-risk" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="philosophy-x-risk"><span class="header-section-number">2.3</span> Philosophy &amp; x-risk</h2>
 <p>Omohundro’s basic AI drives <span class="citation" data-cites="omohundro2008">(<a href="../references.html#ref-omohundro2008" role="doc-biblioref">Omohundro, 2008</a>)</span> and Bostrom’s instrumental convergence <span class="citation" data-cites="bostrom2014">(<a href="../references.html#ref-bostrom2014" role="doc-biblioref">Bostrom, 2014</a>)</span> argued capable agents converge on self-preservation and resource acquisition <em>regardless</em> of their goal.</p>
 <svg class="illustration" viewbox="0 0 880 210" role="img" aria-labelledby="hist-title">
   <title id="hist-title">Deep history of AI safety, 1950–2016</title>
@@ -386,8 +555,8 @@ Note
 </div>
 </div>
 </section>
-<section id="handoff-to-the-empirical-era" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="handoff-to-the-empirical-era"><span class="header-section-number">3.4</span> Handoff to the empirical era</h2>
+<section id="handoff-to-the-empirical-era" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="handoff-to-the-empirical-era"><span class="header-section-number">2.4</span> Handoff to the empirical era</h2>
 <p>These threads hand off to <strong>Concrete Problems in AI Safety</strong> <span class="citation" data-cites="amodei2016concrete">(<a href="../references.html#ref-amodei2016concrete" role="doc-biblioref">Amodei et al., 2016</a>)</span>, which reframed them as tractable empirical ML problems — where the <a href="../foundations/landscape.html">modern landscape</a> and its timeline begin.</p>
 
 
@@ -415,11 +584,23 @@ Wiener, N. (1960). Some moral and technical consequences of automation. <em>Scie
 </div>
 </div>
 </section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -818,7 +999,7 @@ Wiener, N. (1960). Some moral and technical consequences of automation. <em>Scie
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../index.html" class="pagination-link" aria-label="Preface">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Preface</span></span>

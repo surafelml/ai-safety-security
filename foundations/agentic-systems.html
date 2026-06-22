@@ -97,10 +97,14 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-920f8e33c6168ac66b68b4937b16a9d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04671a10ed571c9974bbb63eeee1b285.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -162,7 +166,169 @@ window.Quarto = {
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -181,7 +347,7 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -189,6 +355,7 @@ window.Quarto = {
       <a href="../">AI Safety &amp; Security</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/surafelml/ai-safety-security" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
       </div>
@@ -291,12 +458,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Agentic Safety × Security</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../topics/tooling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -311,7 +472,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../frontier/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
   </div>
 </li>
       </ul>
@@ -328,7 +489,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../supplement/technical-notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Supplementary Technical Notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Technical Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/tooling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
   </div>
 </li>
       </ul>
@@ -336,7 +509,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></span></a>
   </div>
 </li>
     </ul>
@@ -349,21 +522,19 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-agentic-systems" id="toc-sec-agentic-systems" class="nav-link active" data-scroll-target="#sec-agentic-systems"><span class="header-section-number">6</span> Agentic Systems: The Bridge</a>
-  <ul class="collapse">
-  <li><a href="#agent-vs.-model" id="toc-agent-vs.-model" class="nav-link" data-scroll-target="#agent-vs.-model"><span class="header-section-number">6.1</span> Agent vs.&nbsp;model</a></li>
-  <li><a href="#autonomy-is-multi-dimensional" id="toc-autonomy-is-multi-dimensional" class="nav-link" data-scroll-target="#autonomy-is-multi-dimensional"><span class="header-section-number">6.2</span> Autonomy is multi-dimensional</a></li>
-  <li><a href="#the-agent-loop" id="toc-the-agent-loop" class="nav-link" data-scroll-target="#the-agent-loop"><span class="header-section-number">6.3</span> The agent loop</a></li>
-  <li><a href="#interfaces-are-surfaces" id="toc-interfaces-are-surfaces" class="nav-link" data-scroll-target="#interfaces-are-surfaces"><span class="header-section-number">6.4</span> Interfaces are surfaces</a></li>
-  <li><a href="#multi-agent-systems" id="toc-multi-agent-systems" class="nav-link" data-scroll-target="#multi-agent-systems"><span class="header-section-number">6.5</span> Multi-agent systems</a></li>
-  <li><a href="#trust-boundaries" id="toc-trust-boundaries" class="nav-link" data-scroll-target="#trust-boundaries"><span class="header-section-number">6.6</span> Trust boundaries</a></li>
-  <li><a href="#what-this-unlocks" id="toc-what-this-unlocks" class="nav-link" data-scroll-target="#what-this-unlocks"><span class="header-section-number">6.7</span> What this unlocks</a></li>
-  </ul></li>
+  <li><a href="#agent-vs.-model" id="toc-agent-vs.-model" class="nav-link active" data-scroll-target="#agent-vs.-model"><span class="header-section-number">5.1</span> Agent vs.&nbsp;model</a></li>
+  <li><a href="#autonomy-is-multi-dimensional" id="toc-autonomy-is-multi-dimensional" class="nav-link" data-scroll-target="#autonomy-is-multi-dimensional"><span class="header-section-number">5.2</span> Autonomy is multi-dimensional</a></li>
+  <li><a href="#the-agent-loop" id="toc-the-agent-loop" class="nav-link" data-scroll-target="#the-agent-loop"><span class="header-section-number">5.3</span> The agent loop</a></li>
+  <li><a href="#interfaces-are-surfaces" id="toc-interfaces-are-surfaces" class="nav-link" data-scroll-target="#interfaces-are-surfaces"><span class="header-section-number">5.4</span> Interfaces are surfaces</a></li>
+  <li><a href="#multi-agent-systems" id="toc-multi-agent-systems" class="nav-link" data-scroll-target="#multi-agent-systems"><span class="header-section-number">5.5</span> Multi-agent systems</a></li>
+  <li><a href="#trust-boundaries" id="toc-trust-boundaries" class="nav-link" data-scroll-target="#trust-boundaries"><span class="header-section-number">5.6</span> Trust boundaries</a></li>
+  <li><a href="#what-this-unlocks" id="toc-what-this-unlocks" class="nav-link" data-scroll-target="#what-this-unlocks"><span class="header-section-number">5.7</span> What this unlocks</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/foundations/agentic-systems.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../foundations/historical-roots.html">I — Foundations</a></li><li class="breadcrumb-item"><a href="../foundations/agentic-systems.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Agentic Systems: The Bridge</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -372,7 +543,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta">
 
     
   
@@ -384,8 +555,6 @@ window.Quarto = {
 </header>
 
 
-<section id="sec-agentic-systems" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Agentic Systems: The Bridge</h1>
 <p>The object the whole book is about. An agent is where autonomy (a safety problem) meets external action (a security problem) — so it is the seam, not a side topic.</p>
 <ul>
 <li>agent vs.&nbsp;model — what the promotion adds</li>
@@ -393,16 +562,16 @@ window.Quarto = {
 <li>interfaces as capabilities <em>and</em> attack surfaces</li>
 <li>multi-agent systems and trust boundaries</li>
 </ul>
-<section id="agent-vs.-model" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="agent-vs.-model"><span class="header-section-number">6.1</span> Agent vs.&nbsp;model</h2>
+<section id="agent-vs.-model" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="agent-vs.-model"><span class="header-section-number">5.1</span> Agent vs.&nbsp;model</h2>
 <p>A <strong>model</strong> maps input to output: <span class="math inline">\(y = f(x)\)</span>. An <strong>agent</strong> wraps a model in a loop that carries state and acts on the world:</p>
 <p><span class="math display">\[
 a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 \]</span></p>
 <p>where <span class="math inline">\(o_t\)</span> is the observation, <span class="math inline">\(m_t\)</span> the memory/state, <span class="math inline">\(\mathcal{T}\)</span> the available tools, <span class="math inline">\(a_t\)</span> the action, and <span class="math inline">\(u\)</span> the memory update. The promotion from <span class="math inline">\(f\)</span> to <span class="math inline">\(\pi\)</span> adds four things — <strong>autonomy, tools, memory, and an environment</strong> — and every one is simultaneously a capability and a new attack surface.</p>
 </section>
-<section id="autonomy-is-multi-dimensional" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="autonomy-is-multi-dimensional"><span class="header-section-number">6.2</span> Autonomy is multi-dimensional</h2>
+<section id="autonomy-is-multi-dimensional" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="autonomy-is-multi-dimensional"><span class="header-section-number">5.2</span> Autonomy is multi-dimensional</h2>
 <p>Autonomy is not a single dial. Following the agentic design space of <span class="citation" data-cites="kim2026landscape">Kim et al. (<a href="../references.html#ref-kim2026landscape" role="doc-biblioref">2026</a>)</span>, an agent’s risk profile is set by seven dimensions:</p>
 <table class="caption-top table">
 <thead>
@@ -444,8 +613,8 @@ a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 </table>
 <p>Where an agent sits on these axes — not its raw model capability — determines how much oversight and containment it needs.</p>
 </section>
-<section id="the-agent-loop" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="the-agent-loop"><span class="header-section-number">6.3</span> The agent loop</h2>
+<section id="the-agent-loop" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="the-agent-loop"><span class="header-section-number">5.3</span> The agent loop</h2>
 <svg class="illustration" viewbox="0 0 600 300" role="img" aria-labelledby="loop-title">
   <title id="loop-title">The perceive-plan-act loop with persistent memory</title>
   <defs>
@@ -496,8 +665,8 @@ a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 </div>
 </div>
 </section>
-<section id="interfaces-are-surfaces" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="interfaces-are-surfaces"><span class="header-section-number">6.4</span> Interfaces are surfaces</h2>
+<section id="interfaces-are-surfaces" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="interfaces-are-surfaces"><span class="header-section-number">5.4</span> Interfaces are surfaces</h2>
 <p>Each thing the loop touches is dual-natured:</p>
 <ul>
 <li><strong>Tools / APIs</strong> — extend reach <em>and</em> expose privilege escalation and unsafe side effects.</li>
@@ -507,16 +676,16 @@ a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 </ul>
 <p>The dissolved code/data boundary <span class="citation" data-cites="greshake2023not">(<a href="../references.html#ref-greshake2023not" role="doc-biblioref">Greshake et al., 2023</a>)</span> means any of these channels can carry an <em>instruction</em>, not just data — which is exactly the integrity problem from the <a href="../foundations/security-foundations.html">two-track foundation</a>.</p>
 </section>
-<section id="multi-agent-systems" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="multi-agent-systems"><span class="header-section-number">6.5</span> Multi-agent systems</h2>
+<section id="multi-agent-systems" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="multi-agent-systems"><span class="header-section-number">5.5</span> Multi-agent systems</h2>
 <p>Composing agents adds failure modes that no single agent exhibits: emergent collusion, cascading errors as one agent’s output becomes another’s trusted input, and amplified blast radius when a shared tool or memory is compromised. Trust between agents must be explicit, not assumed.</p>
 </section>
-<section id="trust-boundaries" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="trust-boundaries"><span class="header-section-number">6.6</span> Trust boundaries</h2>
+<section id="trust-boundaries" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="trust-boundaries"><span class="header-section-number">5.6</span> Trust boundaries</h2>
 <p>The central design question of an agent is <strong>which inputs are trusted</strong>. The instruction from the operator is trusted; retrieved documents and tool outputs are not. Keeping that boundary intact through the loop — so untrusted data shapes content but never control — is what the defense patterns in the topic chapters enforce. Defenses themselves are deferred to <a href="../topics/robustness-security.html">Robustness &amp; Security</a> and <a href="../topics/monitoring-oversight.html">Monitoring &amp; Oversight</a>; this chapter only frames the problem.</p>
 </section>
-<section id="what-this-unlocks" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="what-this-unlocks"><span class="header-section-number">6.7</span> What this unlocks</h2>
+<section id="what-this-unlocks" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="what-this-unlocks"><span class="header-section-number">5.7</span> What this unlocks</h2>
 <p>The agentic loop is the spine the topic chapters hang on: evaluating agent behavior → <a href="../topics/evaluation.html">Evaluation</a>; the attack surface and its defenses → <a href="../topics/robustness-security.html">Robustness &amp; Security</a>; runtime oversight and control → <a href="../topics/monitoring-oversight.html">Monitoring &amp; Oversight</a>; and the flagship synthesis → <a href="../topics/agentic-safety-security.html">Agentic Safety × Security</a>.</p>
 
 
@@ -532,11 +701,23 @@ Kim, J., Liu, X., Wang, Z., Qiu, S., Li, B., Guo, W., &amp; Song, D. (2026). The
 </div>
 </div>
 </section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -935,7 +1116,7 @@ Kim, J., Liu, X., Wang, Z., Qiu, S., Li, B., Guo, W., &amp; Song, D. (2026). The
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../foundations/security-foundations.html" class="pagination-link" aria-label="Safety &amp; Security: A Two-Track Foundation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Safety &amp; Security: A Two-Track Foundation</span></span>

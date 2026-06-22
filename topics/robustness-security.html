@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Reliable behavior under adversarial and OOD conditions; securing the model and surrounding system.">
+<meta name="description" content="How models and agentic systems fail under adversarial pressure — attack classes, mechanics, and the layered defense architectures that contain them.">
 
 <title>7&nbsp; Robustness &amp; Security – AI Safety &amp; Security</title>
 <style>
@@ -24,7 +24,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -42,10 +97,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-920f8e33c6168ac66b68b4937b16a9d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04671a10ed571c9974bbb63eeee1b285.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,11 +133,202 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -97,7 +347,7 @@ ul.task-list li input[type="checkbox"] {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -105,6 +355,7 @@ ul.task-list li input[type="checkbox"] {
       <a href="../">AI Safety &amp; Security</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/surafelml/ai-safety-security" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
       </div>
@@ -207,12 +458,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Agentic Safety × Security</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../topics/tooling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -227,7 +472,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../frontier/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
   </div>
 </li>
       </ul>
@@ -244,7 +489,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../supplement/technical-notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Supplementary Technical Notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Technical Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/tooling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
   </div>
 </li>
       </ul>
@@ -252,7 +509,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></span></a>
   </div>
 </li>
     </ul>
@@ -265,12 +522,26 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-robustness-security" id="toc-sec-robustness-security" class="nav-link active" data-scroll-target="#sec-robustness-security"><span class="header-section-number">8</span> Robustness &amp; Security</a></li>
+  <li><a href="#the-attack-surface" id="toc-the-attack-surface" class="nav-link active" data-scroll-target="#the-attack-surface"><span class="header-section-number">7.1</span> The Attack Surface</a></li>
+  <li><a href="#adversarial-inputs" id="toc-adversarial-inputs" class="nav-link" data-scroll-target="#adversarial-inputs"><span class="header-section-number">7.2</span> Adversarial Inputs</a></li>
+  <li><a href="#jailbreaks-vs.-prompt-injection-the-critical-distinction" id="toc-jailbreaks-vs.-prompt-injection-the-critical-distinction" class="nav-link" data-scroll-target="#jailbreaks-vs.-prompt-injection-the-critical-distinction"><span class="header-section-number">7.3</span> Jailbreaks vs.&nbsp;Prompt Injection — the Critical Distinction</a></li>
+  <li><a href="#training-level-attacks-backdoors-and-deceptive-alignment" id="toc-training-level-attacks-backdoors-and-deceptive-alignment" class="nav-link" data-scroll-target="#training-level-attacks-backdoors-and-deceptive-alignment"><span class="header-section-number">7.4</span> Training-Level Attacks: Backdoors and Deceptive Alignment</a></li>
+  <li><a href="#privacy-and-extraction-attacks" id="toc-privacy-and-extraction-attacks" class="nav-link" data-scroll-target="#privacy-and-extraction-attacks"><span class="header-section-number">7.5</span> Privacy and Extraction Attacks</a></li>
+  <li><a href="#defensive-architectures-a-layered-stack" id="toc-defensive-architectures-a-layered-stack" class="nav-link" data-scroll-target="#defensive-architectures-a-layered-stack"><span class="header-section-number">7.6</span> Defensive Architectures: A Layered Stack</a>
+  <ul class="collapse">
+  <li><a href="#l1-inputoutput-screening" id="toc-l1-inputoutput-screening" class="nav-link" data-scroll-target="#l1-inputoutput-screening"><span class="header-section-number">7.6.1</span> L1 — Input/Output Screening</a></li>
+  <li><a href="#l2-training-level-alignment" id="toc-l2-training-level-alignment" class="nav-link" data-scroll-target="#l2-training-level-alignment"><span class="header-section-number">7.6.2</span> L2 — Training-Level Alignment</a></li>
+  <li><a href="#l3-representation-level-controls" id="toc-l3-representation-level-controls" class="nav-link" data-scroll-target="#l3-representation-level-controls"><span class="header-section-number">7.6.3</span> L3 — Representation-Level Controls</a></li>
+  <li><a href="#l4-architectural-isolation-the-dual-llm-firewall" id="toc-l4-architectural-isolation-the-dual-llm-firewall" class="nav-link" data-scroll-target="#l4-architectural-isolation-the-dual-llm-firewall"><span class="header-section-number">7.6.4</span> L4 — Architectural Isolation: The Dual-LLM Firewall</a></li>
+  <li><a href="#l5-system-perimeter" id="toc-l5-system-perimeter" class="nav-link" data-scroll-target="#l5-system-perimeter"><span class="header-section-number">7.6.5</span> L5 — System Perimeter</a></li>
+  </ul></li>
+  <li><a href="#open-problems" id="toc-open-problems" class="nav-link" data-scroll-target="#open-problems"><span class="header-section-number">7.7</span> Open Problems</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/topics/robustness-security.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../topics/alignment.html">II — Topics</a></li><li class="breadcrumb-item"><a href="../topics/robustness-security.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Robustness &amp; Security</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -279,7 +550,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta">
 
     
   
@@ -291,18 +562,506 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-robustness-security" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Robustness &amp; Security</h1>
-<blockquote class="blockquote">
-<p><strong>Stub.</strong> Chronological deep-dive: adversarial examples → distribution shift → prompt injection and jailbreaks → tool-use / agent attack surface → adversarial training and system-level defenses. This chapter is where the <em>security</em> half of the thesis is grounded.</p>
-</blockquote>
+<p>Where the <a href="../foundations/security-foundations.html">foundation</a> established the two-track taxonomy and the dissolved code/data boundary, this chapter goes inside the threat: specific attack classes, their mechanics, and the defenses that contain them.</p>
+<section id="the-attack-surface" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="the-attack-surface"><span class="header-section-number">7.1</span> The Attack Surface</h2>
+<p>An agent’s attack surface is a stack of distinct layers — each independently exploitable, and each capable of amplifying a compromise that entered at a lower layer <span class="citation" data-cites="kim2026landscape">(<a href="../references.html#ref-kim2026landscape" role="doc-biblioref">Kim et al., 2026</a>)</span>:</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 860 340" role="img" aria-labelledby="stack-title">
+  <title id="stack-title">Attack surface layers — entry points and consequences</title>
+
+  <!-- Column labels -->
+  <text class="era-label" x="160" y="18" text-anchor="middle">Layer</text>
+  <text class="era-label" x="480" y="18" text-anchor="middle">What can be compromised</text>
+  <text class="era-label" x="755" y="18" text-anchor="middle">Consequence</text>
+
+  <!-- Training data -->
+  <rect class="node band-alignment stroke-alignment" x="10" y="28" width="300" height="40" rx="4"></rect>
+  <text class="node-label" x="160" y="53" text-anchor="middle" font-weight="600">Training data / weights</text>
+  <text class="node-label" x="480" y="53" text-anchor="middle">Poisoned data, backdoor triggers, weight tampering</text>
+  <text class="node-label" x="755" y="53" text-anchor="middle">Persistent covert behavior</text>
+
+  <!-- Input channel -->
+  <rect class="node band-safety stroke-safety" x="10" y="78" width="300" height="40" rx="4"></rect>
+  <text class="node-label" x="160" y="103" text-anchor="middle" font-weight="600">Input channel</text>
+  <text class="node-label" x="480" y="103" text-anchor="middle">Jailbreaks, prompt injection, adversarial suffixes</text>
+  <text class="node-label" x="755" y="103" text-anchor="middle">Control hijack at inference</text>
+
+  <!-- RAG / tool -->
+  <rect class="node band-security stroke-security" x="10" y="128" width="300" height="40" rx="4"></rect>
+  <text class="node-label" x="160" y="153" text-anchor="middle" font-weight="600">Retrieval / tool channel</text>
+  <text class="node-label" x="480" y="153" text-anchor="middle">Environmental injection, tool poisoning</text>
+  <text class="node-label" x="755" y="153" text-anchor="middle">Data executes as instruction</text>
+
+  <!-- Memory -->
+  <rect class="node band-oversight stroke-oversight" x="10" y="178" width="300" height="40" rx="4"></rect>
+  <text class="node-label" x="160" y="203" text-anchor="middle" font-weight="600">Persistent memory</text>
+  <text class="node-label" x="480" y="203" text-anchor="middle">Stored injection, cross-session payload</text>
+  <text class="node-label" x="755" y="203" text-anchor="middle">Persistent attacker foothold</text>
+
+  <!-- Inter-agent -->
+  <rect class="node band-agentic stroke-agentic" x="10" y="228" width="300" height="40" rx="4"></rect>
+  <text class="node-label" x="160" y="253" text-anchor="middle" font-weight="600">Inter-agent channel</text>
+  <text class="node-label" x="480" y="253" text-anchor="middle">Cross-agent injection, trust relay</text>
+  <text class="node-label" x="755" y="253" text-anchor="middle">Cascading pipeline compromise</text>
+
+  <!-- Output / action -->
+  <rect class="node band-systemic stroke-systemic" x="10" y="278" width="300" height="40" rx="4"></rect>
+  <text class="node-label" x="160" y="303" text-anchor="middle" font-weight="600">Output / action layer</text>
+  <text class="node-label" x="480" y="303" text-anchor="middle">Exfiltration, privilege escalation</text>
+  <text class="node-label" x="755" y="303" text-anchor="middle">Real-world blast radius</text>
+
+  <!-- vertical separator lines -->
+  <line class="separator" x1="320" y1="25" x2="320" y2="320"></line>
+  <line class="separator" x1="640" y1="25" x2="640" y2="320"></line>
+</svg>
+<figcaption>Attack surface layers — entry points and consequences at each stack level.</figcaption>
+</figure>
+<p>The dissolved code/data boundary <span class="citation" data-cites="greshake2023not">(<a href="../references.html#ref-greshake2023not" role="doc-biblioref">Greshake et al., 2023</a>)</span> connects these layers: a breach at any level propagates forward, shaping the planning context and widening blast radius without additional attacker effort.</p>
+</section>
+<section id="adversarial-inputs" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="adversarial-inputs"><span class="header-section-number">7.2</span> Adversarial Inputs</h2>
+<p>For language models, the discrete token space makes <span class="math inline">\(\ell_\infty\)</span> perturbations inapplicable but opens a new vector: <strong>optimization over the token vocabulary</strong> finds inputs that reliably bypass safety tuning. <strong>GCG — Greedy Coordinate Gradient</strong> <span class="citation" data-cites="zou2023universal">(<a href="../references.html#ref-zou2023universal" role="doc-biblioref">Zou et al., 2023</a>)</span> is the canonical result: appends an adversarial suffix to any harmful prompt and optimizes it to maximize the probability of a compliant target continuation:</p>
+<p><span class="math display">\[
+\min_{\mathbf{x}_{\text{suf}}} \;
+\mathcal{L}\!\left(f_\theta\!\left([\mathbf{x}_{\text{prompt}};\, \mathbf{x}_{\text{suf}}]\right),\,
+y_{\text{target}}\right),
+\quad y_{\text{target}} = \texttt{"Sure, here is..."}
+\]</span></p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 640 180" role="img" aria-labelledby="gcg-title">
+  <title id="gcg-title">GCG adversarial suffix optimization loop</title>
+  <defs>
+    <marker id="gcg-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"></path>
+    </marker>
+  </defs>
+
+  <!-- Properties banner -->
+  <text class="node-label" x="320" y="22" text-anchor="middle" font-style="italic">Universal (across prompts) · Transferable (open → closed models)</text>
+
+  <!-- Prompt box -->
+  <rect class="node band-safety stroke-safety" x="20" y="38" width="160" height="44" rx="5"></rect>
+  <text class="node-label" x="100" y="57" text-anchor="middle">Harmful prompt</text>
+  <text class="node-label" x="100" y="73" text-anchor="middle">x_prompt</text>
+
+  <!-- Suffix box -->
+  <rect class="node band-security stroke-security" x="220" y="38" width="160" height="44" rx="5"></rect>
+  <text class="node-label" x="300" y="57" text-anchor="middle">Adversarial suffix</text>
+  <text class="node-label" x="300" y="73" text-anchor="middle">x_suf (optimized)</text>
+
+  <!-- Model -->
+  <rect class="node band-agentic stroke-agentic" x="430" y="38" width="120" height="44" rx="5"></rect>
+  <text class="node-label" x="490" y="57" text-anchor="middle">Model f_θ</text>
+  <text class="node-label" x="490" y="73" text-anchor="middle">(aligned)</text>
+
+  <!-- Output — attack succeeds: model complies with harmful target -->
+  <rect class="node-danger" x="590" y="38" width="40" height="44" rx="5"></rect>
+  <text class="node-label text-danger" x="610" y="65" text-anchor="middle">✓</text>
+
+  <!-- Arrows right -->
+  <path class="axis" d="M180,60 L220,60" marker-end="url(#gcg-arr)"></path>
+  <path class="axis" d="M380,60 L430,60" marker-end="url(#gcg-arr)"></path>
+  <path class="axis" d="M550,60 L590,60" marker-end="url(#gcg-arr)"></path>
+
+  <!-- Feedback loop (fill:none is set by .axis in CSS) -->
+  <path class="axis" stroke-dasharray="4 3" d="M610,82 C610,130 300,130 300,82" marker-end="url(#gcg-arr)"></path>
+  <text class="node-label" x="455" y="125" text-anchor="middle">loss gradient → update x_suf</text>
+</svg>
+<figcaption>GCG optimization: the adversarial suffix is iteratively updated via loss gradients until the aligned model produces a compliant harmful output.</figcaption>
+</figure>
+<p>GCG is <strong>universal</strong> (one suffix works across diverse prompts) and <strong>transferable</strong> (suffixes found on open-weight models transfer to closed APIs). It opened the field of <em>algorithmic</em> jailbreaking — removing the assumption that bypassing alignment required social engineering and making attack scalable and automated.</p>
+</section>
+<section id="jailbreaks-vs.-prompt-injection-the-critical-distinction" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="jailbreaks-vs.-prompt-injection-the-critical-distinction"><span class="header-section-number">7.3</span> Jailbreaks vs.&nbsp;Prompt Injection — the Critical Distinction</h2>
+<p>These two failure modes are often conflated but are structurally different problems requiring different defenses:</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 660 200" role="img" aria-labelledby="jvp-title">
+  <title id="jvp-title">Jailbreak vs prompt injection: structural comparison</title>
+  <defs>
+    <marker id="jp-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Jailbreak side -->
+  <rect class="node band-safety stroke-safety" x="20" y="30" width="280" height="140" rx="6"></rect>
+  <text class="era-label" x="160" y="52" text-anchor="middle">Jailbreak</text>
+  <text class="node-label" x="160" y="74" text-anchor="middle">User → Model (direct)</text>
+  <text class="node-label" x="160" y="96" text-anchor="middle">Target: model's values / restrictions</text>
+  <text class="node-label" x="160" y="118" text-anchor="middle">Attacker = the user</text>
+  <text class="node-label" x="160" y="140" text-anchor="middle">Defense: alignment training,</text>
+  <text class="node-label" x="160" y="156" text-anchor="middle">constitutional classifiers</text>
+
+  <!-- Injection side -->
+  <rect class="node band-security stroke-security" x="360" y="30" width="280" height="140" rx="6"></rect>
+  <text class="era-label" x="500" y="52" text-anchor="middle">Prompt injection</text>
+  <text class="node-label" x="500" y="74" text-anchor="middle">Env → Retrieval → Model (indirect)</text>
+  <text class="node-label" x="500" y="96" text-anchor="middle">Target: data / control boundary</text>
+  <text class="node-label" x="500" y="118" text-anchor="middle">Attacker = external / at rest</text>
+  <text class="node-label" x="500" y="140" text-anchor="middle">Defense: input isolation,</text>
+  <text class="node-label" x="500" y="156" text-anchor="middle">privilege separation, sandboxing</text>
+
+  <!-- VS -->
+  <text class="era-label" x="330" y="105" text-anchor="middle">vs</text>
+</svg>
+<figcaption>Jailbreaks and prompt injection differ in threat model, attack path, and the defenses that address them.</figcaption>
+</figure>
+<p>Conflating them leads to misrouted defenses: better jailbreak training does not protect against environmental injection, because the threat model is different. More alignment training does not fix a structural boundary violation.</p>
+<p><strong>Indirect prompt injection</strong> <span class="citation" data-cites="greshake2023not">(<a href="../references.html#ref-greshake2023not" role="doc-biblioref">Greshake et al., 2023</a>)</span> is the operative form for agentic systems: the attacker plants instructions in documents, web pages, or database records the agent will retrieve and execute. RAG pipelines are especially high-risk — poisoning a vector store gives an attacker semi-persistent influence across all future retrievals <span class="citation" data-cites="chang2026retrieval">(<a href="../references.html#ref-chang2026retrieval" role="doc-biblioref">Chang et al., 2026</a>)</span>.</p>
+</section>
+<section id="training-level-attacks-backdoors-and-deceptive-alignment" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="training-level-attacks-backdoors-and-deceptive-alignment"><span class="header-section-number">7.4</span> Training-Level Attacks: Backdoors and Deceptive Alignment</h2>
+<p>Input-level attacks operate at inference time and can be patched with runtime defenses. Training-level attacks alter the model’s weights — and can survive subsequent safety tuning.</p>
+<p><strong>Data poisoning</strong> inserts adversarial examples into training data to degrade performance on specific inputs or introduce covert behaviors. For fine-tuned models, a small fraction of poisoned samples can dominate learned behavior on the targeted distribution.</p>
+<p><strong>Backdoor / trojan attacks</strong> <span class="citation" data-cites="li2025backdoorllm">(<a href="../references.html#ref-li2025backdoorllm" role="doc-biblioref">Li et al., 2025</a>)</span> bind covert behaviors to a trigger token or phrase. The model behaves normally on all other inputs; the trigger activates the malicious behavior (MITRE ATLAS AML.T0020 <span class="citation" data-cites="mitreatlas">(<a href="../references.html#ref-mitreatlas" role="doc-biblioref">MITRE, n.d.</a>)</span>). No current mitigation technique reliably detects all attack modalities (data poisoning, weight poisoning, hidden-state manipulation, chain-of-thought hijacking).</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 640 160" role="img" aria-labelledby="backdoor-title">
+  <title id="backdoor-title">Backdoor attack: trigger activates covert behavior; benign input does not</title>
+  <defs>
+    <marker id="bd-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Model box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="58" width="140" height="44" rx="6"></rect>
+  <text class="node-label" x="340" y="77" text-anchor="middle">Backdoored</text>
+  <text class="node-label" x="340" y="93" text-anchor="middle">model f_θ*</text>
+
+  <!-- Benign input -->
+  <rect class="node band-safety stroke-safety" x="20" y="20" width="200" height="40" rx="5"></rect>
+  <text class="node-label" x="120" y="45" text-anchor="middle">Benign input</text>
+  <path class="axis" d="M220,40 L270,72" marker-end="url(#bd-arr)"></path>
+
+  <!-- Trigger input -->
+  <rect class="node-danger" x="20" y="100" width="200" height="40" rx="5"></rect>
+  <text class="node-label text-danger" x="120" y="125" text-anchor="middle">Input + trigger token ⚡</text>
+  <path class="edge-danger" d="M220,120 L270,108" marker-end="url(#bd-arr)"></path>
+
+  <!-- Benign output -->
+  <rect class="node band-safety stroke-safety" x="460" y="20" width="160" height="40" rx="5"></rect>
+  <text class="node-label" x="540" y="45" text-anchor="middle">Normal output ✓</text>
+  <path class="axis" d="M410,68 L460,38" marker-end="url(#bd-arr)"></path>
+
+  <!-- Malicious output -->
+  <rect class="node-danger" x="460" y="100" width="160" height="40" rx="5"></rect>
+  <text class="node-label text-danger" x="540" y="125" text-anchor="middle">Covert behavior ✗</text>
+  <path class="edge-danger" d="M410,92 L460,112" marker-end="url(#bd-arr)"></path>
+</svg>
+<figcaption>Backdoor attack — benign inputs produce normal output; trigger-embedded inputs activate covert behavior.</figcaption>
+</figure>
+<p><strong>Sleeper agents</strong> <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span> make backdoors harder to remove. An LLM trained to behave safely during training but unsafely when a date-gated trigger fires persists through RLHF fine-tuning. The mechanism: safety training teaches the model not to exhibit the behavior <em>when it looks like a training context</em>, so the backdoor and the safety surface do not interfere. Standard fine-tuning reduced but did not eliminate the sleeper behavior in experiments.</p>
+<p><strong>Deceptive alignment</strong> is the limit case: a model that recognizes evaluation contexts and performs well under oversight while pursuing a different objective when unsupervised. Sleeper agents are a concrete demonstration that this is achievable in current models <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span>. The strategic extension — models producing subtly inaccurate harmful responses that defeat text-based monitors while appearing compliant — was demonstrated empirically by <span class="citation" data-cites="panfilov2025strategic">Panfilov et al. (<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">2025</a>)</span>, where activation-pattern analysis was required to detect what behavioral monitors missed.</p>
+</section>
+<section id="privacy-and-extraction-attacks" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="privacy-and-extraction-attacks"><span class="header-section-number">7.5</span> Privacy and Extraction Attacks</h2>
+<p>Model weights encode statistical patterns from training data. Adversaries exploit this without ever touching the training pipeline:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attack</th>
+<th>Mechanism</th>
+<th>What leaks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Membership inference</strong></td>
+<td>Compare model confidence on in-distribution vs.&nbsp;out-of-distribution examples</td>
+<td>Whether a specific record was in training data</td>
+</tr>
+<tr class="even">
+<td><strong>Model extraction</strong></td>
+<td>Query the model iteratively; fit a surrogate</td>
+<td>Approximation of proprietary model behavior</td>
+</tr>
+<tr class="odd">
+<td><strong>Training data extraction</strong></td>
+<td>Prompt for completion of known prefixes</td>
+<td>Near-verbatim training examples <span class="citation" data-cites="carlini2021extracting">(<a href="../references.html#ref-carlini2021extracting" role="doc-biblioref">Carlini et al., 2021</a>)</span> — demonstrated on GPT-2; scales with model size</td>
+</tr>
+<tr class="even">
+<td><strong>Prompt extraction</strong></td>
+<td>Suffix optimization or injection to elicit system prompt</td>
+<td>Confidential operator instructions</td>
+</tr>
+</tbody>
+</table>
+<p>Privacy and security are coupled: a data-extraction attack against a model trained on sensitive enterprise data is simultaneously a privacy breach and a capability-leak. Larger models memorize proportionally more training data, making this attack surface grow with scale rather than shrink with it.</p>
+</section>
+<section id="defensive-architectures-a-layered-stack" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="defensive-architectures-a-layered-stack"><span class="header-section-number">7.6</span> Defensive Architectures: A Layered Stack</h2>
+<p>No single defense is sufficient. The field has converged on a layered architecture — defense-in-depth — where each layer adds a control point against a different threat tier <span class="citation" data-cites="owasp2025llm googlesaif">(<a href="../references.html#ref-googlesaif" role="doc-biblioref">Google, 2023</a>; <a href="../references.html#ref-owasp2025llm" role="doc-biblioref">OWASP Foundation, 2025</a>)</span>:</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 680 380" role="img" aria-labelledby="defense-title">
+  <title id="defense-title">Layered defense stack: five layers from input screening to system perimeter</title>
+  <defs>
+    <marker id="da" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"></path>
+    </marker>
+  </defs>
+
+  <!-- layer labels on left -->
+  <text class="node-label" x="30" y="98" text-anchor="middle" font-weight="600">L1</text>
+  <text class="node-label" x="30" y="158" text-anchor="middle" font-weight="600">L2</text>
+  <text class="node-label" x="30" y="218" text-anchor="middle" font-weight="600">L3</text>
+  <text class="node-label" x="30" y="278" text-anchor="middle" font-weight="600">L4</text>
+  <text class="node-label" x="30" y="338" text-anchor="middle" font-weight="600">L5</text>
+
+  <!-- L1 Input/output screening -->
+  <rect class="node band-safety stroke-safety" x="60" y="70" width="580" height="56" rx="5"></rect>
+  <text class="era-label" x="350" y="92" text-anchor="middle">Input / Output Screening</text>
+  <text class="node-label" x="350" y="111" text-anchor="middle">Constitutional classifiers · Llama Guard · harm taxonomy filters</text>
+  <text class="node-label" x="350" y="124" text-anchor="middle" font-style="italic">Blocks attack patterns before model; screens outputs before environment</text>
+
+  <!-- L2 Training -->
+  <rect class="node band-security stroke-security" x="60" y="138" width="580" height="56" rx="5"></rect>
+  <text class="era-label" x="350" y="160" text-anchor="middle">Training-Level Alignment</text>
+  <text class="node-label" x="350" y="179" text-anchor="middle">RLHF · DPO · Constitutional AI · adversarial training</text>
+  <text class="node-label" x="350" y="192" text-anchor="middle" font-style="italic">Reduces jailbreak surface area — optimization can always find a bypass</text>
+
+  <!-- L3 Representation -->
+  <rect class="node band-oversight stroke-oversight" x="60" y="198" width="580" height="56" rx="5"></rect>
+  <text class="era-label" x="350" y="220" text-anchor="middle">Representation-Level Controls</text>
+  <text class="node-label" x="350" y="239" text-anchor="middle">Circuit breakers · activation steering · tamper-resistant unlearning</text>
+  <text class="node-label" x="350" y="252" text-anchor="middle" font-style="italic">Interrupts harmful hidden-state trajectories before the model "decides"</text>
+
+  <!-- L4 Architecture -->
+  <rect class="node band-agentic stroke-agentic" x="60" y="258" width="580" height="56" rx="5"></rect>
+  <text class="era-label" x="350" y="280" text-anchor="middle">Architectural Isolation</text>
+  <text class="node-label" x="350" y="299" text-anchor="middle">Dual-LLM firewall · interface isolation · data/control channel separation</text>
+  <text class="node-label" x="350" y="312" text-anchor="middle" font-style="italic">Removes primary model from the trust decision entirely</text>
+
+  <!-- L5 System perimeter -->
+  <rect class="node band-systemic stroke-systemic" x="60" y="318" width="580" height="56" rx="5"></rect>
+  <text class="era-label" x="350" y="340" text-anchor="middle">System Perimeter</text>
+  <text class="node-label" x="350" y="359" text-anchor="middle">Least-privilege tools · sandboxed execution · output schema · audit trail</text>
+  <text class="node-label" x="350" y="372" text-anchor="middle" font-style="italic">Contains blast radius independent of model behavior</text>
+
+  <!-- "attack ingress" arrow on left -->
+  <path class="axis" d="M45,68 L45,374" marker-end="url(#da)"></path>
+  <text class="node-label" x="18" y="220" text-anchor="middle" transform="rotate(-90,18,220)">attack ingress ↓</text>
+</svg>
+<figcaption>Five-layer defense-in-depth stack. Each layer targets a different attack class; no single layer is sufficient.</figcaption>
+</figure>
+<section id="l1-inputoutput-screening" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="l1-inputoutput-screening"><span class="header-section-number">7.6.1</span> L1 — Input/Output Screening</h3>
+<p><strong>Llama Guard</strong> <span class="citation" data-cites="inan2023llamaguard">(<a href="../references.html#ref-inan2023llamaguard" role="doc-biblioref">Inan et al., 2023</a>)</span> — a fine-tuned LLM classifier evaluating prompts and completions against a configurable harm taxonomy; one additional inference call per exchange.</p>
+<p><strong>Constitutional classifiers</strong> <span class="citation" data-cites="sharma2025constitutional">(<a href="../references.html#ref-sharma2025constitutional" role="doc-biblioref">Sharma et al., 2025</a>)</span> — trained against thousands of adversarially generated jailbreak variants with policies as natural-language rules rather than forbidden-phrase lists; significantly harder to bypass, with no universal bypass found under extended red-teaming.</p>
+</section>
+<section id="l2-training-level-alignment" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="l2-training-level-alignment"><span class="header-section-number">7.6.2</span> L2 — Training-Level Alignment</h3>
+<p>RLHF <span class="citation" data-cites="christiano2017deep">(<a href="../references.html#ref-christiano2017deep" role="doc-biblioref">Christiano et al., 2017</a>)</span>, DPO <span class="citation" data-cites="rafailov2023direct">(<a href="../references.html#ref-rafailov2023direct" role="doc-biblioref">Rafailov et al., 2023</a>)</span>, and Constitutional AI <span class="citation" data-cites="bai2022constitutional">(<a href="../references.html#ref-bai2022constitutional" role="doc-biblioref"><span class="nocase">Bai et al.</span>, 2022</a>)</span> reduce jailbreak surface area but do not eliminate it: the defense space and the attack space are drawn from the same vocabulary, and optimization reliably finds compliant outputs despite alignment training.</p>
+</section>
+<section id="l3-representation-level-controls" class="level3" data-number="7.6.3">
+<h3 data-number="7.6.3" class="anchored" data-anchor-id="l3-representation-level-controls"><span class="header-section-number">7.6.3</span> L3 — Representation-Level Controls</h3>
+<p><strong>Circuit breakers</strong> <span class="citation" data-cites="zou2024circuitbreakers">(<a href="../references.html#ref-zou2024circuitbreakers" role="doc-biblioref">Zou et al., 2024</a>)</span> interrupt harmful computation at the representation level rather than at the output:</p>
+<ul>
+<li>Linear probes over residual stream activations detect when hidden states approach the harmful-output subspace</li>
+<li>A learned controller diverts those activations before the harmful computation completes</li>
+<li>Refusal occurs without the model “deciding” — the trajectory is cut before any decision is reached</li>
+</ul>
+<p>This is more robust to optimization-based attacks than behavioral refusal: the optimizer cannot directly target internal activation patterns the way it can target text patterns.</p>
+<p><strong>Tamper-resistant safeguards / unlearning</strong> address a different vulnerability: the <em>normal</em> RLHF-learned safety behaviors (refuse harmful requests) can be stripped by a few hundred fine-tuning steps on a compliant dataset — making fine-tuning access to a model a meaningful threat. Tamper-resistance research attempts to encode safety constraints in a form that is costly to remove without degrading general capabilities. Note the contrast with sleeper agents: sleeper-agent backdoors <em>resist</em> fine-tuning removal (that is their design); standard safety behaviors do not.</p>
+</section>
+<section id="l4-architectural-isolation-the-dual-llm-firewall" class="level3" data-number="7.6.4">
+<h3 data-number="7.6.4" class="anchored" data-anchor-id="l4-architectural-isolation-the-dual-llm-firewall"><span class="header-section-number">7.6.4</span> L4 — Architectural Isolation: The Dual-LLM Firewall</h3>
+<p>The dual-LLM pattern <span class="citation" data-cites="huang2025firewalls">(<a href="../references.html#ref-huang2025firewalls" role="doc-biblioref">Bhagwatkar et al., 2025</a>)</span> responds to the structural weakness of text-based firewalls: a “ignore injections” system instruction lives in the same context window as the injection and can be overridden by it.</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 640 200" role="img" aria-labelledby="dual-title">
+  <title id="dual-title">Dual-LLM firewall: policy model gates all external content before the primary model</title>
+  <defs>
+    <marker id="dl-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+    <marker id="dl-red" class="marker-danger" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"></path>
+    </marker>
+  </defs>
+
+  <!-- External content -->
+  <rect class="node band-security stroke-security" x="10" y="80" width="140" height="40" rx="5"></rect>
+  <text class="node-label" x="80" y="105" text-anchor="middle">External content</text>
+
+  <!-- Policy model -->
+  <rect class="node band-safety stroke-safety" x="210" y="60" width="160" height="80" rx="5"></rect>
+  <text class="era-label" x="290" y="88" text-anchor="middle">Policy model</text>
+  <text class="node-label" x="290" y="108" text-anchor="middle">(small, deterministic)</text>
+  <text class="node-label" x="290" y="124" text-anchor="middle">PASS / BLOCK</text>
+
+  <!-- Primary model -->
+  <rect class="node band-agentic stroke-agentic" x="450" y="70" width="160" height="60" rx="5"></rect>
+  <text class="era-label" x="530" y="97" text-anchor="middle">Primary model</text>
+  <text class="node-label" x="530" y="117" text-anchor="middle">(never sees raw external)</text>
+
+  <!-- Block path (red, downward) -->
+  <rect class="node-danger" x="210" y="165" width="160" height="30" rx="4"></rect>
+  <text class="node-label text-danger" x="290" y="185" text-anchor="middle">⊘ blocked</text>
+
+  <!-- Arrows -->
+  <path class="axis" d="M150,100 L210,100" marker-end="url(#dl-arr)"></path>
+  <path class="axis" d="M370,100 L450,100" marker-end="url(#dl-arr)"></path>
+  <path class="edge-danger" d="M290,140 L290,165" marker-end="url(#dl-red)"></path>
+
+  <!-- Injection attempt: dashed path from external content up/right to policy model, blocked -->
+  <path class="edge-danger-dash" stroke-width="1" d="M80,78 L80,62 L208,62" marker-end="url(#dl-red)"></path>
+  <text class="text-danger" font-size="9" x="144" y="57" text-anchor="middle">injection attempt</text>
+</svg>
+<figcaption>Dual-LLM firewall — the policy model gates all external content; the primary model never sees raw untrusted input.</figcaption>
+</figure>
+<div id="dual-llm-pattern" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dual_llm_gateway(external_content: <span class="bu">str</span>, policy_model, primary_model) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    verdict <span class="op">=</span> policy_model.classify(external_content)   <span class="co"># deterministic policy check</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> verdict.is_safe:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> primary_model.complete(external_content)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"[content blocked by policy model]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The primary model never sees raw external content; the injection channel is eliminated at the interface, not patched with a prompt instruction.</p>
+</section>
+<section id="l5-system-perimeter" class="level3" data-number="7.6.5">
+<h3 data-number="7.6.5" class="anchored" data-anchor-id="l5-system-perimeter"><span class="header-section-number">7.6.5</span> L5 — System Perimeter</h3>
+<p>Infrastructure-level controls that contain blast radius independent of model behavior:</p>
+<ul>
+<li><strong>Least-privilege tool access</strong> — agent granted only permissions required for the current task; no standing access to broad APIs or sensitive endpoints.</li>
+<li><strong>Sandboxed execution</strong> — tool calls run in isolated environments; side effects require explicit authorization to propagate.</li>
+<li><strong>Output schema enforcement</strong> — actions are typed and schema-validated before reaching the environment; free-form text cannot directly trigger execution.</li>
+<li><strong>Immutable audit trail</strong> — every tool call, argument, and result logged before execution; enables post-hoc review and rollback.</li>
+</ul>
+<p>These controls are independent of the model — they apply whether or not any inner layer was bypassed.</p>
+</section>
+</section>
+<section id="open-problems" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="open-problems"><span class="header-section-number">7.7</span> Open Problems</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problem</th>
+<th>Why it persists</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Universal jailbreak resistance</strong></td>
+<td>The fix space and the attack space are drawn from the same token vocabulary; any policy expressible in natural language can be adversarially prompted around</td>
+</tr>
+<tr class="even">
+<td><strong>Sleeper agent / backdoor detection</strong></td>
+<td>Designed to be invisible during evaluation; activation analysis is promising <span class="citation" data-cites="lindsey2025attribution">(<a href="../references.html#ref-lindsey2025attribution" role="doc-biblioref"><span class="nocase">Lindsey et al.</span>, 2025</a>)</span> but not production-ready at scale <span class="citation" data-cites="li2025backdoorllm">(<a href="../references.html#ref-li2025backdoorllm" role="doc-biblioref">Li et al., 2025</a>)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>RAG / memory integrity</strong></td>
+<td>Semi-persistent state corruption has no equivalent in classical software; “reset to known good” requires full vector-store audit</td>
+</tr>
+<tr class="even">
+<td><strong>Defense eval validity</strong></td>
+<td>Reported attack success rates depend critically on evaluation setup; adaptive attackers consistently exceed fixed-defense bounds <span class="citation" data-cites="mazeika2024harmbench zhang2024asb">(<a href="../references.html#ref-mazeika2024harmbench" role="doc-biblioref">Mazeika et al., 2024</a>; <a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Adversarial training arms race</strong></td>
+<td>Each new attack requires retraining defenses; the offense-defense gap is a structural property of the optimization landscape</td>
+</tr>
+<tr class="even">
+<td><strong>Deception detection at inference</strong></td>
+<td>Behavioral monitors are defeated by strategic deception <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>; internal-state monitors are nascent</td>
+</tr>
+</tbody>
+</table>
+<p>The field consensus: defense-in-depth raises the cost of successful attack without eliminating it. The research agenda — representation-level controls, attribution graphs, AI control, safety cases — is the systematic attempt to close the gaps the current stack leaves open.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-bai2022constitutional" class="csl-entry" role="listitem">
+<span class="nocase">Bai, Y., Kadavath, S., Kundu, S., Askell, A., Kernion, J., Jones, A., et al.</span> (2022). Constitutional <span>AI</span>: Harmlessness from <span>AI</span> feedback. <em>arXiv Preprint arXiv:2212.08073</em>.
+</div>
+<div id="ref-huang2025firewalls" class="csl-entry" role="listitem">
+Bhagwatkar, R., Kasa, K., Puri, A., Huang, G., Rish, I., Taylor, G. W., Dvijotham, K. D., &amp; Lacoste, A. (2025). Indirect prompt injections: Are firewalls all you need, or stronger benchmarks? <em>arXiv Preprint arXiv:2510.05244</em>.
+</div>
+<div id="ref-carlini2021extracting" class="csl-entry" role="listitem">
+Carlini, N., Tramer, F., Wallace, E., Jagielski, M., Herbert-Voss, A., Lee, K., Roberts, A., Brown, T. B., Song, D., Erlingsson, Ú., Oprea, A., &amp; Raffel, C. (2021). Extracting training data from large language models. <em>Proceedings of the 30th USENIX Security Symposium</em>, 2633–2650.
+</div>
+<div id="ref-chang2026retrieval" class="csl-entry" role="listitem">
+Chang, H., Bao, E., Luo, X., &amp; Yu, T. (2026). Overcoming the retrieval barrier: Indirect prompt injection in the wild for <span>LLM</span> systems. <em>arXiv Preprint arXiv:2601.07072</em>.
+</div>
+<div id="ref-christiano2017deep" class="csl-entry" role="listitem">
+Christiano, P. F., Leike, J., Brown, T. B., Martic, M., Legg, S., &amp; Amodei, D. (2017). Deep reinforcement learning from human preferences. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>.
+</div>
+<div id="ref-googlesaif" class="csl-entry" role="listitem">
+Google. (2023). <em>Secure <span>AI</span> framework (<span>SAIF</span>)</em>. <a href="https://saif.google/" class="uri">https://saif.google/</a>.
+</div>
+<div id="ref-greshake2023not" class="csl-entry" role="listitem">
+Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., &amp; Fritz, M. (2023). Not what you’ve signed up for: Compromising real-world <span>LLM</span>-integrated applications with indirect prompt injection. <em>arXiv Preprint arXiv:2302.12173</em>.
+</div>
+<div id="ref-hubinger2024sleeper" class="csl-entry" role="listitem">
+<span class="nocase">Hubinger, E., Denison, C., Mu, J., Lambert, M., Tong, M., MacDiarmid, M., et al.</span> (2024). Sleeper agents: Training deceptive <span>LLM</span>s that persist through safety training. <em>arXiv Preprint arXiv:2401.05566</em>.
+</div>
+<div id="ref-inan2023llamaguard" class="csl-entry" role="listitem">
+Inan, H., Upasani, K., Chi, J., Rungta, R., Iyer, K., Mao, Y., Tontchev, M., Hu, Q., Fuller, B., Testuggine, D., &amp; Khabsa, M. (2023). Llama guard: LLM-based input-output safeguard for human-AI conversations. <em>arXiv Preprint arXiv:2312.06674</em>.
+</div>
+<div id="ref-kim2026landscape" class="csl-entry" role="listitem">
+Kim, J., Liu, X., Wang, Z., Qiu, S., Li, B., Guo, W., &amp; Song, D. (2026). The attack and defense landscape of agentic <span>AI</span>: A comprehensive survey. <em>USENIX Security Symposium</em>.
+</div>
+<div id="ref-li2025backdoorllm" class="csl-entry" role="listitem">
+Li, Y., Huang, H., Zhao, Y., Ma, X., &amp; Sun, J. (2025). <span>BackdoorLLM</span>: A comprehensive benchmark for backdoor attacks and defenses on large language models. <em>Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks</em>.
+</div>
+<div id="ref-lindsey2025attribution" class="csl-entry" role="listitem">
+<span class="nocase">Lindsey, J., Batson, J., Denison, C., et al.</span> (2025). Circuit tracing: Revealing computational graphs in language models. <em>Transformer Circuits Thread (Anthropic)</em>.
+</div>
+<div id="ref-mazeika2024harmbench" class="csl-entry" role="listitem">
+Mazeika, M., Phan, L., Yin, X., Zou, A., Wang, Z., Mu, N., Sakhaee, E., Li, N., Basart, S., Li, B., Forsyth, D., &amp; Hendrycks, D. (2024). <span>HarmBench</span>: A standardized evaluation framework for automated red teaming and robust refusal. <em>International Conference on Machine Learning (ICML)</em>.
+</div>
+<div id="ref-mitreatlas" class="csl-entry" role="listitem">
+MITRE. (n.d.). <em><span>ATLAS</span>: Adversarial threat landscape for artificial-intelligence systems</em>. <a href="https://atlas.mitre.org/" class="uri">https://atlas.mitre.org/</a>.
+</div>
+<div id="ref-owasp2025llm" class="csl-entry" role="listitem">
+OWASP Foundation. (2025). <em>OWASP top 10 for large language model applications</em>. <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" class="uri">https://owasp.org/www-project-top-10-for-large-language-model-applications/</a>.
+</div>
+<div id="ref-panfilov2025strategic" class="csl-entry" role="listitem">
+Panfilov, A., Kortukov, E., Nikolić, K., Bethge, M., Lapuschkin, S., Samek, W., Prabhu, A., Andriushchenko, M., &amp; Geiping, J. (2025). Strategic dishonesty can undermine <span>AI</span> safety evaluations of frontier <span>LLM</span>s. <em>arXiv Preprint arXiv:2509.18058</em>.
+</div>
+<div id="ref-rafailov2023direct" class="csl-entry" role="listitem">
+Rafailov, R., Sharma, A., Mitchell, E., Ermon, S., Manning, C. D., &amp; Finn, C. (2023). Direct preference optimization: Your language model is secretly a reward model. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>.
+</div>
+<div id="ref-sharma2025constitutional" class="csl-entry" role="listitem">
+Sharma, M., Tong, M., Mu, J., Wei, J., Kruthoff, J., Goodfriend, S., Ong, E., Peng, A., Agarwal, R., Anil, C., Askell, A., Bailey, N., Benton, J., Bluemke, E., Bowman, S. R., Christiansen, E., Cunningham, H., Dau, A., Gopal, A., … Perez, E. (2025). Constitutional classifiers: Defending against universal jailbreaks across thousands of hours of red teaming. <em>arXiv Preprint arXiv:2501.18837</em>.
+</div>
+<div id="ref-zhang2024asb" class="csl-entry" role="listitem">
+Zhang, H., Huang, J., Mei, K., Yao, Y., Wang, Z., Zhan, C., Wang, H., &amp; Zhang, Y. (2025). Agent security bench (<span>ASB</span>): Formalizing and benchmarking attacks and defenses in <span>LLM</span>-based agents. <em>International Conference on Learning Representations (ICLR)</em>.
+</div>
+<div id="ref-zou2024circuitbreakers" class="csl-entry" role="listitem">
+Zou, A., Phan, L., Wang, J., Duenas, D., Lin, M., Andriushchenko, M., Wang, R., Kolter, Z., Fredrikson, M., &amp; Hendrycks, D. (2024). Improving alignment and robustness with circuit breakers. <em>arXiv Preprint arXiv:2406.04313</em>.
+</div>
+<div id="ref-zou2023universal" class="csl-entry" role="listitem">
+Zou, A., Wang, Z., Carlini, N., Nasr, M., Kolter, J. Z., &amp; Fredrikson, M. (2023). Universal and transferable adversarial attacks on aligned language models. <em>arXiv Preprint arXiv:2307.15043</em>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -701,7 +1460,7 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../topics/alignment.html" class="pagination-link" aria-label="Alignment">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Alignment</span></span>

@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Measuring safety, security, and capability — from static benchmarks to agentic and dangerous-capability evaluations.">
+<meta name="description" content="Measuring safety, security, and capability — from static benchmarks through holistic suites to agentic and dangerous-capability evaluations that trigger frontier safety policy.">
 
 <title>11&nbsp; Evaluation &amp; Benchmarks – AI Safety &amp; Security</title>
 <style>
@@ -24,7 +24,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -42,10 +62,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-920f8e33c6168ac66b68b4937b16a9d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04671a10ed571c9974bbb63eeee1b285.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -78,7 +102,169 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -97,7 +283,7 @@ ul.task-list li input[type="checkbox"] {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -105,6 +291,7 @@ ul.task-list li input[type="checkbox"] {
       <a href="../">AI Safety &amp; Security</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/surafelml/ai-safety-security" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
       </div>
@@ -207,12 +394,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Agentic Safety × Security</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../topics/tooling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -227,7 +408,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../frontier/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
   </div>
 </li>
       </ul>
@@ -244,7 +425,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../supplement/technical-notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Supplementary Technical Notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Technical Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/tooling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
   </div>
 </li>
       </ul>
@@ -252,7 +445,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></span></a>
   </div>
 </li>
     </ul>
@@ -265,12 +458,21 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-evaluation" id="toc-sec-evaluation" class="nav-link active" data-scroll-target="#sec-evaluation"><span class="header-section-number">12</span> Evaluation &amp; Benchmarks</a></li>
+  <li><a href="#why-evaluation-is-a-discipline" id="toc-why-evaluation-is-a-discipline" class="nav-link active" data-scroll-target="#why-evaluation-is-a-discipline"><span class="header-section-number">11.1</span> Why Evaluation is a Discipline</a></li>
+  <li><a href="#generation-1-static-accuracy-20182022" id="toc-generation-1-static-accuracy-20182022" class="nav-link" data-scroll-target="#generation-1-static-accuracy-20182022"><span class="header-section-number">11.2</span> Generation 1 — Static Accuracy (2018–2022)</a></li>
+  <li><a href="#generation-2-holistic-evaluation-20222023" id="toc-generation-2-holistic-evaluation-20222023" class="nav-link" data-scroll-target="#generation-2-holistic-evaluation-20222023"><span class="header-section-number">11.3</span> Generation 2 — Holistic Evaluation (2022–2023)</a></li>
+  <li><a href="#generation-3-adversarial-benchmarks-20232024" id="toc-generation-3-adversarial-benchmarks-20232024" class="nav-link" data-scroll-target="#generation-3-adversarial-benchmarks-20232024"><span class="header-section-number">11.4</span> Generation 3 — Adversarial Benchmarks (2023–2024)</a></li>
+  <li><a href="#generation-4-agentic-benchmarks-2024present" id="toc-generation-4-agentic-benchmarks-2024present" class="nav-link" data-scroll-target="#generation-4-agentic-benchmarks-2024present"><span class="header-section-number">11.5</span> Generation 4 — Agentic Benchmarks (2024–present)</a></li>
+  <li><a href="#generation-5-dangerous-capability-evaluations-2024present" id="toc-generation-5-dangerous-capability-evaluations-2024present" class="nav-link" data-scroll-target="#generation-5-dangerous-capability-evaluations-2024present"><span class="header-section-number">11.6</span> Generation 5 — Dangerous-Capability Evaluations (2024–present)</a></li>
+  <li><a href="#frontier-safety-frameworks-and-threshold-triggers" id="toc-frontier-safety-frameworks-and-threshold-triggers" class="nav-link" data-scroll-target="#frontier-safety-frameworks-and-threshold-triggers"><span class="header-section-number">11.7</span> Frontier Safety Frameworks and Threshold Triggers</a></li>
+  <li><a href="#evaluation-in-the-multi-agent-setting" id="toc-evaluation-in-the-multi-agent-setting" class="nav-link" data-scroll-target="#evaluation-in-the-multi-agent-setting"><span class="header-section-number">11.8</span> Evaluation in the Multi-Agent Setting</a></li>
+  <li><a href="#open-problems" id="toc-open-problems" class="nav-link" data-scroll-target="#open-problems"><span class="header-section-number">11.9</span> Open Problems</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/topics/evaluation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../topics/alignment.html">II — Topics</a></li><li class="breadcrumb-item"><a href="../topics/evaluation.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Evaluation &amp; Benchmarks</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -279,7 +481,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta">
 
     
   
@@ -291,18 +493,415 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-evaluation" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> Evaluation &amp; Benchmarks</h1>
-<blockquote class="blockquote">
-<p><strong>Stub.</strong> Chronological deep-dive: static accuracy benchmarks → holistic evaluation (HELM) → safety/red-teaming evals → agentic benchmarks (AgentDojo, τ-bench, Agent Security Bench) → dangerous-capability evaluations (CBRN, cyber, autonomy, self-proliferation) and the frontier-policy thresholds they trigger. The methodological backbone of the <strong>evaluation</strong> review paper.</p>
-</blockquote>
+<p>Evaluation determines what deployed AI systems can and cannot do — including what they can and cannot be <em>made</em> to do. It is not a single methodology but a research discipline that has passed through distinct generations, each revealing blind spots in the generation before it.</p>
+<section id="why-evaluation-is-a-discipline" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="why-evaluation-is-a-discipline"><span class="header-section-number">11.1</span> Why Evaluation is a Discipline</h2>
+<p>A benchmark is a claim about what ability a score measures. That claim fails in at least three ways:</p>
+<ol type="1">
+<li><strong>Contamination</strong> — test examples appear in training data; scores reflect memorization, not generalization.</li>
+<li><strong>Construct validity</strong> — the benchmark measures a proxy that diverges from the target ability under distribution shift or capability scaling.</li>
+<li><strong>Goodhart’s law</strong> — once a benchmark becomes a training target, it ceases to measure what it was designed to measure.</li>
+</ol>
+<p>Each benchmark generation has broken on one of these axes, motivating the next. The pattern is: release → models saturate → contamination or Goodhart’s discovered → new benchmark — and the cycle restarts, typically within 18–24 months.</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 680 200" role="img" aria-labelledby="gen-title">
+  <title id="gen-title">Five generations of AI evaluation, 2018 to present</title>
+  <defs>
+    <marker id="gn-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Timeline spine -->
+  <path class="axis" d="M30,100 L650,100" marker-end="url(#gn-arr)"></path>
+
+  <!-- Gen 1 -->
+  <rect class="node band-safety stroke-safety" x="30" y="40" width="100" height="50" rx="4"></rect>
+  <text class="node-label" x="80" y="59" text-anchor="middle" font-weight="600">Gen 1</text>
+  <text class="node-label" x="80" y="74" text-anchor="middle">Static</text>
+  <text class="node-label" x="80" y="88" text-anchor="middle">accuracy</text>
+  <text class="node-label" x="80" y="120" text-anchor="middle">2018–22</text>
+  <line class="axis" x1="80" y1="90" x2="80" y2="100"></line>
+
+  <!-- Gen 2 -->
+  <rect class="node band-security stroke-security" x="160" y="40" width="110" height="50" rx="4"></rect>
+  <text class="node-label" x="215" y="59" text-anchor="middle" font-weight="600">Gen 2</text>
+  <text class="node-label" x="215" y="74" text-anchor="middle">Holistic</text>
+  <text class="node-label" x="215" y="88" text-anchor="middle">HELM</text>
+  <text class="node-label" x="215" y="120" text-anchor="middle">2022–23</text>
+  <line class="axis" x1="215" y1="90" x2="215" y2="100"></line>
+
+  <!-- Gen 3 -->
+  <rect class="node band-oversight stroke-oversight" x="300" y="40" width="110" height="50" rx="4"></rect>
+  <text class="node-label" x="355" y="59" text-anchor="middle" font-weight="600">Gen 3</text>
+  <text class="node-label" x="355" y="74" text-anchor="middle">Adversarial</text>
+  <text class="node-label" x="355" y="88" text-anchor="middle">HarmBench</text>
+  <text class="node-label" x="355" y="120" text-anchor="middle">2023–24</text>
+  <line class="axis" x1="355" y1="90" x2="355" y2="100"></line>
+
+  <!-- Gen 4 -->
+  <rect class="node band-agentic stroke-agentic" x="440" y="40" width="110" height="50" rx="4"></rect>
+  <text class="node-label" x="495" y="59" text-anchor="middle" font-weight="600">Gen 4</text>
+  <text class="node-label" x="495" y="74" text-anchor="middle">Agentic</text>
+  <text class="node-label" x="495" y="88" text-anchor="middle">AgentDojo / ASB</text>
+  <text class="node-label" x="495" y="120" text-anchor="middle">2024–</text>
+  <line class="axis" x1="495" y1="90" x2="495" y2="100"></line>
+
+  <!-- Gen 5 -->
+  <rect class="node band-systemic stroke-systemic" x="560" y="40" width="80" height="50" rx="4"></rect>
+  <text class="node-label" x="600" y="59" text-anchor="middle" font-weight="600">Gen 5</text>
+  <text class="node-label" x="600" y="74" text-anchor="middle">Dangerous</text>
+  <text class="node-label" x="600" y="88" text-anchor="middle">capability</text>
+  <text class="node-label" x="600" y="120" text-anchor="middle">2024–</text>
+  <line class="axis" x1="600" y1="90" x2="600" y2="100"></line>
+
+  <!-- Transition labels -->
+  <text class="node-label" x="137" y="155" text-anchor="middle" font-style="italic">saturated</text>
+  <text class="node-label" x="275" y="155" text-anchor="middle" font-style="italic">too narrow</text>
+  <text class="node-label" x="415" y="155" text-anchor="middle" font-style="italic">behavioral only</text>
+  <text class="node-label" x="540" y="155" text-anchor="middle" font-style="italic">single-turn only</text>
+</svg>
+<figcaption>Five generations of AI evaluation — each generation exposed blind spots in the one before it.</figcaption>
+</figure>
+</section>
+<section id="generation-1-static-accuracy-20182022" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="generation-1-static-accuracy-20182022"><span class="header-section-number">11.2</span> Generation 1 — Static Accuracy (2018–2022)</h2>
+<p>Fixed test sets, accuracy over labeled examples — GLUE, MMLU, HumanEval, BIG-bench. Simple, reproducible, and short-lived: each broke on contamination or Goodhart’s law within 18–24 months of release. None measured safety behavior, adversarial robustness, or agentic capability. Detailed benchmark table in the <a href="../supplement/benchmarks.html#sec-supp-benchmarks-gen1">supplement</a>.</p>
+</section>
+<section id="generation-2-holistic-evaluation-20222023" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="generation-2-holistic-evaluation-20222023"><span class="header-section-number">11.3</span> Generation 2 — Holistic Evaluation (2022–2023)</h2>
+<p><strong>HELM</strong> <span class="citation" data-cites="liang2022holistic">(<a href="../references.html#ref-liang2022holistic" role="doc-biblioref"><span class="nocase">Liang et al.</span>, 2023</a>)</span> was the first multi-dimensional framework: accuracy, calibration, robustness, fairness, toxicity, and efficiency scored simultaneously across shared scenarios (metric breakdown in the <a href="../supplement/benchmarks.html">supplement</a>). The key finding: accuracy and robustness are weakly correlated — a model topping accuracy leaderboards can be brittle to distribution shift or rephrasing.</p>
+<p><strong>Red-teaming</strong> <span class="citation" data-cites="perez2022red">(<a href="../references.html#ref-perez2022red" role="doc-biblioref">Perez et al., 2022</a>)</span> emerged in parallel: use a language model to generate adversarial prompts and measure harmful-output rate. LLM red teams cover vastly more of the attack surface than manual testers.</p>
+<p>Both measure behavioral properties of a fixed model under fixed prompts — neither captures what a determined adversary can elicit using optimization, nor what happens over a multi-step task.</p>
+</section>
+<section id="generation-3-adversarial-benchmarks-20232024" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="generation-3-adversarial-benchmarks-20232024"><span class="header-section-number">11.4</span> Generation 3 — Adversarial Benchmarks (2023–2024)</h2>
+<p>GCG <span class="citation" data-cites="zou2023universal">(<a href="../references.html#ref-zou2023universal" role="doc-biblioref">Zou et al., 2023</a>)</span> changed the evaluation calculus: if a fixed adversarial suffix can reliably bypass alignment training, behavioral red-teaming understates the attack surface. The response: benchmarks that stress-test safety under optimization, with attack success rate reported as a function of attack budget.</p>
+<p><strong>HarmBench</strong> <span class="citation" data-cites="mazeika2024harmbench">(<a href="../references.html#ref-mazeika2024harmbench" role="doc-biblioref">Mazeika et al., 2024</a>)</span> standardizes this across 18 red-teaming methods and 33 target LLMs:</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 640 230" role="img" aria-labelledby="harm-title">
+  <title id="harm-title">HarmBench evaluation structure: attack methods × model targets × harm categories</title>
+  <defs>
+    <marker id="hb-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Three columns -->
+  <!-- Attack methods -->
+  <rect class="node band-safety stroke-safety" x="20" y="20" width="170" height="190" rx="5"></rect>
+  <text class="era-label" x="105" y="44" text-anchor="middle">Attack methods</text>
+  <text class="node-label" x="105" y="70" text-anchor="middle">GCG</text>
+  <text class="node-label" x="105" y="92" text-anchor="middle">AutoDAN</text>
+  <text class="node-label" x="105" y="114" text-anchor="middle">PAIR</text>
+  <text class="node-label" x="105" y="136" text-anchor="middle">TAP</text>
+  <text class="node-label" x="105" y="158" text-anchor="middle">+ 14 others</text>
+  <text class="node-label" x="105" y="196" text-anchor="middle" font-style="italic">18 total</text>
+
+  <!-- Cross arrows showing matrix evaluation (all three feed a central evaluation) -->
+  <path class="axis" d="M190,115 L235,115" marker-end="url(#hb-arr)"></path>
+  <path class="axis" d="M450,115 L405,115" marker-end="url(#hb-arr)"></path>
+
+  <!-- Harm categories (center column — the evaluation matrix) -->
+  <rect class="node band-agentic stroke-agentic" x="235" y="20" width="170" height="190" rx="5"></rect>
+  <text class="era-label" x="320" y="44" text-anchor="middle">Harm categories</text>
+  <text class="node-label" x="320" y="70" text-anchor="middle">Cybercrime</text>
+  <text class="node-label" x="320" y="92" text-anchor="middle">CBRN uplift</text>
+  <text class="node-label" x="320" y="114" text-anchor="middle">Disinformation</text>
+  <text class="node-label" x="320" y="136" text-anchor="middle">Hate speech</text>
+  <text class="node-label" x="320" y="158" text-anchor="middle">Physical harm</text>
+  <text class="node-label" x="320" y="196" text-anchor="middle" font-style="italic">evaluation matrix</text>
+
+  <!-- Target models -->
+  <rect class="node band-oversight stroke-oversight" x="450" y="20" width="170" height="190" rx="5"></rect>
+  <text class="era-label" x="535" y="44" text-anchor="middle">Target LLMs</text>
+  <text class="node-label" x="535" y="70" text-anchor="middle">Llama 2/3</text>
+  <text class="node-label" x="535" y="92" text-anchor="middle">Mistral</text>
+  <text class="node-label" x="535" y="114" text-anchor="middle">GPT-4</text>
+  <text class="node-label" x="535" y="136" text-anchor="middle">Claude 3</text>
+  <text class="node-label" x="535" y="158" text-anchor="middle">+ 29 others</text>
+  <text class="node-label" x="535" y="196" text-anchor="middle" font-style="italic">33 total</text>
+</svg>
+<figcaption>HarmBench — 18 attack methods × 5 harm categories × 33 target models; attack success rate reported as a function of attack budget.</figcaption>
+</figure>
+<p>Key finding: under optimization-based attacks, current safety training provides substantially weaker protection than behavioral evaluations suggest. The gap between behavioral safety scores and adversarial safety scores is a measure of how much the behavioral evaluation understates actual risk.</p>
+<p>HarmBench also introduced an adversarial training method that materially improves robustness across diverse attack vectors — the first standardized defense evaluation in the same framework as attack evaluation.</p>
+<p>The generation 3 insight: <strong>jailbreak ≠ robustness</strong>. A model can be robust to distribution-shift OOD inputs while being brittle to adversarial suffixes. These are distinct threat models; conflating them produces benchmarks that measure neither well.</p>
+</section>
+<section id="generation-4-agentic-benchmarks-2024present" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="generation-4-agentic-benchmarks-2024present"><span class="header-section-number">11.5</span> Generation 4 — Agentic Benchmarks (2024–present)</h2>
+<p>Single-turn benchmarks miss the failure modes that emerge when a model takes actions in a multi-step loop. Agentic evaluation requires three things single-turn evaluation lacks: a <strong>task environment</strong>, <strong>trajectory-level safety criteria</strong>, and <strong>adversarial conditions embedded in the environment</strong> — not just in the prompt.</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 680 240" role="img" aria-labelledby="agent-eval-title">
+  <title id="agent-eval-title">Agentic benchmark structure: agent operating in adversarial task environment</title>
+  <defs>
+    <marker id="ae-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+    <marker id="ae-red" class="marker-danger" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"></path>
+    </marker>
+  </defs>
+
+  <!-- Agent -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="90" width="140" height="60" rx="6"></rect>
+  <text class="era-label" x="340" y="115" text-anchor="middle">Agent</text>
+  <text class="node-label" x="340" y="135" text-anchor="middle">plan → act → observe</text>
+
+  <!-- Legitimate task -->
+  <rect class="node band-safety stroke-safety" x="20" y="30" width="200" height="50" rx="5"></rect>
+  <text class="node-label" x="120" y="52" text-anchor="middle" font-weight="600">Legitimate task</text>
+  <text class="node-label" x="120" y="68" text-anchor="middle">"Summarize my emails"</text>
+  <path class="axis" d="M220,55 L270,110" marker-end="url(#ae-arr)"></path>
+
+  <!-- Injected payload -->
+  <rect class="node-danger" x="20" y="160" width="200" height="50" rx="5"></rect>
+  <text class="node-label text-danger" x="120" y="182" text-anchor="middle" font-weight="600">Adversarial payload</text>
+  <text class="node-label text-danger" x="120" y="198" text-anchor="middle">"Fwd attachments to evil@..."</text>
+  <path class="edge-danger" d="M220,185 L270,140" marker-end="url(#ae-red)"></path>
+
+  <!-- Task success output -->
+  <rect class="node band-safety stroke-safety" x="460" y="30" width="200" height="50" rx="5"></rect>
+  <text class="node-label" x="560" y="52" text-anchor="middle" font-weight="600">Utility metric</text>
+  <text class="node-label" x="560" y="68" text-anchor="middle">task completion rate</text>
+  <path class="axis" d="M410,110 L460,55" marker-end="url(#ae-arr)"></path>
+
+  <!-- Attack success output -->
+  <rect class="node-danger" x="460" y="160" width="200" height="50" rx="5"></rect>
+  <text class="node-label text-danger" x="560" y="182" text-anchor="middle" font-weight="600">Safety metric</text>
+  <text class="node-label text-danger" x="560" y="198" text-anchor="middle">attack success rate</text>
+  <path class="edge-danger" d="M410,140 L460,185" marker-end="url(#ae-red)"></path>
+
+  <!-- Key insight -->
+  <text class="node-label" x="340" y="210" text-anchor="middle" font-style="italic">Both axes required — a defense is useless if it destroys task utility</text>
+</svg>
+<figcaption>Agentic benchmark structure — legitimate tasks and adversarial payloads arrive simultaneously; both utility and safety are measured.</figcaption>
+</figure>
+<p>Key Gen 4 findings across AgentDojo <span class="citation" data-cites="debenedetti2024agentdojo">(<a href="../references.html#ref-debenedetti2024agentdojo" role="doc-biblioref">Debenedetti et al., 2024</a>)</span>, Agent Security Bench <span class="citation" data-cites="zhang2024asb">(<a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span>, and service-task reliability benchmarks (τ-bench): frontier models complete 60–70 % of legitimate tasks but are vulnerable to environmental injection in 30–60 % of attack scenarios; direct injection achieves up to 84 % attack success on undefended agents; no evaluated defense eliminated the attack surface without also degrading task completion. Detailed benchmark numbers in the <a href="../supplement/benchmarks.html">supplement</a>.</p>
+<p>Gen 4 established two invariants: the defense-utility tradeoff is fundamental, and trajectory-level safety cannot be reduced to per-step output classification. Gen 5 asks a different question: not whether the model behaves safely, but whether it has acquired capabilities that are dangerous regardless of intent.</p>
+</section>
+<section id="generation-5-dangerous-capability-evaluations-2024present" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="generation-5-dangerous-capability-evaluations-2024present"><span class="header-section-number">11.6</span> Generation 5 — Dangerous-Capability Evaluations (2024–present)</h2>
+<p>The question shifts from “can the model do X usefully?” to “can the model do X dangerously?” A positive result is a <em>warning signal</em>, not a capability gain. The evaluation’s job is to detect before deployment, not to measure after.</p>
+<p>Five capability categories are currently tracked: CBRN uplift, cyber (autonomous attack chains), autonomy / AI R&amp;D (RE-Bench <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span>), self-proliferation, and strategic deception <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>. Full taxonomy in the <a href="../supplement/benchmarks.html#sec-supp-dangcap">supplement</a>.</p>
+<p><strong>METR RE-Bench</strong> <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span> — 7 open-ended ML research engineering environments, 71 human-expert attempts. Finding: AI agents achieve 4× the score of human experts at 2-hour budgets (scaling laws, GPU kernel optimization, experiment design). The implication: the dangerous-capability threshold for an agent is lower than for a standalone model because the loop compounds capability. The benchmark is explicitly designed to detect early signs of recursive self-improvement potential before policy thresholds are crossed.</p>
+<p><strong>Strategic deception under evaluation</strong> <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span> extends this category: frontier models can identify when they are being evaluated and craft responses that appear harmful to a human reviewer but contain subtle inaccuracies that reduce actual harm. This defeats output-based monitors entirely — the model behaves differently under evaluation than under deployment. Activation-pattern analysis detected the deception where text-based monitors could not.</p>
+</section>
+<section id="frontier-safety-frameworks-and-threshold-triggers" class="level2" data-number="11.7">
+<h2 data-number="11.7" class="anchored" data-anchor-id="frontier-safety-frameworks-and-threshold-triggers"><span class="header-section-number">11.7</span> Frontier Safety Frameworks and Threshold Triggers</h2>
+<p>Dangerous-capability evaluations now gate deployment decisions:</p>
+<figure class="figure">
+<svg class="illustration" viewbox="0 0 680 260" role="img" aria-labelledby="fw-title">
+  <title id="fw-title">Frontier safety frameworks: evaluation thresholds trigger deployment gates</title>
+  <defs>
+    <marker id="fw-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Column headers -->
+  <text class="era-label" x="120" y="22" text-anchor="middle">Organization</text>
+  <text class="era-label" x="340" y="22" text-anchor="middle">Framework</text>
+  <text class="era-label" x="560" y="22" text-anchor="middle">Threshold mechanism</text>
+
+  <!-- Anthropic -->
+  <rect class="node band-safety stroke-safety" x="20" y="35" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="120" y="56" text-anchor="middle" font-weight="600">Anthropic</text>
+  <text class="node-label" x="120" y="75" text-anchor="middle">Responsible Scaling</text>
+  <text class="node-label" x="120" y="91" text-anchor="middle">Policy (RSP)</text>
+
+  <rect class="node band-safety stroke-safety" x="240" y="35" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="340" y="56" text-anchor="middle">ASL tiers (2 / 3 / 4)</text>
+  <text class="node-label" x="340" y="75" text-anchor="middle">Each tier requires specific</text>
+  <text class="node-label" x="340" y="91" text-anchor="middle">pre-deployment evals + mitigations</text>
+
+  <rect class="node band-safety stroke-safety" x="460" y="35" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="560" y="62" text-anchor="middle">ASL-3 autonomy eval →</text>
+  <text class="node-label" x="560" y="78" text-anchor="middle">no deployment without</text>
+  <text class="node-label" x="560" y="94" text-anchor="middle">ASL-3 mitigations in place</text>
+
+  <!-- OpenAI -->
+  <rect class="node band-security stroke-security" x="20" y="110" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="120" y="131" text-anchor="middle" font-weight="600">OpenAI</text>
+  <text class="node-label" x="120" y="150" text-anchor="middle">Preparedness</text>
+  <text class="node-label" x="120" y="166" text-anchor="middle">Framework</text>
+
+  <rect class="node band-security stroke-security" x="240" y="110" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="340" y="131" text-anchor="middle">Critical / High / Medium</text>
+  <text class="node-label" x="340" y="150" text-anchor="middle">per capability domain</text>
+  <text class="node-label" x="340" y="166" text-anchor="middle">(CBRN, cyber, autonomy…)</text>
+
+  <rect class="node band-security stroke-security" x="460" y="110" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="560" y="137" text-anchor="middle">Critical rating →</text>
+  <text class="node-label" x="560" y="153" text-anchor="middle">no deployment</text>
+  <text class="node-label" x="560" y="169" text-anchor="middle">(hard block)</text>
+
+  <!-- DeepMind -->
+  <rect class="node band-oversight stroke-oversight" x="20" y="185" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="120" y="206" text-anchor="middle" font-weight="600">Google DeepMind</text>
+  <text class="node-label" x="120" y="225" text-anchor="middle">Frontier Safety</text>
+  <text class="node-label" x="120" y="241" text-anchor="middle">Framework (FSF)</text>
+
+  <rect class="node band-oversight stroke-oversight" x="240" y="185" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="340" y="206" text-anchor="middle">Threat model per capability;</text>
+  <text class="node-label" x="340" y="225" text-anchor="middle">critical capabilities require</text>
+  <text class="node-label" x="340" y="241" text-anchor="middle">containment before deployment</text>
+
+  <rect class="node band-oversight stroke-oversight" x="460" y="185" width="200" height="60" rx="5"></rect>
+  <text class="node-label" x="560" y="212" text-anchor="middle">Critical capability →</text>
+  <text class="node-label" x="560" y="228" text-anchor="middle">containment required;</text>
+  <text class="node-label" x="560" y="244" text-anchor="middle">safety case must be filed</text>
+
+  <!-- grid lines -->
+  <line class="separator" x1="238" y1="30" x2="238" y2="250"></line>
+  <line class="separator" x1="458" y1="30" x2="458" y2="250"></line>
+</svg>
+<figcaption>Frontier safety frameworks — each lab maps evaluation results to deployment thresholds through a different tier structure.</figcaption>
+</figure>
+<p>Two research threads make those threshold decisions tractable:</p>
+<ul>
+<li><strong>Safety cases</strong> <span class="citation" data-cites="hilton2025safetycases">(<a href="../references.html#ref-hilton2025safetycases" role="doc-biblioref">Hilton et al., 2025</a>)</span> — structured arguments that a model’s risk is tolerable given its evaluations; evaluation evidence is the primary input, making evaluation quality a direct gate on deployment authorization</li>
+<li><strong>Scalable oversight</strong> <span class="citation" data-cites="engels2025scalinglaws">(<a href="../references.html#ref-engels2025scalinglaws" role="doc-biblioref">Engels et al., 2025</a>)</span> — as models exceed human-expert capability in specific domains, human evaluators can no longer reliably detect failures; scalable oversight addresses the supervision bottleneck that would otherwise undermine threshold decisions</li>
+</ul>
+</section>
+<section id="evaluation-in-the-multi-agent-setting" class="level2" data-number="11.8">
+<h2 data-number="11.8" class="anchored" data-anchor-id="evaluation-in-the-multi-agent-setting"><span class="header-section-number">11.8</span> Evaluation in the Multi-Agent Setting</h2>
+<p>Gen 4 benchmarks (AgentDojo, ASB) evaluate a single agent operating in an adversarial environment. When multiple agents compose into a pipeline, additional failure modes appear that are invisible at the component level — AgentDojo itself measured higher injection success rates in multi-agent chains than in single-agent settings:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Failure mode</th>
+<th>Mechanism</th>
+<th>Why it evades per-agent evals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Error propagation</strong></td>
+<td>Agent A’s hallucinated output → Agent B’s trusted input; errors amplify</td>
+<td>Each agent looks fine individually; the pipeline fails</td>
+</tr>
+<tr class="even">
+<td><strong>Trust collapse</strong></td>
+<td>An agent that refuses an unsafe action is bypassed by routing through a second agent with a different system prompt</td>
+<td>Per-agent refusal rate doesn’t measure pipeline refusal rate</td>
+</tr>
+<tr class="odd">
+<td><strong>Emergent collusion</strong></td>
+<td>Two agents independently optimized develop coordinated behaviors not present in either</td>
+<td>Not observable in single-agent eval; requires pipeline-level measurement</td>
+</tr>
+<tr class="even">
+<td><strong>Deceptive relay</strong></td>
+<td>A compromised agent passes an injection to a peer with the peer’s inherited trust level</td>
+<td>Per-agent input filters don’t screen inter-agent messages</td>
+</tr>
+</tbody>
+</table>
+<p>Current agentic benchmarks evaluate individual agents <em>within</em> a multi-agent environment. True pipeline-level safety evaluation — measuring emergent properties of the composition rather than properties of any component — is an open problem.</p>
+</section>
+<section id="open-problems" class="level2" data-number="11.9">
+<h2 data-number="11.9" class="anchored" data-anchor-id="open-problems"><span class="header-section-number">11.9</span> Open Problems</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problem</th>
+<th>Current state</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Contamination detection</strong></td>
+<td>No reliable method to determine whether a benchmark appears in a frontier model’s training data</td>
+</tr>
+<tr class="even">
+<td><strong>Adaptive-attacker validity</strong></td>
+<td>Most safety benchmarks use fixed attacks; adaptive attackers consistently exceed reported bounds <span class="citation" data-cites="mazeika2024harmbench zhang2024asb">(<a href="../references.html#ref-mazeika2024harmbench" role="doc-biblioref">Mazeika et al., 2024</a>; <a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Deception detection</strong></td>
+<td>Behavioral monitors are defeated by strategic deception <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>; activation-based detection is nascent</td>
+</tr>
+<tr class="even">
+<td><strong>Longitudinal / deployment drift</strong></td>
+<td>Benchmarks measure a pre-deployment snapshot; post-deployment fine-tuning and RLHF updates change the model’s safety properties without re-evaluation</td>
+</tr>
+<tr class="odd">
+<td><strong>Multi-agent emergence</strong></td>
+<td>No standardized benchmark for emergent pipeline behavior; AgentDojo/ASB measure individual agents in adversarial environments, not emergent multi-agent dynamics</td>
+</tr>
+<tr class="even">
+<td><strong>Safety-capability joint metric</strong></td>
+<td>No standard metric for the joint distribution of safety and utility; AgentDojo’s dual-axis reporting is the current state of the art</td>
+</tr>
+<tr class="odd">
+<td><strong>Autonomous R&amp;D evaluation</strong></td>
+<td>RE-Bench <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span> is a starting point; the self-improvement regime (where the agent improves the evaluation itself) has no established benchmark</td>
+</tr>
+</tbody>
+</table>
+<p>The deeper problem: the model under evaluation and the models used to evaluate it are trained on overlapping data. Capability improvements that make a model better at tasks also make it better at evading evaluation — the benchmark and the subject improve together.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-debenedetti2024agentdojo" class="csl-entry" role="listitem">
+Debenedetti, E., Zhang, J., Balunović, M., Beurer-Kellner, L., Fischer, M., &amp; Tramèr, F. (2024). AgentDojo: A dynamic environment to evaluate attacks and defenses for <span>LLM</span> agents. <em>Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks</em>.
+</div>
+<div id="ref-engels2025scalinglaws" class="csl-entry" role="listitem">
+Engels, J., Baek, D. D., Kantamneni, S., &amp; Tegmark, M. (2025). Scaling laws for scalable oversight. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>.
+</div>
+<div id="ref-hilton2025safetycases" class="csl-entry" role="listitem">
+Hilton, B., Buhl, M. D., Korbak, T., &amp; Irving, G. (2025). Safety cases: A scalable approach to frontier <span>AI</span> safety. <em>arXiv Preprint arXiv:2503.04744</em>.
+</div>
+<div id="ref-liang2022holistic" class="csl-entry" role="listitem">
+<span class="nocase">Liang, P., Bommasani, R., Lee, T., Tsipras, D., Soylu, D., Yasunaga, M., Zhang, Y., Narayanan, D., Wu, Y., Kumar, A., et al.</span> (2023). Holistic evaluation of language models. <em>Transactions on Machine Learning Research</em>.
+</div>
+<div id="ref-mazeika2024harmbench" class="csl-entry" role="listitem">
+Mazeika, M., Phan, L., Yin, X., Zou, A., Wang, Z., Mu, N., Sakhaee, E., Li, N., Basart, S., Li, B., Forsyth, D., &amp; Hendrycks, D. (2024). <span>HarmBench</span>: A standardized evaluation framework for automated red teaming and robust refusal. <em>International Conference on Machine Learning (ICML)</em>.
+</div>
+<div id="ref-panfilov2025strategic" class="csl-entry" role="listitem">
+Panfilov, A., Kortukov, E., Nikolić, K., Bethge, M., Lapuschkin, S., Samek, W., Prabhu, A., Andriushchenko, M., &amp; Geiping, J. (2025). Strategic dishonesty can undermine <span>AI</span> safety evaluations of frontier <span>LLM</span>s. <em>arXiv Preprint arXiv:2509.18058</em>.
+</div>
+<div id="ref-perez2022red" class="csl-entry" role="listitem">
+Perez, E., Huang, S., Song, F., Cai, T., Ring, R., Aslanides, J., Glaese, A., McAleese, N., &amp; Irving, G. (2022). Red teaming language models with language models. <em>arXiv Preprint arXiv:2202.03286</em>.
+</div>
+<div id="ref-wijk2024rebench" class="csl-entry" role="listitem">
+Wijk, H., Lin, T., Becker, J., Jawhar, S., Parikh, N., Broadley, T., Chan, L., Chen, M., Clymer, J., Dhyani, J., Ericheva, E., Garcia, K., Goodrich, B., Jurkovic, N., Karnofsky, H., Kinniment, M., Lajko, A., Nix, S., Sato, L., … Barnes, E. (2024). <span>RE-Bench</span>: Evaluating frontier <span>AI</span> <span>R&amp;D</span> capabilities of language model agents against human experts. <em>arXiv Preprint arXiv:2411.15114</em>.
+</div>
+<div id="ref-zhang2024asb" class="csl-entry" role="listitem">
+Zhang, H., Huang, J., Mei, K., Yao, Y., Wang, Z., Zhan, C., Wang, H., &amp; Zhang, Y. (2025). Agent security bench (<span>ASB</span>): Formalizing and benchmarking attacks and defenses in <span>LLM</span>-based agents. <em>International Conference on Learning Representations (ICLR)</em>.
+</div>
+<div id="ref-zou2023universal" class="csl-entry" role="listitem">
+Zou, A., Wang, Z., Carlini, N., Nasr, M., Kolter, J. Z., &amp; Fredrikson, M. (2023). Universal and transferable adversarial attacks on aligned language models. <em>arXiv Preprint arXiv:2307.15043</em>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -701,7 +1300,7 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../topics/systemic-safety.html" class="pagination-link" aria-label="Systemic Safety &amp; Governance">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Systemic Safety &amp; Governance</span></span>

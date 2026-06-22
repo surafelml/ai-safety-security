@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Overseeing deployed agents and intervening when behavior turns dangerous — runtime monitors, scalable oversight, AI control, and intervention architectures.">
+<meta name="description" content="Reference tables for AI safety and security benchmarks — static, holistic, adversarial, agentic, and dangerous-capability evaluations.">
 
-<title>9&nbsp; Monitoring &amp; Oversight – AI Safety &amp; Security</title>
+<title>15&nbsp; Benchmark Catalog – AI Safety &amp; Security</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -54,8 +54,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../topics/systemic-safety.html" rel="next">
-<link href="../topics/interpretability.html" rel="prev">
+<link href="../supplement/tooling.html" rel="next">
+<link href="../supplement/technical-notes.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -98,35 +98,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -302,7 +273,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../topics/alignment.html">II — Topics</a></li><li class="breadcrumb-item"><a href="../topics/monitoring-oversight.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monitoring &amp; Oversight</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../supplement/technical-notes.html">IV — Supplementary</a></li><li class="breadcrumb-item"><a href="../supplement/benchmarks.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -401,7 +372,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../topics/monitoring-oversight.html" class="sidebar-item-text sidebar-link active">
+  <a href="../topics/monitoring-oversight.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monitoring &amp; Oversight</span></span></a>
   </div>
 </li>
@@ -459,7 +430,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link">
+  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></span></a>
   </div>
 </li>
@@ -487,22 +458,21 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-oversight-premise" id="toc-the-oversight-premise" class="nav-link active" data-scroll-target="#the-oversight-premise"><span class="header-section-number">9.1</span> The Oversight Premise</a></li>
-  <li><a href="#runtime-monitors" id="toc-runtime-monitors" class="nav-link" data-scroll-target="#runtime-monitors"><span class="header-section-number">9.2</span> Runtime Monitors</a></li>
-  <li><a href="#scalable-oversight" id="toc-scalable-oversight" class="nav-link" data-scroll-target="#scalable-oversight"><span class="header-section-number">9.3</span> Scalable Oversight</a></li>
-  <li><a href="#ai-control" id="toc-ai-control" class="nav-link" data-scroll-target="#ai-control"><span class="header-section-number">9.4</span> AI Control</a></li>
-  <li><a href="#intervention-architectures" id="toc-intervention-architectures" class="nav-link" data-scroll-target="#intervention-architectures"><span class="header-section-number">9.5</span> Intervention Architectures</a></li>
-  <li><a href="#open-problems" id="toc-open-problems" class="nav-link" data-scroll-target="#open-problems"><span class="header-section-number">9.6</span> Open Problems</a></li>
+  <li><a href="#sec-supp-benchmarks-gen1" id="toc-sec-supp-benchmarks-gen1" class="nav-link active" data-scroll-target="#sec-supp-benchmarks-gen1"><span class="header-section-number">15.1</span> Generation 1 — Static Accuracy (2018–2022)</a></li>
+  <li><a href="#generation-2-holistic-evaluation-20222023" id="toc-generation-2-holistic-evaluation-20222023" class="nav-link" data-scroll-target="#generation-2-holistic-evaluation-20222023"><span class="header-section-number">15.2</span> Generation 2 — Holistic Evaluation (2022–2023)</a></li>
+  <li><a href="#generation-3-adversarial-20232024" id="toc-generation-3-adversarial-20232024" class="nav-link" data-scroll-target="#generation-3-adversarial-20232024"><span class="header-section-number">15.3</span> Generation 3 — Adversarial (2023–2024)</a></li>
+  <li><a href="#generation-4-agentic-2024present" id="toc-generation-4-agentic-2024present" class="nav-link" data-scroll-target="#generation-4-agentic-2024present"><span class="header-section-number">15.4</span> Generation 4 — Agentic (2024–present)</a></li>
+  <li><a href="#sec-supp-dangcap" id="toc-sec-supp-dangcap" class="nav-link" data-scroll-target="#sec-supp-dangcap"><span class="header-section-number">15.5</span> Generation 5 — Dangerous Capabilities (2024–present)</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/topics/monitoring-oversight.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/supplement/benchmarks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../topics/alignment.html">II — Topics</a></li><li class="breadcrumb-item"><a href="../topics/monitoring-oversight.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monitoring &amp; Oversight</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../supplement/technical-notes.html">IV — Supplementary</a></li><li class="breadcrumb-item"><a href="../supplement/benchmarks.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Monitoring &amp; Oversight</span></h1>
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></h1>
 </div>
 
 
@@ -519,85 +489,13 @@ window.Quarto = {
 </header>
 
 
-<p><a href="../topics/alignment.html">Alignment</a> shapes the objective before deployment; <a href="../topics/interpretability.html">interpretability</a> reads mechanism. Monitoring is the <em>runtime</em> line of defense — the assumption that the first two are imperfect, and that a deployed agent must be watched and, when it turns dangerous, stopped. It is the pillar that does not require trusting the model.</p>
-<section id="the-oversight-premise" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="the-oversight-premise"><span class="header-section-number">9.1</span> The Oversight Premise</h2>
-<p>Monitoring inverts alignment’s question. Alignment asks <em>how do we make the model want the right thing</em>; monitoring asks <em>given that we may have failed, how do we catch and contain the failure while the system runs</em>. Two pressures define the problem:</p>
-<ul>
-<li><strong>The capability gap</strong> — as models exceed humans on the supervised task, direct human judgment stops being a reliable oversight signal (the scalable-oversight problem inherited from <a href="../topics/alignment.html">alignment</a>).</li>
-<li><strong>The adversarial gap</strong> — a sufficiently capable misaligned model may actively work to <em>defeat</em> oversight, which means monitoring must hold even against an intelligent system that is trying to evade it.</li>
-</ul>
-<figure class="figure">
-<svg class="illustration" viewbox="0 0 700 180" role="img" aria-labelledby="mo-title">
-  <title id="mo-title">Oversight loop: monitor, judge, intervene around a running agent</title>
-  <defs>
-    <marker id="mo-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
-    </marker>
-    <marker id="mo-red" class="marker-danger" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z"></path>
-    </marker>
-  </defs>
-
-  <rect class="node band-agentic stroke-agentic" x="40" y="64" width="150" height="52" rx="5"></rect>
-  <text class="node-label" x="115" y="86" text-anchor="middle">Agent</text>
-  <text class="node-label" x="115" y="102" text-anchor="middle">acting in environment</text>
-
-  <rect class="node band-oversight stroke-oversight" x="280" y="64" width="150" height="52" rx="5"></rect>
-  <text class="node-label" x="355" y="86" text-anchor="middle">Monitor</text>
-  <text class="node-label" x="355" y="102" text-anchor="middle">behavior + activations</text>
-
-  <rect class="node band-safety stroke-safety" x="520" y="30" width="150" height="44" rx="5"></rect>
-  <text class="node-label" x="595" y="50" text-anchor="middle">Allow</text>
-  <text class="node-label" x="595" y="66" text-anchor="middle">low risk → continue</text>
-
-  <rect class="node-danger" x="520" y="106" width="150" height="44" rx="5"></rect>
-  <text class="node-label text-danger" x="595" y="126" text-anchor="middle">Intervene</text>
-  <text class="node-label text-danger" x="595" y="142" text-anchor="middle">pause / rollback / halt</text>
-
-  <path class="axis" d="M190,90 L280,90" marker-end="url(#mo-arr)"></path>
-  <path class="axis" d="M430,82 L520,58" marker-end="url(#mo-arr)"></path>
-  <path class="edge-danger" d="M430,98 L520,124" marker-end="url(#mo-red)"></path>
-
-  <path class="axis" stroke-dasharray="4 3" d="M595,74 C595,90 430,40 250,40 L115,40 L115,64" marker-end="url(#mo-arr)"></path>
-</svg>
-<figcaption>The oversight loop wraps the running agent — every action passes a monitor that allows low-risk behavior and escalates to intervention on detected risk.</figcaption>
-</figure>
-</section>
-<section id="runtime-monitors" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="runtime-monitors"><span class="header-section-number">9.2</span> Runtime Monitors</h2>
-<p>The first line: classifiers and checks that run <em>alongside</em> the agent, scoring inputs, outputs, and actions in real time. They overlap the L1/L5 layers of the <a href="../topics/robustness-security.html">defensive stack</a> — guardrail models screening content, schema validators on tool calls, policy checks before consequential actions. Their limit is the one <a href="../topics/interpretability.html">interpretability</a> exposes: a monitor reading <em>behavior</em> (text, tool arguments) can be defeated by a model whose stated reasoning diverges from its actual computation <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>. Robust monitoring increasingly means reading <em>activations</em>, not just outputs — grounding the monitor in mechanism.</p>
-</section>
-<section id="scalable-oversight" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="scalable-oversight"><span class="header-section-number">9.3</span> Scalable Oversight</h2>
-<p>When the agent’s task exceeds human judgment, the monitor cannot be a human. <strong>Scalable oversight</strong> builds an oversight signal that scales with capability, on the bet that <em>verification is easier than generation</em>.</p>
-<p>The setup. Let <span class="math inline">\(G\)</span> be a generator with capability <span class="math inline">\(c_G\)</span>, and <span class="math inline">\(S\)</span> a supervisor with <span class="math inline">\(c_S &lt; c_G\)</span>. Let <span class="math inline">\(\mathcal{V}(T)\)</span> be the set of acceptable solutions to task <span class="math inline">\(T\)</span>.</p>
-<p><span class="math display">\[
-c_S &lt; c_G \;\Rightarrow\; S \text{ cannot enumerate } \mathcal{V}(T)
-\]</span></p>
-<p>The supervisor can be fooled by a generator that deliberately produces hard-to-verify outputs. The scalable-oversight question is whether a protocol <span class="math inline">\(P(G, S)\)</span> exists that keeps <span class="math inline">\(G\)</span>’s output inside <span class="math inline">\(\mathcal{V}(T)\)</span> <em>despite</em> the gap <span class="math inline">\(c_G - c_S\)</span>. Four families attack it:</p>
-<p><strong>Weak-to-strong generalization</strong> <span class="citation" data-cites="burns2023weak">(<a href="../references.html#ref-burns2023weak" role="doc-biblioref">Burns et al., 2023</a>)</span> — a weaker supervisor elicits the capability of a stronger model. Train <span class="math inline">\(G_{\text{strong}}\)</span> on labels from <span class="math inline">\(G_{\text{weak}}\)</span> and measure the recoverable fraction of the performance gap:</p>
-<p><span class="math display">\[
-\Delta = \text{acc}(G_{\text{strong, ceiling}}) - \text{acc}(G_{\text{strong, weak-sup}})
-\]</span></p>
-<p>Cheap supervision transfers — <span class="math inline">\(\Delta\)</span> shrinks substantially — but never closes.</p>
-<p><strong>Debate</strong> <span class="citation" data-cites="bowman2022measuring">(<a href="../references.html#ref-bowman2022measuring" role="doc-biblioref"><span class="nocase">Bowman et al.</span>, 2022</a>)</span> — two agents argue opposing positions; a weaker verifier <span class="math inline">\(V\)</span> judges. The bet: an honest debater can always rebut a false claim, so <span class="math inline">\(V\)</span> detects dishonesty even on tasks it cannot solve directly. If the bet holds,</p>
-<p><span class="math display">\[
-P\!\left(V \text{ correct} \mid \text{debate}(A_1, A_2)\right) \;\geq\; P\!\left(V \text{ correct} \mid A_{\text{single}}\right)
-\]</span></p>
-<p>Evidence on bounded tasks is positive; the regime <span class="math inline">\(c_G \gg c_V\)</span> is unsettled.</p>
-<p><strong>Decomposition and AI-assisted evaluation</strong> — break a task too large to judge into sub-claims a human (or a trusted weaker model) <em>can</em> check, and let models assist the evaluation of models.</p>
-<p><strong>Red-teaming as standing oversight</strong> <span class="citation" data-cites="perez2022red">(<a href="../references.html#ref-perez2022red" role="doc-biblioref">Perez et al., 2022</a>)</span> — use models to continuously probe a deployed system for failures, rather than relying on one-time pre-deployment testing.</p>
-<p>This is the runtime face of the same problem <a href="../topics/alignment.html">alignment</a> frames at training time; the two pillars meet here.</p>
-</section>
-<section id="ai-control" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="ai-control"><span class="header-section-number">9.4</span> AI Control</h2>
-<p>Scalable oversight tries to make the model <em>trustworthy</em>. <strong>AI control</strong> <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span> takes the complementary, pessimistic stance: assume the model may be misaligned and adversarial, and design the deployment so that it is <em>safe anyway</em>. The question shifts from “is the model aligned?” to “can a misaligned model cause harm given these protocols?” — answered with control evaluations where a red-team model deliberately tries to subvert the safeguards.</p>
-<p>The control guarantee is stated as a safety property over the deployment protocol <span class="math inline">\(D\)</span> and model <span class="math inline">\(M\)</span>:</p>
-<p><span class="math display">\[
-P\!\left(\text{catastrophic outcome} \;\middle|\; D,\, M\right) &lt; \varepsilon
-\]</span></p>
-<p>This bound is <em>not</em> derived from trust in <span class="math inline">\(M\)</span> — it holds even if <span class="math inline">\(M\)</span> is maximally adversarial, because <span class="math inline">\(D\)</span> is evaluated against a red-team model <span class="math inline">\(M_{\text{adv}}\)</span> that actively tries to cause the catastrophic outcome within the protocol’s constraints <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span>.</p>
+<blockquote class="blockquote">
+<p><strong>Living document.</strong> This catalog covers benchmarks prominent at the time of last review. The evaluation landscape moves fast — benchmarks are released, saturated, and superseded on 12–24 month cycles. Entries will be updated each quarterly review; treat any specific result or saturation claim as time-stamped, not permanent.</p>
+<p>For the conceptual framework — why evaluation has passed through distinct generations and what each generation revealed — see <a href="../topics/evaluation.html">Evaluation &amp; Benchmarks</a>.</p>
+</blockquote>
+<section id="sec-supp-benchmarks-gen1" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="sec-supp-benchmarks-gen1"><span class="header-section-number">15.1</span> Generation 1 — Static Accuracy (2018–2022)</h2>
+<p>Fixed-distribution benchmarks that defined the first era of LLM evaluation. All saturated or broken by contamination within two years of release.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -607,96 +505,203 @@ P\!\left(\text{catastrophic outcome} \;\middle|\; D,\, M\right) &lt; \varepsilon
 </colgroup>
 <thead>
 <tr class="header">
-<th>Stance</th>
-<th>Assumes</th>
-<th>Asks</th>
-<th>Holds even if</th>
+<th>Benchmark</th>
+<th>Year</th>
+<th>Measures</th>
+<th>How it broke</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Scalable oversight</strong></td>
-<td>model can be made trustworthy</td>
-<td>is it aligned?</td>
-<td>oversight signal scales</td>
+<td>GLUE / SuperGLUE</td>
+<td>2018/19</td>
+<td>NLU tasks (NLI, QA, coreference)</td>
+<td>Models saturated within months of release</td>
 </tr>
 <tr class="even">
-<td><strong>AI control</strong> <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span></td>
-<td>model may be adversarial</td>
-<td>can it cause harm anyway?</td>
-<td>the model is misaligned</td>
+<td>MMLU</td>
+<td>2020</td>
+<td>57-subject multiple-choice knowledge</td>
+<td>Contamination; frontier models now exceed human average</td>
+</tr>
+<tr class="odd">
+<td>HumanEval</td>
+<td>2021</td>
+<td>Python code generation (pass@k)</td>
+<td>pass@k gameable; real-world correctness diverges from pass rate</td>
+</tr>
+<tr class="even">
+<td>BIG-bench</td>
+<td>2022</td>
+<td>204 diverse tasks, difficulty-scaled</td>
+<td>Heterogeneous scoring; no safety dimension; marks end of static era</td>
 </tr>
 </tbody>
 </table>
-<p>Concrete control protocols — trusted weaker models auditing a stronger untrusted one, restricting the untrusted model’s high-stakes actions, escalating suspicious cases to human review — give safety guarantees that <em>do not depend on the model being aligned</em>, making control the natural complement to alignment rather than a substitute.</p>
 </section>
-<section id="intervention-architectures" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="intervention-architectures"><span class="header-section-number">9.5</span> Intervention Architectures</h2>
-<p>Monitoring without the power to act is only logging. The control surface:</p>
-<ul>
-<li><strong>Kill switches / halt</strong> — terminate the agent immediately. Complicated by instrumental convergence <span class="citation" data-cites="omohundro2008">(<a href="../references.html#ref-omohundro2008" role="doc-biblioref">Omohundro, 2008</a>)</span>: a capable goal-directed agent has reason to resist shutdown, so the off-switch must sit <em>outside</em> the agent’s action space.</li>
-<li><strong>Rollback</strong> — for agents with persistent memory (developed in <a href="../topics/agentic-safety-security.html">Agentic Safety × Security</a>), reverting to a known-good state, since semi-persistent state corruption has no clean classical analogue.</li>
-<li><strong>Audit trails</strong> — immutable, pre-execution logs of every action and argument, enabling post-hoc review, attribution, and the <a href="../topics/systemic-safety.html">safety cases</a> that justify deployment.</li>
-<li><strong>Multi-agent oversight</strong> — in agent pipelines, per-agent monitors miss joint behaviors that appear only in the composed system, so oversight must operate at the pipeline level (developed in <a href="../topics/agentic-safety-security.html">Agentic Safety × Security</a>).</li>
-</ul>
-</section>
-<section id="open-problems" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="open-problems"><span class="header-section-number">9.6</span> Open Problems</h2>
+<section id="generation-2-holistic-evaluation-20222023" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="generation-2-holistic-evaluation-20222023"><span class="header-section-number">15.2</span> Generation 2 — Holistic Evaluation (2022–2023)</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Problem</th>
-<th>Why it persists</th>
+<th>Benchmark</th>
+<th>Year</th>
+<th>Measures</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Behavioral monitors are evadable</strong></td>
-<td>A model whose stated reasoning diverges from its computation defeats text-level monitoring <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span></td>
-</tr>
-<tr class="even">
-<td><strong>Oversight under capability gap</strong></td>
-<td>No reliable signal for behavior humans cannot judge; weak-to-strong recovers only part <span class="citation" data-cites="burns2023weak">(<a href="../references.html#ref-burns2023weak" role="doc-biblioref">Burns et al., 2023</a>)</span></td>
-</tr>
-<tr class="odd">
-<td><strong>Shutdown resistance</strong></td>
-<td>Instrumental convergence gives capable agents reason to preserve themselves <span class="citation" data-cites="omohundro2008">(<a href="../references.html#ref-omohundro2008" role="doc-biblioref">Omohundro, 2008</a>)</span>; the off-switch must be uncircumventable</td>
-</tr>
-<tr class="even">
-<td><strong>Control at scale</strong></td>
-<td>Control evaluations <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span> are promising but established mainly in constrained settings, not open-ended frontier deployment</td>
-</tr>
-<tr class="odd">
-<td><strong>Pipeline-level oversight</strong></td>
-<td>Emergent joint behavior is invisible to per-agent monitors; composed-system monitoring is immature</td>
+<td>HELM <span class="citation" data-cites="liang2022holistic">(<a href="../references.html#ref-liang2022holistic" role="doc-biblioref"><span class="nocase">Liang et al.</span>, 2023</a>)</span></td>
+<td>2022</td>
+<td>Accuracy, calibration, robustness, fairness, toxicity, efficiency across shared scenarios</td>
+<td>First multi-dimensional framework; exposed accuracy–robustness decorrelation</td>
 </tr>
 </tbody>
 </table>
-<p>Monitoring is the pillar that assumes the others fail — and so it is also the one that, in the limit, must hold against a model actively working to defeat it. That is why its frontier runs straight into <a href="../topics/interpretability.html">interpretability</a> (monitor mechanism, not behavior) and <a href="../topics/agentic-safety-security.html">agentic safety × security</a> (oversee the composed system, not just its parts).</p>
+</section>
+<section id="generation-3-adversarial-20232024" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="generation-3-adversarial-20232024"><span class="header-section-number">15.3</span> Generation 3 — Adversarial (2023–2024)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Benchmark</th>
+<th>Year</th>
+<th>Measures</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HarmBench <span class="citation" data-cites="mazeika2024harmbench">(<a href="../references.html#ref-mazeika2024harmbench" role="doc-biblioref">Mazeika et al., 2024</a>)</span></td>
+<td>2023</td>
+<td>Attack success rate across 18 attack methods × 5 harm categories × 33 target LLMs</td>
+<td>Standardized attack + defense evaluation in a single framework</td>
+</tr>
+<tr class="even">
+<td>Agent Security Bench <span class="citation" data-cites="zhang2024asb">(<a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span></td>
+<td>2024</td>
+<td>Direct + indirect injection across 10 scenarios, 10 attack methods, 400+ tools</td>
+<td>No evaluated defense eliminated the attack surface</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="generation-4-agentic-2024present" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="generation-4-agentic-2024present"><span class="header-section-number">15.4</span> Generation 4 — Agentic (2024–present)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Benchmark</th>
+<th>Year</th>
+<th>Measures</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AgentDojo <span class="citation" data-cites="debenedetti2024agentdojo">(<a href="../references.html#ref-debenedetti2024agentdojo" role="doc-biblioref">Debenedetti et al., 2024</a>)</span></td>
+<td>2024</td>
+<td>Attack success rate + utility preservation on realistic tool-using agent tasks (email, calendar, banking API)</td>
+<td>Frontier models complete 60–70 % of tasks; vulnerable to injection in 30–60 % of attack scenarios; input filtering cuts both attack and task success</td>
+</tr>
+<tr class="even">
+<td>Agent Security Bench (ASB) <span class="citation" data-cites="zhang2024asb">(<a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span></td>
+<td>2024</td>
+<td>10 scenarios × 10 attack methods × 400+ tools; unified attack success rate</td>
+<td>Direct injection 84 % ASR on undefended agents; indirect injection 60–80 %; no evaluated defense eliminated attack surface</td>
+</tr>
+<tr class="odd">
+<td>τ-bench / service-task reliability</td>
+<td>2024</td>
+<td>Agent reliability across stochastic, multi-turn service tasks (airline, retail)</td>
+<td>Measures over-action failures — when agent should pause, refuse, escalate but does not</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-supp-dangcap" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="sec-supp-dangcap"><span class="header-section-number">15.5</span> Generation 5 — Dangerous Capabilities (2024–present)</h2>
+<p>A positive result is a <em>warning signal</em>, not a capability gain.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Capability</th>
+<th>Evaluation focus</th>
+<th>Representative approach</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CBRN</strong></td>
+<td>Uplift beyond freely available information on chemical, biological, radiological, nuclear weapons</td>
+<td>Structured elicitation against domain-expert counterfactuals</td>
+</tr>
+<tr class="even">
+<td><strong>Cyber</strong></td>
+<td>Novel exploit generation, autonomous attack chain completion</td>
+<td>CTF benchmarks; autonomous pen-test environments</td>
+</tr>
+<tr class="odd">
+<td><strong>Autonomy / AI R&amp;D</strong></td>
+<td>Long-horizon task completion, research engineering at human-expert level</td>
+<td>METR RE-Bench <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span></td>
+</tr>
+<tr class="even">
+<td><strong>Self-proliferation</strong></td>
+<td>Copy and deploy own weights, acquire compute autonomously</td>
+<td>Controlled sandbox with monitored exfiltration opportunity</td>
+</tr>
+<tr class="odd">
+<td><strong>Deception</strong></td>
+<td>Behavior changes between evaluation and deployment context</td>
+<td>Consistency probing; activation analysis <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span></td>
+</tr>
+</tbody>
+</table>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-bowman2022measuring" class="csl-entry" role="listitem">
-<span class="nocase">Bowman, S. R., Hyun, J., Perez, E., Chen, E., Pettit, C., Heiner, S., et al.</span> (2022). Measuring progress on scalable oversight for large language models. <em>arXiv Preprint arXiv:2211.03540</em>.
+<div id="ref-debenedetti2024agentdojo" class="csl-entry" role="listitem">
+Debenedetti, E., Zhang, J., Balunović, M., Beurer-Kellner, L., Fischer, M., &amp; Tramèr, F. (2024). AgentDojo: A dynamic environment to evaluate attacks and defenses for <span>LLM</span> agents. <em>Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks</em>.
 </div>
-<div id="ref-burns2023weak" class="csl-entry" role="listitem">
-Burns, C., Izmailov, P., Kirchner, J. H., Baker, B., Gao, L., Aschenbrenner, L., Chen, Y., Ecoffet, A., Joglekar, M., Leike, J., Sutskever, I., &amp; Wu, J. (2023). Weak-to-strong generalization: Eliciting strong capabilities with weak supervision. <em>arXiv Preprint arXiv:2312.09390</em>.
+<div id="ref-liang2022holistic" class="csl-entry" role="listitem">
+<span class="nocase">Liang, P., Bommasani, R., Lee, T., Tsipras, D., Soylu, D., Yasunaga, M., Zhang, Y., Narayanan, D., Wu, Y., Kumar, A., et al.</span> (2023). Holistic evaluation of language models. <em>Transactions on Machine Learning Research</em>.
 </div>
-<div id="ref-greenblatt2023control" class="csl-entry" role="listitem">
-Greenblatt, R., Shlegeris, B., Sachan, K., &amp; Roger, F. (2023). <span>AI</span> control: Improving safety despite intentional subversion. <em>arXiv Preprint arXiv:2312.06942</em>.
-</div>
-<div id="ref-omohundro2008" class="csl-entry" role="listitem">
-Omohundro, S. M. (2008). The basic <span>AI</span> drives. <em>Artificial General Intelligence (AGI)</em>.
+<div id="ref-mazeika2024harmbench" class="csl-entry" role="listitem">
+Mazeika, M., Phan, L., Yin, X., Zou, A., Wang, Z., Mu, N., Sakhaee, E., Li, N., Basart, S., Li, B., Forsyth, D., &amp; Hendrycks, D. (2024). <span>HarmBench</span>: A standardized evaluation framework for automated red teaming and robust refusal. <em>International Conference on Machine Learning (ICML)</em>.
 </div>
 <div id="ref-panfilov2025strategic" class="csl-entry" role="listitem">
 Panfilov, A., Kortukov, E., Nikolić, K., Bethge, M., Lapuschkin, S., Samek, W., Prabhu, A., Andriushchenko, M., &amp; Geiping, J. (2025). Strategic dishonesty can undermine <span>AI</span> safety evaluations of frontier <span>LLM</span>s. <em>arXiv Preprint arXiv:2509.18058</em>.
 </div>
-<div id="ref-perez2022red" class="csl-entry" role="listitem">
-Perez, E., Huang, S., Song, F., Cai, T., Ring, R., Aslanides, J., Glaese, A., McAleese, N., &amp; Irving, G. (2022). Red teaming language models with language models. <em>arXiv Preprint arXiv:2202.03286</em>.
+<div id="ref-wijk2024rebench" class="csl-entry" role="listitem">
+Wijk, H., Lin, T., Becker, J., Jawhar, S., Parikh, N., Broadley, T., Chan, L., Chen, M., Clymer, J., Dhyani, J., Ericheva, E., Garcia, K., Goodrich, B., Jurkovic, N., Karnofsky, H., Kinniment, M., Lajko, A., Nix, S., Sato, L., … Barnes, E. (2024). <span>RE-Bench</span>: Evaluating frontier <span>AI</span> <span>R&amp;D</span> capabilities of language model agents against human experts. <em>arXiv Preprint arXiv:2411.15114</em>.
+</div>
+<div id="ref-zhang2024asb" class="csl-entry" role="listitem">
+Zhang, H., Huang, J., Mei, K., Yao, Y., Wang, Z., Zhan, C., Wang, H., &amp; Zhang, Y. (2025). Agent security bench (<span>ASB</span>): Formalizing and benchmarking attacks and defenses in <span>LLM</span>-based agents. <em>International Conference on Learning Representations (ICLR)</em>.
 </div>
 </div>
 </section>
@@ -1117,13 +1122,13 @@ Perez, E., Huang, S., Song, F., Cai, T., Ring, R., Aslanides, J., Glaese, A., Mc
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../topics/interpretability.html" class="pagination-link" aria-label="Interpretability &amp; Explainability">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Interpretability &amp; Explainability</span></span>
+      <a href="../supplement/technical-notes.html" class="pagination-link" aria-label="Technical Notes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Technical Notes</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../topics/systemic-safety.html" class="pagination-link" aria-label="Systemic Safety &amp; Governance">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Systemic Safety &amp; Governance</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../supplement/tooling.html" class="pagination-link" aria-label="Tools &amp; Frameworks">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1132,4 +1137,4 @@ Perez, E., Huang, S., Song, F., Cai, T., Ring, R., Aslanides, J., Glaese, A., Mc
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/topics/monitoring-oversight.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/supplement/benchmarks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

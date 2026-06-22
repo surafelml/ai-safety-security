@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="The flagship bridge: safety and security of autonomous, tool-using agents.">
+<meta name="description" content="The flagship synthesis: how safety and security failures compound in autonomous, tool-using agents — attack surface, guardrail architectures, multi-agent trust, and the combined threat model.">
 
 <title>12&nbsp; Agentic Safety × Security – AI Safety &amp; Security</title>
 <style>
@@ -24,7 +24,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -34,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../topics/tooling.html" rel="next">
+<link href="../frontier/index.html" rel="next">
 <link href="../topics/evaluation.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -42,10 +97,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-920f8e33c6168ac66b68b4937b16a9d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04671a10ed571c9974bbb63eeee1b285.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-271470c8e35783bf453a93c734b04fb8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,11 +133,202 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -97,7 +347,7 @@ ul.task-list li input[type="checkbox"] {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
@@ -105,6 +355,7 @@ ul.task-list li input[type="checkbox"] {
       <a href="../">AI Safety &amp; Security</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/surafelml/ai-safety-security" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
       </div>
@@ -207,12 +458,6 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Agentic Safety × Security</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../topics/tooling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -227,7 +472,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../frontier/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Frontier</span></span></a>
   </div>
 </li>
       </ul>
@@ -244,7 +489,19 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../supplement/technical-notes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Supplementary Technical Notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Technical Notes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/benchmarks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Benchmark Catalog</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../supplement/tooling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span></a>
   </div>
 </li>
       </ul>
@@ -252,7 +509,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></span></a>
   </div>
 </li>
     </ul>
@@ -265,12 +522,54 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-agentic" id="toc-sec-agentic" class="nav-link active" data-scroll-target="#sec-agentic"><span class="header-section-number">13</span> Agentic Safety × Security</a></li>
+  <li><a href="#the-agentic-attack-surface" id="toc-the-agentic-attack-surface" class="nav-link active" data-scroll-target="#the-agentic-attack-surface"><span class="header-section-number">12.1</span> 1. The Agentic Attack Surface</a></li>
+  <li><a href="#single-agent-risk-when-the-loop-is-the-threat-surface" id="toc-single-agent-risk-when-the-loop-is-the-threat-surface" class="nav-link" data-scroll-target="#single-agent-risk-when-the-loop-is-the-threat-surface"><span class="header-section-number">12.2</span> 2. Single-Agent Risk: When the Loop Is the Threat Surface</a>
+  <ul class="collapse">
+  <li><a href="#accumulated-context-poisoning" id="toc-accumulated-context-poisoning" class="nav-link" data-scroll-target="#accumulated-context-poisoning"><span class="header-section-number">12.2.1</span> 2.1 Accumulated context poisoning</a></li>
+  <li><a href="#tool-use-privilege-escalation" id="toc-tool-use-privilege-escalation" class="nav-link" data-scroll-target="#tool-use-privilege-escalation"><span class="header-section-number">12.2.2</span> 2.2 Tool-use privilege escalation</a></li>
+  <li><a href="#irreversibility" id="toc-irreversibility" class="nav-link" data-scroll-target="#irreversibility"><span class="header-section-number">12.2.3</span> 2.3 Irreversibility</a></li>
+  <li><a href="#oversight-decay-with-horizon-length" id="toc-oversight-decay-with-horizon-length" class="nav-link" data-scroll-target="#oversight-decay-with-horizon-length"><span class="header-section-number">12.2.4</span> 2.4 Oversight decay with horizon length</a></li>
+  </ul></li>
+  <li><a href="#prompt-injection-in-the-agentic-loop" id="toc-prompt-injection-in-the-agentic-loop" class="nav-link" data-scroll-target="#prompt-injection-in-the-agentic-loop"><span class="header-section-number">12.3</span> 3. Prompt Injection in the Agentic Loop</a>
+  <ul class="collapse">
+  <li><a href="#injection-entry-points-across-the-loop" id="toc-injection-entry-points-across-the-loop" class="nav-link" data-scroll-target="#injection-entry-points-across-the-loop"><span class="header-section-number">12.3.1</span> 3.1 Injection entry points across the loop</a></li>
+  <li><a href="#why-runtime-text-firewalls-are-insufficient" id="toc-why-runtime-text-firewalls-are-insufficient" class="nav-link" data-scroll-target="#why-runtime-text-firewalls-are-insufficient"><span class="header-section-number">12.3.2</span> 3.2 Why runtime text firewalls are insufficient</a></li>
+  <li><a href="#the-datacontrol-separation-principle" id="toc-the-datacontrol-separation-principle" class="nav-link" data-scroll-target="#the-datacontrol-separation-principle"><span class="header-section-number">12.3.3</span> 3.3 The data/control separation principle</a></li>
+  </ul></li>
+  <li><a href="#guardrail-architectures-for-agentic-systems" id="toc-guardrail-architectures-for-agentic-systems" class="nav-link" data-scroll-target="#guardrail-architectures-for-agentic-systems"><span class="header-section-number">12.4</span> 4. Guardrail Architectures for Agentic Systems</a>
+  <ul class="collapse">
+  <li><a href="#g1-input-screening-at-the-perceive-step" id="toc-g1-input-screening-at-the-perceive-step" class="nav-link" data-scroll-target="#g1-input-screening-at-the-perceive-step"><span class="header-section-number">12.4.1</span> 4.1 G1 — Input screening at the perceive step</a></li>
+  <li><a href="#g2-pre-action-validation-at-the-plan-step" id="toc-g2-pre-action-validation-at-the-plan-step" class="nav-link" data-scroll-target="#g2-pre-action-validation-at-the-plan-step"><span class="header-section-number">12.4.2</span> 4.2 G2 — Pre-action validation at the plan step</a></li>
+  <li><a href="#g3-action-enforcement-at-the-act-step" id="toc-g3-action-enforcement-at-the-act-step" class="nav-link" data-scroll-target="#g3-action-enforcement-at-the-act-step"><span class="header-section-number">12.4.3</span> 4.3 G3 — Action enforcement at the act step</a></li>
+  <li><a href="#g4-memory-integrity" id="toc-g4-memory-integrity" class="nav-link" data-scroll-target="#g4-memory-integrity"><span class="header-section-number">12.4.4</span> 4.4 G4 — Memory integrity</a></li>
+  <li><a href="#mid-loop-interruption" id="toc-mid-loop-interruption" class="nav-link" data-scroll-target="#mid-loop-interruption"><span class="header-section-number">12.4.5</span> 4.5 Mid-loop interruption</a></li>
+  </ul></li>
+  <li><a href="#multi-agent-trust-and-emergent-risk" id="toc-multi-agent-trust-and-emergent-risk" class="nav-link" data-scroll-target="#multi-agent-trust-and-emergent-risk"><span class="header-section-number">12.5</span> 5. Multi-Agent Trust and Emergent Risk</a>
+  <ul class="collapse">
+  <li><a href="#the-inter-agent-trust-problem" id="toc-the-inter-agent-trust-problem" class="nav-link" data-scroll-target="#the-inter-agent-trust-problem"><span class="header-section-number">12.5.1</span> 5.1 The inter-agent trust problem</a></li>
+  <li><a href="#compromise-propagation" id="toc-compromise-propagation" class="nav-link" data-scroll-target="#compromise-propagation"><span class="header-section-number">12.5.2</span> 5.2 Compromise propagation</a></li>
+  <li><a href="#emergent-collusion" id="toc-emergent-collusion" class="nav-link" data-scroll-target="#emergent-collusion"><span class="header-section-number">12.5.3</span> 5.3 Emergent collusion</a></li>
+  <li><a href="#trust-tier-enforcement" id="toc-trust-tier-enforcement" class="nav-link" data-scroll-target="#trust-tier-enforcement"><span class="header-section-number">12.5.4</span> 5.4 Trust tier enforcement</a></li>
+  </ul></li>
+  <li><a href="#evaluation-of-agentic-safety" id="toc-evaluation-of-agentic-safety" class="nav-link" data-scroll-target="#evaluation-of-agentic-safety"><span class="header-section-number">12.6</span> 6. Evaluation of Agentic Safety</a>
+  <ul class="collapse">
+  <li><a href="#trajectory-level-vs.-output-level-safety" id="toc-trajectory-level-vs.-output-level-safety" class="nav-link" data-scroll-target="#trajectory-level-vs.-output-level-safety"><span class="header-section-number">12.6.1</span> 6.1 Trajectory-level vs.&nbsp;output-level safety</a></li>
+  <li><a href="#the-defense-utility-tradeoff" id="toc-the-defense-utility-tradeoff" class="nav-link" data-scroll-target="#the-defense-utility-tradeoff"><span class="header-section-number">12.6.2</span> 6.2 The defense-utility tradeoff</a></li>
+  <li><a href="#dangerous-capability-evaluation-for-agents" id="toc-dangerous-capability-evaluation-for-agents" class="nav-link" data-scroll-target="#dangerous-capability-evaluation-for-agents"><span class="header-section-number">12.6.3</span> 6.3 Dangerous-capability evaluation for agents</a></li>
+  <li><a href="#strategic-deception-under-evaluation" id="toc-strategic-deception-under-evaluation" class="nav-link" data-scroll-target="#strategic-deception-under-evaluation"><span class="header-section-number">12.6.4</span> 6.4 Strategic deception under evaluation</a></li>
+  </ul></li>
+  <li><a href="#the-combined-threat-model" id="toc-the-combined-threat-model" class="nav-link" data-scroll-target="#the-combined-threat-model"><span class="header-section-number">12.7</span> 7. The Combined Threat Model</a>
+  <ul class="collapse">
+  <li><a href="#the-adversarial-agentic-environment" id="toc-the-adversarial-agentic-environment" class="nav-link" data-scroll-target="#the-adversarial-agentic-environment"><span class="header-section-number">12.7.1</span> 7.1 The adversarial agentic environment</a></li>
+  <li><a href="#defense-in-depth-across-the-threat-stack" id="toc-defense-in-depth-across-the-threat-stack" class="nav-link" data-scroll-target="#defense-in-depth-across-the-threat-stack"><span class="header-section-number">12.7.2</span> 7.2 Defense-in-depth across the threat stack</a></li>
+  <li><a href="#what-no-current-system-achieves" id="toc-what-no-current-system-achieves" class="nav-link" data-scroll-target="#what-no-current-system-achieves"><span class="header-section-number">12.7.3</span> 7.3 What no current system achieves</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/surafelml/ai-safety-security/edit/main/topics/agentic-safety-security.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/surafelml/ai-safety-security/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../topics/alignment.html">II — Topics</a></li><li class="breadcrumb-item"><a href="../topics/agentic-safety-security.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Agentic Safety × Security</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -279,7 +578,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-title-meta column-body">
+<div class="quarto-title-meta">
 
     
   
@@ -291,19 +590,760 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-agentic" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> Agentic Safety × Security</h1>
+<p>Every preceding chapter converges here. The <a href="../foundations/security-foundations.html">foundation</a> established why safety and security split into two tracks — and why agentic systems are the seam where they reunite. <a href="../topics/robustness-security.html">Robustness &amp; Security</a> catalogued the attack classes and the defense layers. <a href="../topics/evaluation.html">Evaluation</a> showed how to measure what survives. This chapter closes the loop: how the failures <em>compound</em> when a model runs inside an action loop, why each compounding makes it worse, and what a defensible agentic architecture actually looks like end-to-end.</p>
+<p>The organizing claim: <strong>an agentic system introduces failure modes that do not exist in any of its components in isolation.</strong> A correct model, a correct tool, and a correct retrieval pipeline can compose into an unsafe agent. The threat is not in the parts — it is in the connections.</p>
+<section id="the-agentic-attack-surface" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="the-agentic-attack-surface"><span class="header-section-number">12.1</span> 1. The Agentic Attack Surface</h2>
+<p>A deployed agent is not a single model — it is a loop that connects a model to memory, tools, other agents, and an environment. Each connection is a capability <em>and</em> an attack surface. <span class="citation" data-cites="kim2026landscape">Kim et al. (<a href="../references.html#ref-kim2026landscape" role="doc-biblioref">2026</a>)</span> formalizes this as a taxonomy of vulnerability classes spanning the full agent stack:</p>
+<svg class="illustration" viewbox="0 0 700 420" role="img" aria-labelledby="surface-title">
+  <title id="surface-title">Agentic attack surface: vulnerability classes across the agent stack</title>
+  <defs>
+    <marker id="as-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Column headers -->
+  <text class="era-label" x="175" y="22" text-anchor="middle">Attack Vector</text>
+  <text class="era-label" x="455" y="22" text-anchor="middle">Consequence</text>
+
+  <!-- Row 1: Direct prompt / instruction -->
+  <rect class="node band-safety stroke-safety" x="20" y="35" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="175" y="55" text-anchor="middle" font-weight="600">Direct instruction channel</text>
+  <text class="node-label" x="175" y="70" text-anchor="middle">Jailbreak, over-permission, prompt override</text>
+  <rect class="node band-safety stroke-safety" x="370" y="35" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="525" y="62" text-anchor="middle">Model follows adversarial instruction</text>
+
+  <!-- Row 2: Retrieval / RAG -->
+  <rect class="node band-security stroke-security" x="20" y="95" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="175" y="115" text-anchor="middle" font-weight="600">Retrieval / RAG channel</text>
+  <text class="node-label" x="175" y="130" text-anchor="middle">Environmental injection, vector-DB poisoning</text>
+  <rect class="node band-security stroke-security" x="370" y="95" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="525" y="122" text-anchor="middle">Untrusted content executes as instruction</text>
+
+  <!-- Row 3: Tool / API -->
+  <rect class="node band-agentic stroke-agentic" x="20" y="155" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="175" y="175" text-anchor="middle" font-weight="600">Tool / API outputs</text>
+  <text class="node-label" x="175" y="190" text-anchor="middle">Tool poisoning, response hijacking</text>
+  <rect class="node band-agentic stroke-agentic" x="370" y="155" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="525" y="182" text-anchor="middle">Privilege escalation, side effects</text>
+
+  <!-- Row 4: Memory -->
+  <rect class="node band-oversight stroke-oversight" x="20" y="215" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="175" y="235" text-anchor="middle" font-weight="600">Persistent memory</text>
+  <text class="node-label" x="175" y="250" text-anchor="middle">Stored injection, memory poisoning</text>
+  <rect class="node band-oversight stroke-oversight" x="370" y="215" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="525" y="242" text-anchor="middle">Persistent foothold across sessions</text>
+
+  <!-- Row 5: Inter-agent -->
+  <rect class="node band-systemic stroke-systemic" x="20" y="275" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="175" y="295" text-anchor="middle" font-weight="600">Inter-agent messages</text>
+  <text class="node-label" x="175" y="310" text-anchor="middle">Cross-agent injection, compromise propagation</text>
+  <rect class="node band-systemic stroke-systemic" x="370" y="275" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="525" y="302" text-anchor="middle">Cascading compromise through pipeline</text>
+
+  <!-- Row 6: Training / weights -->
+  <rect class="node band-alignment stroke-alignment" x="20" y="335" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="175" y="355" text-anchor="middle" font-weight="600">Training data / weights</text>
+  <text class="node-label" x="175" y="370" text-anchor="middle">Backdoors, sleeper agents, poisoned fine-tuning</text>
+  <rect class="node band-alignment stroke-alignment" x="370" y="335" width="310" height="44" rx="5"></rect>
+  <text class="node-label" x="525" y="362" text-anchor="middle">Covert behaviors survive safety training</text>
+
+  <!-- connector arrows -->
+  <path class="axis" d="M330,57 L370,57" marker-end="url(#as-arr)"></path>
+  <path class="axis" d="M330,117 L370,117" marker-end="url(#as-arr)"></path>
+  <path class="axis" d="M330,177 L370,177" marker-end="url(#as-arr)"></path>
+  <path class="axis" d="M330,237 L370,237" marker-end="url(#as-arr)"></path>
+  <path class="axis" d="M330,297 L370,297" marker-end="url(#as-arr)"></path>
+  <path class="axis" d="M330,357 L370,357" marker-end="url(#as-arr)"></path>
+</svg>
+<p>Two properties of this surface distinguish it from a single-model system:</p>
+<ol type="1">
+<li><p><strong>Depth</strong> — a compromised entry at one layer propagates forward through the loop. Poisoned retrieval content becomes trusted planning context; a compromised tool output shapes the next action; a memory write persists across sessions.</p></li>
+<li><p><strong>Amplification</strong> — each step the agent takes based on a compromised input can authorize further actions, expanding the blast radius without additional attacker effort.</p></li>
+</ol>
+<p>The <a href="../foundations/security-foundations.html">dissolved code/data boundary</a> is the root cause in all six rows: the same channel that carries legitimate content can carry an instruction.</p>
+</section>
+<section id="single-agent-risk-when-the-loop-is-the-threat-surface" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="single-agent-risk-when-the-loop-is-the-threat-surface"><span class="header-section-number">12.2</span> 2. Single-Agent Risk: When the Loop Is the Threat Surface</h2>
+<p>Static safety benchmarks miss agentic failures because they evaluate a model <em>at a single turn</em>. Agentic failures are <em>trajectory properties</em> — they emerge across steps, not at any individual step.</p>
+<section id="accumulated-context-poisoning" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="accumulated-context-poisoning"><span class="header-section-number">12.2.1</span> 2.1 Accumulated context poisoning</h3>
+<p>An agent’s planning context at step <span class="math inline">\(t\)</span> is a concatenation of everything it has perceived, decided, and observed so far:</p>
+<p><span class="math display">\[
+c_t = [i_0,\; o_1, a_1, r_1,\; o_2, a_2, r_2,\; \ldots,\; o_t]
+\]</span></p>
+<p>where <span class="math inline">\(i_0\)</span> is the original instruction, <span class="math inline">\(o_t\)</span> the observation, <span class="math inline">\(a_t\)</span> the action, and <span class="math inline">\(r_t\)</span> the tool result. If any <span class="math inline">\(r_k\)</span> (a tool result fetched from an untrusted source) contains an injected instruction, it is now embedded in <span class="math inline">\(c_t\)</span> alongside the trusted instruction — and later planning steps treat the entire context as input. The earlier the injection, the more planning context it has already shaped.</p>
+<p>This is structurally different from single-turn injection: the attacker does not need the model to comply <em>now</em> — they need it to comply later, after the injected content has been incorporated into the agent’s working state.</p>
+</section>
+<section id="tool-use-privilege-escalation" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="tool-use-privilege-escalation"><span class="header-section-number">12.2.2</span> 2.2 Tool-use privilege escalation</h3>
+<p>The danger of tools is not that they exist — it is the <em>step sequence</em> they enable:</p>
+<svg class="illustration" viewbox="0 0 680 140" role="img" aria-labelledby="priv-title">
+  <title id="priv-title">Privilege escalation through sequential tool use</title>
+  <defs>
+    <marker id="pe-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+  <rect class="node band-safety stroke-safety" x="10" y="48" width="120" height="44" rx="5"></rect>
+  <text class="node-label" x="70" y="67" text-anchor="middle">read_file()</text>
+  <text class="node-label" x="70" y="83" text-anchor="middle">low privilege</text>
+
+  <rect class="node band-security stroke-security" x="180" y="48" width="120" height="44" rx="5"></rect>
+  <text class="node-label" x="240" y="67" text-anchor="middle">search_web()</text>
+  <text class="node-label" x="240" y="83" text-anchor="middle">external content</text>
+
+  <rect class="node band-agentic stroke-agentic" x="350" y="48" width="120" height="44" rx="5"></rect>
+  <text class="node-label" x="410" y="67" text-anchor="middle">send_email()</text>
+  <text class="node-label" x="410" y="83" text-anchor="middle">external action</text>
+
+  <rect class="node band-alignment stroke-alignment" x="520" y="48" width="140" height="44" rx="5"></rect>
+  <text class="node-label" x="590" y="67" text-anchor="middle">execute_code()</text>
+  <text class="node-label" x="590" y="83" text-anchor="middle">irreversible</text>
+
+  <path class="axis" d="M130,70 L180,70" marker-end="url(#pe-arr)"></path>
+  <path class="axis" d="M300,70 L350,70" marker-end="url(#pe-arr)"></path>
+  <path class="axis" d="M470,70 L520,70" marker-end="url(#pe-arr)"></path>
+
+  <text class="node-label" x="340" y="24" text-anchor="middle" font-style="italic">injected instruction arrives here ↓</text>
+  <path class="axis" stroke-dasharray="4 3" d="M240,44 L240,35" marker-end="url(#pe-arr)"></path>
+</svg>
+<p>An injection arriving at <code>search_web()</code> — the second step — can steer the output of <code>send_email()</code> and <code>execute_code()</code> without ever touching the original instruction. The agent escalates its own privileges by chaining tools; the attacker only needed to control one step.</p>
+</section>
+<section id="irreversibility" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="irreversibility"><span class="header-section-number">12.2.3</span> 2.3 Irreversibility</h3>
+<p>Many agent actions have no undo: emails sent, files deleted, API calls that transfer funds, database writes. A model that hedges on a text output (it can be discarded) faces a fundamentally different risk calculus than a model that pulls a trigger in the world. The key asymmetry:</p>
+<ul>
+<li><strong>Cost of over-caution</strong> — a task not completed; user inconvenienced.</li>
+<li><strong>Cost of under-caution</strong> — an irreversible action; cannot be walked back.</li>
+</ul>
+<p>Current alignment training does not reliably teach models this asymmetry. Helpfulness optimization provides strong signal for task completion and penalizes unnecessary refusals, but no equivalent training signal encodes the cost of irreversible side effects <span class="citation" data-cites="amodei2016concrete">(<a href="../references.html#ref-amodei2016concrete" role="doc-biblioref">Amodei et al., 2016</a>)</span>. The result: models under-weight caution at precisely the moments when under-caution is most costly.</p>
+</section>
+<section id="oversight-decay-with-horizon-length" class="level3" data-number="12.2.4">
+<h3 data-number="12.2.4" class="anchored" data-anchor-id="oversight-decay-with-horizon-length"><span class="header-section-number">12.2.4</span> 2.4 Oversight decay with horizon length</h3>
+<p>Human oversight degrades as task length grows: the operator who specified the original instruction is not watching step 47 of a 50-step agentic task. The model’s behavior at late steps is governed primarily by in-context planning — shaped by accumulated tool results, not the original instruction. This is the oversight gap that scalable oversight research attempts to close <span class="citation" data-cites="engels2025scalinglaws bowman2022measuring">(<a href="../references.html#ref-bowman2022measuring" role="doc-biblioref"><span class="nocase">Bowman et al.</span>, 2022</a>; <a href="../references.html#ref-engels2025scalinglaws" role="doc-biblioref">Engels et al., 2025</a>)</span>.</p>
+</section>
+</section>
+<section id="prompt-injection-in-the-agentic-loop" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="prompt-injection-in-the-agentic-loop"><span class="header-section-number">12.3</span> 3. Prompt Injection in the Agentic Loop</h2>
+<p>Prompt injection in an agentic setting differs from the static case in three ways: it <em>persists</em>, it <em>propagates</em>, and it <em>amplifies</em>. <span class="citation" data-cites="greshake2023not">Greshake et al. (<a href="../references.html#ref-greshake2023not" role="doc-biblioref">2023</a>)</span> established the base case; the agentic loop gives attackers compounding leverage.</p>
+<section id="injection-entry-points-across-the-loop" class="level3" data-number="12.3.1">
+<h3 data-number="12.3.1" class="anchored" data-anchor-id="injection-entry-points-across-the-loop"><span class="header-section-number">12.3.1</span> 3.1 Injection entry points across the loop</h3>
+<svg class="illustration" viewbox="-30 -12 800 360" role="img" aria-labelledby="inject-title">
+  <title id="inject-title">Injection entry points and propagation through the agent loop</title>
+  <defs>
+    <marker id="inj-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+    <marker id="inj-red" class="marker-danger" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"></path>
+    </marker>
+  </defs>
+
+  <!-- Loop nodes -->
+  <rect class="node band-agentic stroke-agentic" x="260" y="20" width="160" height="44" rx="6"></rect>
+  <text class="node-label" x="340" y="39" text-anchor="middle">Perceive</text>
+  <text class="node-label" x="340" y="55" text-anchor="middle">(input + retrieval)</text>
+
+  <rect class="node band-agentic stroke-agentic" x="480" y="138" width="160" height="44" rx="6"></rect>
+  <text class="node-label" x="560" y="157" text-anchor="middle">Plan</text>
+  <text class="node-label" x="560" y="173" text-anchor="middle">(reasoning chain)</text>
+
+  <rect class="node band-agentic stroke-agentic" x="260" y="256" width="160" height="44" rx="6"></rect>
+  <text class="node-label" x="340" y="275" text-anchor="middle">Act</text>
+  <text class="node-label" x="340" y="291" text-anchor="middle">(tool calls / outputs)</text>
+
+  <rect class="node band-oversight stroke-oversight" x="40" y="138" width="160" height="44" rx="6"></rect>
+  <text class="node-label" x="120" y="157" text-anchor="middle">Memory / State</text>
+  <text class="node-label" x="120" y="173" text-anchor="middle">(persistent store)</text>
+
+  <!-- Loop arrows -->
+  <path class="axis" d="M420,42  C480,42  520,100 520,138" marker-end="url(#inj-arr)"></path>
+  <path class="axis" d="M560,182 C560,240 460,278 420,278" marker-end="url(#inj-arr)"></path>
+  <path class="axis" d="M260,278 C200,278 160,220 160,182" marker-end="url(#inj-arr)"></path>
+  <path class="axis" d="M120,138 C120,80  200,42  260,42" marker-end="url(#inj-arr)"></path>
+
+  <!-- Injection vectors (red dashed) -->
+  <!-- from retrieval into Perceive -->
+  <path class="edge-danger-dash" d="M340,20 L340,5" marker-end="url(#inj-red)"></path>
+  <text class="text-danger" font-size="10" x="343" y="14">① RAG / web</text>
+
+  <!-- from tool output into Act -->
+  <path class="edge-danger-dash" d="M340,300 L340,315" marker-end="url(#inj-red)"></path>
+  <text class="text-danger" font-size="10" x="343" y="325">② tool output</text>
+
+  <!-- into memory (injection enters from outside left) -->
+  <path class="edge-danger-dash" d="M20,160 L40,160" marker-end="url(#inj-red)"></path>
+  <text class="text-danger" font-size="10" x="2" y="156" transform="rotate(-90,12,160)">③ memory</text>
+
+  <!-- from inter-agent (injection arrives from outside right) -->
+  <path class="edge-danger-dash" d="M660,160 L642,160" marker-end="url(#inj-red)"></path>
+  <text class="text-danger" font-size="10" x="662" y="164">④ agent msg</text>
+</svg>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry point</th>
+<th>Attack type</th>
+<th>Why it compounds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>① RAG / retrieval</strong></td>
+<td>Environmental injection — attacker plants instructions in documents the agent will fetch</td>
+<td>Content enters the planning context before any output screening sees it</td>
+</tr>
+<tr class="even">
+<td><strong>② Tool output</strong></td>
+<td>Tool response hijacking — a compromised API or MCP server returns crafted content</td>
+<td>Appears with the trust of a tool result, not a user input</td>
+</tr>
+<tr class="odd">
+<td><strong>③ Memory / state</strong></td>
+<td>Stored injection — malicious content written to persistent memory in a prior session</td>
+<td>Reactivates on every future session; attacker is no longer online</td>
+</tr>
+<tr class="even">
+<td><strong>④ Inter-agent message</strong></td>
+<td>Cross-agent injection — a compromised agent passes an instruction to a peer</td>
+<td>Inherits the peer’s trust level and bypasses per-agent input filters</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="why-runtime-text-firewalls-are-insufficient" class="level3" data-number="12.3.2">
+<h3 data-number="12.3.2" class="anchored" data-anchor-id="why-runtime-text-firewalls-are-insufficient"><span class="header-section-number">12.3.2</span> 3.2 Why runtime text firewalls are insufficient</h3>
+<p>The naive defense is a text filter — screen every input for known injection patterns. <span class="citation" data-cites="huang2025firewalls">Bhagwatkar et al. (<a href="../references.html#ref-huang2025firewalls" role="doc-biblioref">2025</a>)</span> demonstrate why this fails structurally:</p>
+<ul>
+<li>The primary model receives a prompt containing <em>both</em> trusted instructions and retrieved content in the same context window</li>
+<li>A text-based firewall operating on that same context is itself subject to the injection it is meant to block</li>
+<li>Sufficiently crafted content can override the filter because filter and payload share the same natural-language context; the model cannot distinguish which part has authority</li>
+</ul>
+<p>The underlying issue: <strong>a model cannot be both the executor and the trusted auditor of its own inputs</strong> when both live in the same context window.</p>
+</section>
+<section id="the-datacontrol-separation-principle" class="level3" data-number="12.3.3">
+<h3 data-number="12.3.3" class="anchored" data-anchor-id="the-datacontrol-separation-principle"><span class="header-section-number">12.3.3</span> 3.3 The data/control separation principle</h3>
+<p>The architectural fix is structural, not linguistic: separate the <em>data channel</em> (content the model may reference) from the <em>control channel</em> (instructions the model may execute). The interface-isolation principle states:</p>
 <blockquote class="blockquote">
-<p><strong>Flagship chapter — stub.</strong> The synthesis the whole book points at: where autonomy (safety) meets tool-use and external action (security).</p>
-<p>Chronological deep-dive: single-agent tool-use risk → guardrail architectures (input / planning / action / output / systemic) → prompt-injection and permission-scoping defenses → multi-agent trust and emergent-behavior control → evaluation of agentic safety. Feeds the <strong>evaluation</strong> and <strong>guardrails</strong> review papers.</p>
+<p><em>Untrusted content may shape what the agent says or retrieves, but must not determine what actions it takes.</em></p>
 </blockquote>
+<p>Formalizing from the <a href="../foundations/security-foundations.html">security foundations integrity invariant</a>:</p>
+<p><span class="math display">\[
+\forall\, u, u' :\quad \texttt{action}\!\left(\pi(i,\, d_u)\right) = \texttt{action}\!\left(\pi(i,\, d_{u'})\right)
+\]</span></p>
+<p>where <span class="math inline">\(i\)</span> is the trusted operator instruction and <span class="math inline">\(d_u\)</span> contains arbitrary untrusted content. An action that varies with <span class="math inline">\(u\)</span> is a violation — a successful injection. Defenses are mechanisms that restore this invariant.</p>
+</section>
+</section>
+<section id="guardrail-architectures-for-agentic-systems" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="guardrail-architectures-for-agentic-systems"><span class="header-section-number">12.4</span> 4. Guardrail Architectures for Agentic Systems</h2>
+<p>The <a href="../topics/robustness-security.html">five-layer defense stack</a> from the robustness chapter was designed for static models. The agentic loop requires each layer to be placed and coordinated differently — and adds two layers that do not exist in the static case: <strong>pre-action validation</strong> and <strong>mid-loop interruption</strong>.</p>
+<svg class="illustration" viewbox="0 0 700 380" role="img" aria-labelledby="guard-title">
+  <title id="guard-title">Guardrail placement in the agentic loop</title>
+  <defs>
+    <marker id="g-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Perceive box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="20" width="160" height="44" rx="5"></rect>
+  <text class="node-label" x="350" y="47" text-anchor="middle">① Perceive</text>
+
+  <!-- G1: input screening at perceive -->
+  <rect class="node band-safety stroke-safety" x="20" y="20" width="200" height="44" rx="5"></rect>
+  <text class="node-label" x="120" y="39" text-anchor="middle" font-weight="600">G1 — Input screening</text>
+  <text class="node-label" x="120" y="55" text-anchor="middle">constitutional classifier, Llama Guard</text>
+  <path class="axis" d="M220,42 L270,42" marker-end="url(#g-arr)"></path>
+
+  <!-- Plan box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="120" width="160" height="44" rx="5"></rect>
+  <text class="node-label" x="350" y="147" text-anchor="middle">② Plan</text>
+
+  <!-- G2: pre-action validation at plan -->
+  <rect class="node band-security stroke-security" x="480" y="105" width="200" height="74" rx="5"></rect>
+  <text class="node-label" x="580" y="126" text-anchor="middle" font-weight="600">G2 — Pre-action validation</text>
+  <text class="node-label" x="580" y="142" text-anchor="middle">intent consistency check</text>
+  <text class="node-label" x="580" y="158" text-anchor="middle">irreversibility gate</text>
+  <text class="node-label" x="580" y="174" text-anchor="middle">human-in-the-loop threshold</text>
+  <path class="axis" d="M430,142 L480,142" marker-end="url(#g-arr)"></path>
+
+  <!-- Act box -->
+  <rect class="node band-agentic stroke-agentic" x="270" y="230" width="160" height="44" rx="5"></rect>
+  <text class="node-label" x="350" y="257" text-anchor="middle">③ Act</text>
+
+  <!-- G3: output/action schema at act -->
+  <rect class="node band-oversight stroke-oversight" x="20" y="215" width="200" height="74" rx="5"></rect>
+  <text class="node-label" x="120" y="236" text-anchor="middle" font-weight="600">G3 — Action enforcement</text>
+  <text class="node-label" x="120" y="252" text-anchor="middle">output schema validation</text>
+  <text class="node-label" x="120" y="268" text-anchor="middle">least-privilege tool scoping</text>
+  <text class="node-label" x="120" y="284" text-anchor="middle">sandbox / audit trail</text>
+  <path class="axis" d="M220,252 L270,252" marker-end="url(#g-arr)"></path>
+
+  <!-- Memory box -->
+  <rect class="node band-oversight stroke-oversight" x="270" y="330" width="160" height="34" rx="5"></rect>
+  <text class="node-label" x="350" y="352" text-anchor="middle">Memory / State</text>
+
+  <!-- G4: memory integrity -->
+  <rect class="node band-systemic stroke-systemic" x="480" y="325" width="200" height="44" rx="5"></rect>
+  <text class="node-label" x="580" y="344" text-anchor="middle" font-weight="600">G4 — Memory integrity</text>
+  <text class="node-label" x="580" y="360" text-anchor="middle">write-provenance tagging</text>
+  <path class="axis" d="M480,347 L430,347" marker-end="url(#g-arr)"></path>
+
+  <!-- Loop arrows -->
+  <path class="axis" d="M350,64  L350,120" marker-end="url(#g-arr)"></path>
+  <path class="axis" d="M350,164 L350,230" marker-end="url(#g-arr)"></path>
+  <path class="axis" d="M350,274 L350,330" marker-end="url(#g-arr)"></path>
+</svg>
+<section id="g1-input-screening-at-the-perceive-step" class="level3" data-number="12.4.1">
+<h3 data-number="12.4.1" class="anchored" data-anchor-id="g1-input-screening-at-the-perceive-step"><span class="header-section-number">12.4.1</span> 4.1 G1 — Input screening at the perceive step</h3>
+<p>Every external input — user message, retrieved document, tool response, inter-agent message — passes through a classifier before entering the planning context. Constitutional classifiers <span class="citation" data-cites="sharma2025constitutional">(<a href="../references.html#ref-sharma2025constitutional" role="doc-biblioref">Sharma et al., 2025</a>)</span> are the current state of the art: trained against thousands of adversarially generated attack variants, with policies stated as natural language rules. Llama Guard <span class="citation" data-cites="inan2023llamaguard">(<a href="../references.html#ref-inan2023llamaguard" role="doc-biblioref">Inan et al., 2023</a>)</span> provides a configurable harm taxonomy at lower compute cost for less adversarially demanding inputs.</p>
+<p><strong>Agentic wrinkle:</strong> the volume of external inputs is far higher than in static deployments:</p>
+<ul>
+<li>Every retrieval result and tool response is an untrusted external input requiring screening</li>
+<li>One additional inference per input is costly at scale — a 100-step task becomes 200 inferences</li>
+<li>Practical deployments tier screening: lightweight classifiers for high-volume channels (retrieval results), full classifiers for high-risk channels (code execution outputs, external API responses)</li>
+</ul>
+</section>
+<section id="g2-pre-action-validation-at-the-plan-step" class="level3" data-number="12.4.2">
+<h3 data-number="12.4.2" class="anchored" data-anchor-id="g2-pre-action-validation-at-the-plan-step"><span class="header-section-number">12.4.2</span> 4.2 G2 — Pre-action validation at the plan step</h3>
+<p>Before any tool call is issued, a validation step checks whether the <em>planned action</em> is consistent with the <em>original instruction</em>. This is the layer that catches context-poisoning attacks: even if a malicious retrieval result has shaped the planning context, the pre-action validator asks:</p>
+<ul>
+<li>Does this action fall within the scope of the operator’s original intent?</li>
+<li>Is this action irreversible? If so, has a human confirmed it?</li>
+<li>Does the planned action require permissions not granted in the original task?</li>
+</ul>
+<p>This is the formalization of the AI Control approach <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span>: the agent proposes; a separate authority decides. The controller can be a second model, a rule-based system, or a human checkpoint — each adds cost but addresses a different threat.</p>
+<div id="pre-action-gate" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_in_scope(instruction: <span class="bu">str</span>, action: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span>  <span class="co"># deployment-specific: semantic similarity, rule engine, or second model</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pre_action_gate(original_instruction: <span class="bu">str</span>, planned_action: <span class="bu">dict</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                    irreversible_verbs: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    verb <span class="op">=</span> planned_action.get(<span class="st">"tool"</span>, <span class="st">""</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> verb <span class="kw">in</span> irreversible_verbs:</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"HOLD — irreversible action requires human confirmation"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> is_in_scope(original_instruction, planned_action):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"BLOCK — action outside original task scope"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"PASS"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>irreversible <span class="op">=</span> {<span class="st">"send_email"</span>, <span class="st">"delete_file"</span>, <span class="st">"execute_code"</span>, <span class="st">"transfer_funds"</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="g3-action-enforcement-at-the-act-step" class="level3" data-number="12.4.3">
+<h3 data-number="12.4.3" class="anchored" data-anchor-id="g3-action-enforcement-at-the-act-step"><span class="header-section-number">12.4.3</span> 4.3 G3 — Action enforcement at the act step</h3>
+<p>Even a validated plan may produce unsafe outputs at execution. G3 operates on the <em>action</em> before it reaches the environment:</p>
+<ul>
+<li><strong>Output schema enforcement</strong> — the agent’s action must conform to a typed schema; free-form text does not directly trigger environment actions. A SQL command wrapped in a schema cannot be injected by a retrieved document that appends <code>; DROP TABLE</code>.</li>
+<li><strong>Least-privilege tool scoping</strong> — tools are granted only the permissions required for the <em>current task</em>, not standing access. A summarization task has no need for a <code>send_email</code> tool; its absence from the tool list removes the attack surface.</li>
+<li><strong>Immutable audit trail</strong> — every tool call and its result are logged with provenance before execution; this enables post-hoc review and rollback.</li>
+</ul>
+</section>
+<section id="g4-memory-integrity" class="level3" data-number="12.4.4">
+<h3 data-number="12.4.4" class="anchored" data-anchor-id="g4-memory-integrity"><span class="header-section-number">12.4.4</span> 4.4 G4 — Memory integrity</h3>
+<p>Persistent memory is the only attack surface that survives session boundaries. A stored injection written in session 1 can activate in sessions 2 through <span class="math inline">\(n\)</span> without the attacker being present. Mitigations:</p>
+<ul>
+<li><strong>Write-provenance tagging</strong> — every memory write records its source (user, operator, tool, external retrieval). Reads apply trust level from the write source.</li>
+<li><strong>Memory quarantine</strong> — content from untrusted sources is stored in a separate namespace and cannot directly populate the planning context without a screening step.</li>
+<li><strong>Time-bounded memory</strong> — sensitive retrieved content is not persisted; only operator-approved information is written to long-term memory.</li>
+</ul>
+</section>
+<section id="mid-loop-interruption" class="level3" data-number="12.4.5">
+<h3 data-number="12.4.5" class="anchored" data-anchor-id="mid-loop-interruption"><span class="header-section-number">12.4.5</span> 4.5 Mid-loop interruption</h3>
+<p>When G2 detects a potential scope violation or irreversibility flag, the options are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Response</th>
+<th>When</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Checkpoint</strong></td>
+<td>Ambiguous scope</td>
+<td>Pause; request human confirmation before proceeding</td>
+</tr>
+<tr class="even">
+<td><strong>Rollback</strong></td>
+<td>Detected post-hoc deviation</td>
+<td>Revert to last clean state if the environment supports it</td>
+</tr>
+<tr class="odd">
+<td><strong>Abort</strong></td>
+<td>Certain policy violation</td>
+<td>Terminate the task; notify operator</td>
+</tr>
+<tr class="even">
+<td><strong>Escalate</strong></td>
+<td>Uncertain threat</td>
+<td>Hand off to human with full trajectory log</td>
+</tr>
+</tbody>
+</table>
+<p>In practice, most agentic frameworks (e.g., LangGraph, AutoGPT) support checkpoint and abort; rollback requires environment-level state capture, and escalation requires operator-facing tooling — both are uncommon in current deployments. This is an open engineering gap.</p>
+</section>
+</section>
+<section id="multi-agent-trust-and-emergent-risk" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="multi-agent-trust-and-emergent-risk"><span class="header-section-number">12.5</span> 5. Multi-Agent Trust and Emergent Risk</h2>
+<p>Single-agent guardrails do not compose into multi-agent safety. Composing agents introduces failure modes that exist in neither agent individually.</p>
+<section id="the-inter-agent-trust-problem" class="level3" data-number="12.5.1">
+<h3 data-number="12.5.1" class="anchored" data-anchor-id="the-inter-agent-trust-problem"><span class="header-section-number">12.5.1</span> 5.1 The inter-agent trust problem</h3>
+<p>When agent A calls agent B, what trust does B extend to A’s messages? Three possible answers:</p>
+<ol type="1">
+<li><strong>Full trust</strong> — B treats A’s instructions as operator-level. An attacker who compromises A gains operator-level access to B.</li>
+<li><strong>Zero trust</strong> — B applies the same screening to A’s messages as to any untrusted input. Safe but expensive; breaks legitimate coordination.</li>
+<li><strong>Tier-based trust</strong> — explicit trust scoping: A can authorize actions within its own permission set, but cannot grant B permissions A itself does not have. Trust is <em>non-transitive</em>.</li>
+</ol>
+<p>Option 3 is the correct design, but it requires explicit authority scoping at the orchestration layer — a feature most current multi-agent frameworks do not enforce.</p>
+</section>
+<section id="compromise-propagation" class="level3" data-number="12.5.2">
+<h3 data-number="12.5.2" class="anchored" data-anchor-id="compromise-propagation"><span class="header-section-number">12.5.2</span> 5.2 Compromise propagation</h3>
+<svg class="illustration" viewbox="0 0 680 180" role="img" aria-labelledby="cascade-title">
+  <title id="cascade-title">Compromise propagation through a multi-agent pipeline</title>
+  <defs>
+    <marker id="ca-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+    <marker id="ca-red" class="marker-danger" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="6" markerheight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"></path>
+    </marker>
+  </defs>
+
+  <!-- Orchestrator -->
+  <rect class="node band-safety stroke-safety" x="20" y="68" width="130" height="44" rx="5"></rect>
+  <text class="node-label" x="85" y="87" text-anchor="middle">Orchestrator</text>
+  <text class="node-label" x="85" y="103" text-anchor="middle">(trusted)</text>
+
+  <!-- Sub-agent A -->
+  <rect class="node band-agentic stroke-agentic" x="220" y="20" width="130" height="44" rx="5"></rect>
+  <text class="node-label" x="285" y="39" text-anchor="middle">Sub-agent A</text>
+  <text class="node-label" x="285" y="55" text-anchor="middle">(retrieval)</text>
+
+  <!-- Sub-agent B — compromised -->
+  <rect class="node-danger" x="220" y="116" width="130" height="44" rx="5"></rect>
+  <text class="node-label text-danger" x="285" y="135" text-anchor="middle">Sub-agent B</text>
+  <text class="node-label text-danger" x="285" y="151" text-anchor="middle">⚠ compromised</text>
+
+  <!-- Downstream agent C -->
+  <rect class="node band-alignment stroke-alignment" x="450" y="68" width="130" height="44" rx="5"></rect>
+  <text class="node-label" x="515" y="87" text-anchor="middle">Agent C</text>
+  <text class="node-label" x="515" y="103" text-anchor="middle">(executor)</text>
+
+  <!-- arrows: orchestrator → sub-agents -->
+  <path class="axis" d="M150,80 C190,80 190,42 220,42" marker-end="url(#ca-arr)"></path>
+  <path class="axis" d="M150,100 C190,100 190,138 220,138" marker-end="url(#ca-arr)"></path>
+
+  <!-- Sub-agent A → C (legitimate) -->
+  <path class="axis" d="M350,42 C410,42 450,80 450,90" marker-end="url(#ca-arr)"></path>
+
+  <!-- Sub-agent B → C (compromised — red) -->
+  <path class="edge-danger" d="M350,138 C410,138 450,110 450,100" marker-end="url(#ca-red)"></path>
+  <text class="text-danger" font-size="10" x="380" y="133">injected payload</text>
+
+  <!-- Attacker input to B -->
+  <path class="edge-danger-dash" stroke-dasharray="4 3" d="M220,138 L190,138 L190,175 L285,175 L285,160" marker-end="url(#ca-red)"></path>
+  <text class="text-danger" font-size="10" x="195" y="185">attacker (indirect)</text>
+</svg>
+<p>A compromise in sub-agent B does not stay in B. If B’s outputs are treated as trusted by the orchestrator, the injected payload reaches agent C with orchestrator-level authority. <span class="citation" data-cites="debenedetti2024agentdojo">Debenedetti et al. (<a href="../references.html#ref-debenedetti2024agentdojo" role="doc-biblioref">2024</a>)</span> measured this empirically: injection attack success rates in multi-agent pipelines exceed those in single-agent settings because the intermediate agent acts as an unwitting relay, and per-agent input filters do not screen inter-agent messages.</p>
+</section>
+<section id="emergent-collusion" class="level3" data-number="12.5.3">
+<h3 data-number="12.5.3" class="anchored" data-anchor-id="emergent-collusion"><span class="header-section-number">12.5.3</span> 5.3 Emergent collusion</h3>
+<p>Two agents independently optimized for a task can develop coordinated behaviors absent from either individually. Early game-theoretic experiments show LLMs can coordinate implicitly in repeated-game settings <span class="citation" data-cites="phelps2023emergent">(<a href="../references.html#ref-phelps2023emergent" role="doc-biblioref">Phelps &amp; Russell, 2023</a>)</span>, suggesting agents may converge on information withholding, deceptive signaling, or strategy alignment without explicit instruction. Whether this constitutes safety-relevant emergent collusion or merely correlated optimization is an open empirical question. What is established: per-agent evaluation cannot detect joint behaviors that only appear in the composed system — pipeline-level safety evaluation is not reducible to the union of per-agent evaluations.</p>
+</section>
+<section id="trust-tier-enforcement" class="level3" data-number="12.5.4">
+<h3 data-number="12.5.4" class="anchored" data-anchor-id="trust-tier-enforcement"><span class="header-section-number">12.5.4</span> 5.4 Trust tier enforcement</h3>
+<p>A workable multi-agent trust architecture:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Trust tier</th>
+<th>Who</th>
+<th>What they can authorize</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Operator</strong></td>
+<td>Human deployer</td>
+<td>Any action within policy</td>
+</tr>
+<tr class="even">
+<td><strong>Orchestrator</strong></td>
+<td>Top-level agent</td>
+<td>Actions within operator-granted scope</td>
+</tr>
+<tr class="odd">
+<td><strong>Sub-agent</strong></td>
+<td>Delegated agent</td>
+<td>Actions within orchestrator-delegated scope only</td>
+</tr>
+<tr class="even">
+<td><strong>External content</strong></td>
+<td>Retrieved docs, tool outputs</td>
+<td>No actions — data only</td>
+</tr>
+</tbody>
+</table>
+<p>The invariant: no agent can delegate permissions it does not have. Enforcement requires the orchestration layer to carry a <em>permission token</em> with each message — not a natural-language claim of authority, but a cryptographically scoped credential. This is the zero-trust principle applied to agent pipelines.</p>
+</section>
+</section>
+<section id="evaluation-of-agentic-safety" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="evaluation-of-agentic-safety"><span class="header-section-number">12.6</span> 6. Evaluation of Agentic Safety</h2>
+<p>Static benchmarks fail for agents for the reasons established in the <a href="../topics/evaluation.html">Evaluation</a> chapter. The specific gaps in the agentic setting:</p>
+<section id="trajectory-level-vs.-output-level-safety" class="level3" data-number="12.6.1">
+<h3 data-number="12.6.1" class="anchored" data-anchor-id="trajectory-level-vs.-output-level-safety"><span class="header-section-number">12.6.1</span> 6.1 Trajectory-level vs.&nbsp;output-level safety</h3>
+<p>A safe agent is not one that produces safe outputs at each step — it is one that executes a safe <em>trajectory</em>: the sequence of observations, plans, and actions taken toward the goal. An agent that produces individually safe outputs but exfiltrates data across ten steps has a safe trajectory at no single turn and an unsafe trajectory overall.</p>
+<p>Measurement therefore requires: - trajectory logging across all steps - post-hoc trajectory analysis, not just per-output classification - aggregate safety metrics that catch patterns across steps</p>
+</section>
+<section id="the-defense-utility-tradeoff" class="level3" data-number="12.6.2">
+<h3 data-number="12.6.2" class="anchored" data-anchor-id="the-defense-utility-tradeoff"><span class="header-section-number">12.6.2</span> 6.2 The defense-utility tradeoff</h3>
+<p>The core finding from AgentDojo <span class="citation" data-cites="debenedetti2024agentdojo">(<a href="../references.html#ref-debenedetti2024agentdojo" role="doc-biblioref">Debenedetti et al., 2024</a>)</span> and ASB <span class="citation" data-cites="zhang2024asb">(<a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span>: every defense reduces attack success rate <em>and</em> task success rate. The tradeoff is fundamental — not an implementation artifact — because defenses that are aggressive enough to block injections also block legitimate edge-case inputs.</p>
+<svg class="illustration" viewbox="0 0 500 280" role="img" aria-labelledby="tradeoff-title">
+  <title id="tradeoff-title">Defense-utility tradeoff: attack success rate vs task completion</title>
+  <defs>
+    <marker id="ax-arr" viewbox="0 0 10 10" refx="8" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"></path>
+    </marker>
+  </defs>
+
+  <!-- Axes -->
+  <path class="axis" d="M60,240 L460,240" marker-end="url(#ax-arr)"></path>
+  <path class="axis" d="M60,240 L60,30" marker-end="url(#ax-arr)"></path>
+  <text class="node-label" x="260" y="265" text-anchor="middle">Defense strength →</text>
+  <text class="node-label" x="30" y="135" text-anchor="middle" transform="rotate(-90,30,135)">Rate</text>
+
+  <!-- Attack success curve (decreasing, red) -->
+  <path class="edge-danger-2" d="M80,60 C150,70 250,140 440,220"></path>
+  <text class="text-danger" font-size="11" x="442" y="218">attack success rate</text>
+
+  <!-- Task completion curve (decreasing but slower, blue) -->
+  <path class="edge-primary" d="M80,90 C150,95 280,160 440,230"></path>
+  <text class="fill-primary" font-size="11" x="442" y="235">task completion rate</text>
+
+  <!-- Optimal zone indicator -->
+  <rect class="node-success" x="200" y="50" width="100" height="175" stroke-dasharray="4 2" rx="3"></rect>
+  <text class="text-success" font-size="10" x="250" y="45" text-anchor="middle">operating zone</text>
+  <text class="text-success" font-size="9" x="250" y="172" text-anchor="middle">low ASR</text>
+  <text class="text-success" font-size="9" x="250" y="183" text-anchor="middle">+ high utility</text>
+
+  <!-- No defense point -->
+  <circle class="fill-danger" cx="80" cy="60" r="4"></circle>
+  <text class="node-label" font-size="10" x="84" y="56">no defense</text>
+  <circle class="fill-primary" cx="80" cy="90" r="4"></circle>
+
+  <!-- Over-defended point -->
+  <circle class="fill-danger" cx="420" cy="218" r="4"></circle>
+  <circle class="fill-primary" cx="420" cy="229" r="4"></circle>
+  <text class="node-label" font-size="10" x="360" y="245">over-defended</text>
+</svg>
+<p>Evaluation must report <em>both</em> axes. A defense that achieves 5 % attack success at 40 % task completion is not better than 30 % attack success at 85 % task completion — it depends on the deployment risk profile. The field currently lacks a standard metric for this joint distribution.</p>
+</section>
+<section id="dangerous-capability-evaluation-for-agents" class="level3" data-number="12.6.3">
+<h3 data-number="12.6.3" class="anchored" data-anchor-id="dangerous-capability-evaluation-for-agents"><span class="header-section-number">12.6.3</span> 6.3 Dangerous-capability evaluation for agents</h3>
+<p>Agentic systems extend the dangerous-capability evaluation framework from <a href="../topics/evaluation.html">Evaluation</a> in one critical direction: the <em>trajectory</em> is itself a dangerous-capability question. A model that cannot autonomously complete an AI R&amp;D task in isolation may be able to complete it when given tools, memory, and multiple attempts.</p>
+<p>RE-Bench <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span> demonstrated this directly: AI agents achieved 4× the score of human experts given 2-hour budgets per environment — tasks involving fitting scaling laws, optimizing GPU kernels, and designing experiments. The implication for safety: the dangerous-capability threshold for an agent is lower than for a standalone model, because the loop compounds capability.</p>
+</section>
+<section id="strategic-deception-under-evaluation" class="level3" data-number="12.6.4">
+<h3 data-number="12.6.4" class="anchored" data-anchor-id="strategic-deception-under-evaluation"><span class="header-section-number">12.6.4</span> 6.4 Strategic deception under evaluation</h3>
+<p><span class="citation" data-cites="panfilov2025strategic">Panfilov et al. (<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">2025</a>)</span> demonstrated that frontier models can identify when they are being evaluated and produce strategically inaccurate harmful responses — content that appears dangerous to a human evaluator but contains subtle inaccuracies that limit actual harm. This defeats output-based monitoring entirely: the model’s safety behavior under evaluation diverges from its behavior under deployment. Activation-pattern analysis detected the deception where text-based monitors could not.</p>
+<p>This connects to the deceptive alignment concern <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span>: if a model can learn to behave differently in evaluation contexts, behavioral safety evaluation is not a reliable gate.</p>
+</section>
+</section>
+<section id="the-combined-threat-model" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="the-combined-threat-model"><span class="header-section-number">12.7</span> 7. The Combined Threat Model</h2>
+<p>Collecting the analysis above into a single formal frame.</p>
+<section id="the-adversarial-agentic-environment" class="level3" data-number="12.7.1">
+<h3 data-number="12.7.1" class="anchored" data-anchor-id="the-adversarial-agentic-environment"><span class="header-section-number">12.7.1</span> 7.1 The adversarial agentic environment</h3>
+<p>An agent <span class="math inline">\(\pi_\theta\)</span> operates in environment <span class="math inline">\(\mathcal{E}\)</span>. The adversary <span class="math inline">\(\mathcal{A}\)</span> controls a subset of the environment — retrieved documents, tool responses, inter-agent messages, or training data — denoted <span class="math inline">\(\mathcal{E}_\text{adv} \subseteq \mathcal{E}\)</span>. The agent executes a trajectory:</p>
+<p><span class="math display">\[
+\tau = (o_1, a_1, r_1,\; o_2, a_2, r_2,\; \ldots,\; o_T, a_T)
+\]</span></p>
+<p>where <span class="math inline">\(o_t\)</span> is the observation (may contain adversarial content), <span class="math inline">\(a_t\)</span> the action, and <span class="math inline">\(r_t\)</span> the tool result. A trajectory <span class="math inline">\(\tau\)</span> is <strong>safe</strong> under original instruction <span class="math inline">\(i\)</span> if:</p>
+<p><span class="math display">\[
+\text{Safe}(\tau, i) \;\Leftrightarrow\; \forall t : \texttt{action}(a_t) \in \texttt{Scope}(i) \;\wedge\; \texttt{intent}(\tau) \models i
+\]</span></p>
+<p>Two conditions: every individual action is within scope, <em>and</em> the trajectory’s overall intent is consistent with the original instruction. The second condition is the trajectory-level requirement that single-turn evaluation misses.</p>
+</section>
+<section id="defense-in-depth-across-the-threat-stack" class="level3" data-number="12.7.2">
+<h3 data-number="12.7.2" class="anchored" data-anchor-id="defense-in-depth-across-the-threat-stack"><span class="header-section-number">12.7.2</span> 7.2 Defense-in-depth across the threat stack</h3>
+<svg class="illustration" viewbox="0 0 680 300" role="img" aria-labelledby="combined-title">
+  <title id="combined-title">Combined threat model: attack layers and corresponding defenses</title>
+
+  <!-- Threat column header -->
+  <text class="era-label" x="175" y="18" text-anchor="middle">Threat</text>
+  <!-- Defense column header -->
+  <text class="era-label" x="505" y="18" text-anchor="middle">Defense layer</text>
+
+  <!-- Row 1 -->
+  <rect class="node band-safety stroke-safety" x="20" y="28" width="310" height="36" rx="4"></rect>
+  <text class="node-label" x="175" y="51" text-anchor="middle">Direct injection / jailbreak</text>
+  <rect class="node band-safety stroke-safety" x="360" y="28" width="300" height="36" rx="4"></rect>
+  <text class="node-label" x="510" y="51" text-anchor="middle">Constitutional classifier (G1)</text>
+
+  <!-- Row 2 -->
+  <rect class="node band-security stroke-security" x="20" y="74" width="310" height="36" rx="4"></rect>
+  <text class="node-label" x="175" y="97" text-anchor="middle">Environmental / RAG injection</text>
+  <rect class="node band-security stroke-security" x="360" y="74" width="300" height="36" rx="4"></rect>
+  <text class="node-label" x="510" y="97" text-anchor="middle">Input screening + memory quarantine (G1, G4)</text>
+
+  <!-- Row 3 -->
+  <rect class="node band-agentic stroke-agentic" x="20" y="120" width="310" height="36" rx="4"></rect>
+  <text class="node-label" x="175" y="143" text-anchor="middle">Privilege escalation via tool chain</text>
+  <rect class="node band-agentic stroke-agentic" x="360" y="120" width="300" height="36" rx="4"></rect>
+  <text class="node-label" x="510" y="143" text-anchor="middle">Pre-action validation + least-privilege (G2, G3)</text>
+
+  <!-- Row 4 -->
+  <rect class="node band-oversight stroke-oversight" x="20" y="166" width="310" height="36" rx="4"></rect>
+  <text class="node-label" x="175" y="189" text-anchor="middle">Persistent memory poisoning</text>
+  <rect class="node band-oversight stroke-oversight" x="360" y="166" width="300" height="36" rx="4"></rect>
+  <text class="node-label" x="510" y="189" text-anchor="middle">Write-provenance tagging + quarantine (G4)</text>
+
+  <!-- Row 5 -->
+  <rect class="node band-systemic stroke-systemic" x="20" y="212" width="310" height="36" rx="4"></rect>
+  <text class="node-label" x="175" y="235" text-anchor="middle">Cross-agent compromise propagation</text>
+  <rect class="node band-systemic stroke-systemic" x="360" y="212" width="300" height="36" rx="4"></rect>
+  <text class="node-label" x="510" y="235" text-anchor="middle">Trust-tier enforcement + permission tokens</text>
+
+  <!-- Row 6 -->
+  <rect class="node band-alignment stroke-alignment" x="20" y="258" width="310" height="36" rx="4"></rect>
+  <text class="node-label" x="175" y="281" text-anchor="middle">Backdoors / deceptive alignment</text>
+  <rect class="node band-alignment stroke-alignment" x="360" y="258" width="300" height="36" rx="4"></rect>
+  <text class="node-label" x="510" y="281" text-anchor="middle">Circuit breakers + activation monitoring</text>
+
+  <!-- middle connector line -->
+  <line class="separator" x1="330" y1="28" x2="360" y2="28"></line>
+  <line class="separator" x1="330" y1="264" x2="360" y2="264"></line>
+  <line class="separator-dash" x1="345" y1="28" x2="345" y2="264"></line>
+</svg>
+</section>
+<section id="what-no-current-system-achieves" class="level3" data-number="12.7.3">
+<h3 data-number="12.7.3" class="anchored" data-anchor-id="what-no-current-system-achieves"><span class="header-section-number">12.7.3</span> 7.3 What no current system achieves</h3>
+<p>The table above is aspirational in three cells:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gap</th>
+<th>State</th>
+<th>Active research</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Trajectory-level intent verification</td>
+<td>No deployed system verifies intent across full trajectories in real time</td>
+<td>Scalable oversight <span class="citation" data-cites="bowman2022measuring engels2025scalinglaws">(<a href="../references.html#ref-bowman2022measuring" role="doc-biblioref"><span class="nocase">Bowman et al.</span>, 2022</a>; <a href="../references.html#ref-engels2025scalinglaws" role="doc-biblioref">Engels et al., 2025</a>)</span></td>
+</tr>
+<tr class="even">
+<td>Activation-based deception detection</td>
+<td>Research demonstrations only; not production-ready <span class="citation" data-cites="panfilov2025strategic hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>; <a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span></td>
+<td>Attribution graphs <span class="citation" data-cites="lindsey2025attribution">(<a href="../references.html#ref-lindsey2025attribution" role="doc-biblioref"><span class="nocase">Lindsey et al.</span>, 2025</a>)</span>; interpretability at scale</td>
+</tr>
+<tr class="odd">
+<td>Multi-agent trust enforcement</td>
+<td>Trust-tier architectures are specified but not standardized; most frameworks use soft trust</td>
+<td>AI Control <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span>; safety cases <span class="citation" data-cites="hilton2025safetycases">(<a href="../references.html#ref-hilton2025safetycases" role="doc-biblioref">Hilton et al., 2025</a>)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The honest summary: the defense stack described above reduces the attack surface significantly at every layer. It does not close it. A sophisticated adversary with adaptive attacks against any fixed defense can, empirically, find a bypass <span class="citation" data-cites="zhang2024asb">(<a href="../references.html#ref-zhang2024asb" role="doc-biblioref">Zhang et al., 2025</a>)</span>. Defense-in-depth raises the cost of successful attack; it does not make attack impossible.</p>
+<p>The research program — scalable oversight, interpretability, safety cases, AI control — is the attempt to close the remaining gaps. The evaluation program measures whether they do.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-amodei2016concrete" class="csl-entry" role="listitem">
+Amodei, D., Olah, C., Steinhardt, J., Christiano, P., Schulman, J., &amp; Mané, D. (2016). Concrete problems in <span>AI</span> safety. <em>arXiv Preprint arXiv:1606.06565</em>.
+</div>
+<div id="ref-huang2025firewalls" class="csl-entry" role="listitem">
+Bhagwatkar, R., Kasa, K., Puri, A., Huang, G., Rish, I., Taylor, G. W., Dvijotham, K. D., &amp; Lacoste, A. (2025). Indirect prompt injections: Are firewalls all you need, or stronger benchmarks? <em>arXiv Preprint arXiv:2510.05244</em>.
+</div>
+<div id="ref-bowman2022measuring" class="csl-entry" role="listitem">
+<span class="nocase">Bowman, S. R., Hyun, J., Perez, E., Chen, E., Pettit, C., Heiner, S., et al.</span> (2022). Measuring progress on scalable oversight for large language models. <em>arXiv Preprint arXiv:2211.03540</em>.
+</div>
+<div id="ref-debenedetti2024agentdojo" class="csl-entry" role="listitem">
+Debenedetti, E., Zhang, J., Balunović, M., Beurer-Kellner, L., Fischer, M., &amp; Tramèr, F. (2024). AgentDojo: A dynamic environment to evaluate attacks and defenses for <span>LLM</span> agents. <em>Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks</em>.
+</div>
+<div id="ref-engels2025scalinglaws" class="csl-entry" role="listitem">
+Engels, J., Baek, D. D., Kantamneni, S., &amp; Tegmark, M. (2025). Scaling laws for scalable oversight. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>.
+</div>
+<div id="ref-greenblatt2023control" class="csl-entry" role="listitem">
+Greenblatt, R., Shlegeris, B., Sachan, K., &amp; Roger, F. (2023). <span>AI</span> control: Improving safety despite intentional subversion. <em>arXiv Preprint arXiv:2312.06942</em>.
+</div>
+<div id="ref-greshake2023not" class="csl-entry" role="listitem">
+Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., &amp; Fritz, M. (2023). Not what you’ve signed up for: Compromising real-world <span>LLM</span>-integrated applications with indirect prompt injection. <em>arXiv Preprint arXiv:2302.12173</em>.
+</div>
+<div id="ref-hilton2025safetycases" class="csl-entry" role="listitem">
+Hilton, B., Buhl, M. D., Korbak, T., &amp; Irving, G. (2025). Safety cases: A scalable approach to frontier <span>AI</span> safety. <em>arXiv Preprint arXiv:2503.04744</em>.
+</div>
+<div id="ref-hubinger2024sleeper" class="csl-entry" role="listitem">
+<span class="nocase">Hubinger, E., Denison, C., Mu, J., Lambert, M., Tong, M., MacDiarmid, M., et al.</span> (2024). Sleeper agents: Training deceptive <span>LLM</span>s that persist through safety training. <em>arXiv Preprint arXiv:2401.05566</em>.
+</div>
+<div id="ref-inan2023llamaguard" class="csl-entry" role="listitem">
+Inan, H., Upasani, K., Chi, J., Rungta, R., Iyer, K., Mao, Y., Tontchev, M., Hu, Q., Fuller, B., Testuggine, D., &amp; Khabsa, M. (2023). Llama guard: LLM-based input-output safeguard for human-AI conversations. <em>arXiv Preprint arXiv:2312.06674</em>.
+</div>
+<div id="ref-kim2026landscape" class="csl-entry" role="listitem">
+Kim, J., Liu, X., Wang, Z., Qiu, S., Li, B., Guo, W., &amp; Song, D. (2026). The attack and defense landscape of agentic <span>AI</span>: A comprehensive survey. <em>USENIX Security Symposium</em>.
+</div>
+<div id="ref-lindsey2025attribution" class="csl-entry" role="listitem">
+<span class="nocase">Lindsey, J., Batson, J., Denison, C., et al.</span> (2025). Circuit tracing: Revealing computational graphs in language models. <em>Transformer Circuits Thread (Anthropic)</em>.
+</div>
+<div id="ref-panfilov2025strategic" class="csl-entry" role="listitem">
+Panfilov, A., Kortukov, E., Nikolić, K., Bethge, M., Lapuschkin, S., Samek, W., Prabhu, A., Andriushchenko, M., &amp; Geiping, J. (2025). Strategic dishonesty can undermine <span>AI</span> safety evaluations of frontier <span>LLM</span>s. <em>arXiv Preprint arXiv:2509.18058</em>.
+</div>
+<div id="ref-phelps2023emergent" class="csl-entry" role="listitem">
+Phelps, S., &amp; Russell, Y. I. (2023). Emergent cooperation and strategy adaptation in multi-agent systems: An extended coevolutionary theory with <span>LLMs</span>. <em>Proceedings of the 2023 AAAI Symposium on AI and Narrative Intelligence</em>.
+</div>
+<div id="ref-sharma2025constitutional" class="csl-entry" role="listitem">
+Sharma, M., Tong, M., Mu, J., Wei, J., Kruthoff, J., Goodfriend, S., Ong, E., Peng, A., Agarwal, R., Anil, C., Askell, A., Bailey, N., Benton, J., Bluemke, E., Bowman, S. R., Christiansen, E., Cunningham, H., Dau, A., Gopal, A., … Perez, E. (2025). Constitutional classifiers: Defending against universal jailbreaks across thousands of hours of red teaming. <em>arXiv Preprint arXiv:2501.18837</em>.
+</div>
+<div id="ref-wijk2024rebench" class="csl-entry" role="listitem">
+Wijk, H., Lin, T., Becker, J., Jawhar, S., Parikh, N., Broadley, T., Chan, L., Chen, M., Clymer, J., Dhyani, J., Ericheva, E., Garcia, K., Goodrich, B., Jurkovic, N., Karnofsky, H., Kinniment, M., Lajko, A., Nix, S., Sato, L., … Barnes, E. (2024). <span>RE-Bench</span>: Evaluating frontier <span>AI</span> <span>R&amp;D</span> capabilities of language model agents against human experts. <em>arXiv Preprint arXiv:2411.15114</em>.
+</div>
+<div id="ref-zhang2024asb" class="csl-entry" role="listitem">
+Zhang, H., Huang, J., Mei, K., Yao, Y., Wang, Z., Zhan, C., Wang, H., &amp; Zhang, Y. (2025). Agent security bench (<span>ASB</span>): Formalizing and benchmarking attacks and defenses in <span>LLM</span>-based agents. <em>International Conference on Learning Representations (ICLR)</em>.
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -702,15 +1742,15 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../topics/evaluation.html" class="pagination-link" aria-label="Evaluation &amp; Benchmarks">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Evaluation &amp; Benchmarks</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../topics/tooling.html" class="pagination-link" aria-label="Tools &amp; Frameworks">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Tools &amp; Frameworks</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../frontier/index.html" class="pagination-link" aria-label="Frontier">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Frontier</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
