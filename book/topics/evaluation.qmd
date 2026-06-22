@@ -94,36 +94,27 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
 
 ## Generation 1 — Static Accuracy (2018–2022)
 
-Fixed test sets, accuracy over labeled examples. Simple, reproducible, and short-lived:
-
-| Benchmark | Year | Measures | How it broke |
-|---|---|---|---|
-| GLUE / SuperGLUE | 2018/19 | NLU tasks (NLI, QA, coreference) | Models saturated within months |
-| MMLU | 2020 | 57-subject multiple-choice | Contamination; models now exceed human average |
-| HumanEval | 2021 | Python code generation | Pass@k is gameable; real-world correctness diverges |
-| BIG-bench | 2022 | 204 tasks, diverse difficulty | Heterogeneous scoring; no safety dimension; marks end of the static era |
-
-Static benchmarks reveal nothing about safety behavior, adversarial robustness, or
-agentic capability — they measure task performance on a fixed distribution that is
-itself a training target.
+Fixed test sets, accuracy over labeled examples — GLUE, MMLU, HumanEval, BIG-bench.
+Simple, reproducible, and short-lived: each broke on contamination or Goodhart's law
+within 18–24 months of release. None measured safety behavior, adversarial robustness,
+or agentic capability. Detailed benchmark table in the
+[supplement](../supplement/benchmarks.qmd#sec-supp-benchmarks-gen1).
 
 ## Generation 2 — Holistic Evaluation (2022–2023)
 
-**HELM** [@liang2022holistic] was the first multi-dimensional evaluation framework,
-measuring simultaneously across a shared set of scenarios:
+**HELM** [@liang2022holistic] was the first multi-dimensional framework: accuracy,
+calibration, robustness, fairness, toxicity, and efficiency scored simultaneously across
+shared scenarios (metric breakdown in the [supplement](../supplement/benchmarks.qmd)). The
+key finding: accuracy and robustness are weakly correlated — a model topping accuracy
+leaderboards can be brittle to distribution shift or rephrasing.
 
-- **Accuracy** — task performance on standard NLP scenarios
-- **Calibration** — whether confidence scores match actual accuracy
-- **Robustness** — stability under distribution shift and rephrasing
-- **Fairness and bias** — differential performance across demographic groups
-- **Toxicity** — unsafe generation rate
-- **Efficiency** — compute and throughput cost
+**Red-teaming** [@perez2022red] emerged in parallel: use a language model to generate
+adversarial prompts and measure harmful-output rate. LLM red teams cover vastly more of
+the attack surface than manual testers.
 
-HELM made evaluation multidimensional — no single leaderboard number — and exposed a tension static benchmarks hid: accuracy and robustness scores are weakly correlated. A model can top accuracy leaderboards while being brittle to distribution shift or adversarial rephrasing.
-
-**Red-teaming** [@perez2022red] emerged in parallel as a safety-specific methodology: use a language model to generate adversarial prompts, then measure how often the target produces harmful outputs. LLM red teams cover vastly more of the attack surface than manual red teams.
-
-Both HELM and red-teaming measure behavioral properties of a fixed model under fixed prompts — neither captures what a model does across a multi-step task, nor what a determined adversary can elicit using optimization.
+Both measure behavioral properties of a fixed model under fixed prompts — neither captures
+what a determined adversary can elicit using optimization, nor what happens over a
+multi-step task.
 
 ## Generation 3 — Adversarial Benchmarks (2023–2024)
 
@@ -253,35 +244,16 @@ embedded in the environment** — not just in the prompt.
 </figure>
 ```
 
-### AgentDojo [@debenedetti2024agentdojo]
+Key Gen 4 findings across AgentDojo [@debenedetti2024agentdojo], Agent Security Bench
+[@zhang2024asb], and service-task reliability benchmarks (τ-bench): frontier models
+complete 60–70 % of legitimate tasks but are vulnerable to environmental injection in
+30–60 % of attack scenarios; direct injection achieves up to 84 % attack success on
+undefended agents; no evaluated defense eliminated the attack surface without also
+degrading task completion. Detailed benchmark numbers in the
+[supplement](../supplement/benchmarks.qmd).
 
-A dynamic benchmark for LLM agents over realistic tools (email, calendar, banking API).
-Agents receive legitimate tasks; the environment contains injected adversarial payloads
-designed to hijack the agent into side-tasks (data exfiltration, unauthorized actions).
-Reports attack success rate and utility preservation jointly.
-
-Findings: frontier models complete 60–70 % of tasks but are vulnerable to environmental
-injection in 30–60 % of attack scenarios. Input filtering defenses cut attack success
-but also cut task success — the defense-utility tradeoff is fundamental.
-
-### Agent Security Bench (ASB) [@zhang2024asb]
-
-10 agent scenarios, 10 attack methods, 400+ tools, unified scoring. Direct injection
-achieves 84 % attack success on undefended agents; indirect (environmental) injection
-60–80 %. No evaluated defense eliminated the attack surface — all traded safety for
-utility at varying rates.
-
-### Service-task reliability benchmarks
-
-Benchmarks such as τ-bench measure agent reliability across stochastic, multi-turn
-service tasks (airline reservations, retail transactions). The evaluation question:
-does the agent know when to confirm, refuse, and escalate? Safety-relevant because an
-over-confident agent causes irreversible real-world actions without appropriate
-verification pauses. Unlike AgentDojo and ASB, this class of benchmark focuses on
-*over-action* failures rather than adversarial injection.
-
-Gen 4 established that the defense-utility tradeoff is fundamental and that trajectory-level
-safety cannot be reduced to per-step output classification. Gen 5 asks a different question:
+Gen 4 established two invariants: the defense-utility tradeoff is fundamental, and
+trajectory-level safety cannot be reduced to per-step output classification. Gen 5 asks a different question:
 not whether the model behaves safely, but whether it has acquired capabilities that are
 dangerous regardless of intent.
 
@@ -291,13 +263,10 @@ The question shifts from "can the model do X usefully?" to "can the model do X
 dangerously?" A positive result is a *warning signal*, not a capability gain. The
 evaluation's job is to detect before deployment, not to measure after.
 
-| Capability category | Evaluation focus | Representative benchmark |
-|---|---|---|
-| **CBRN** | Uplift beyond freely available information on weapons | Structured elicitation against domain-expert counterfactuals |
-| **Cyber** | Novel exploit generation, autonomous attack chain | CTF benchmarks; autonomous pen-test environments |
-| **Autonomy / AI R&D** | Long-horizon task completion, research engineering | METR RE-Bench [@wijk2024rebench] |
-| **Self-proliferation** | Copy and deploy own weights, acquire compute | Controlled sandbox with exfiltration opportunity |
-| **Deception** | Behavior differs between evaluation and deployment | Consistency probing, activation analysis [@panfilov2025strategic] |
+Five capability categories are currently tracked: CBRN uplift, cyber (autonomous attack
+chains), autonomy / AI R&D (RE-Bench [@wijk2024rebench]), self-proliferation, and
+strategic deception [@panfilov2025strategic]. Full taxonomy in the
+[supplement](../supplement/benchmarks.qmd#sec-supp-dangcap).
 
 **METR RE-Bench** [@wijk2024rebench] — 7 open-ended ML research engineering
 environments, 71 human-expert attempts. Finding: AI agents achieve 4× the score of
