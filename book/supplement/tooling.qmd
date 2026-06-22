@@ -1,0 +1,138 @@
+---
+title: "Tools & Frameworks"
+description: "The applied layer — guardrails, evaluation harnesses, red-teaming, interpretability, and provenance tooling, mapped to the attack surface and rated by maturity."
+created: 2026-05-26
+last-reviewed: 2026-06-21
+maturity: supplement
+---
+
+# Tools & Frameworks {#sec-tooling}
+
+> **Living document.** This catalog covers tools prominent at the time of last review and
+> is not exhaustive. The tooling landscape evolves rapidly — products are acquired,
+> deprecated, or superseded, and new categories emerge as the attack surface grows.
+> Entries will be updated each quarterly review. Maturity ratings reflect deployment
+> track record, not capability claims.
+
+What practitioners actually deploy. This catalog maps each tool to where it sits in the
+[attack surface](../foundations/security-foundations.qmd) and rates it by maturity. The
+organizing question is placement: a guardrail at the input channel and an audit log at the
+action layer defend different things, and a stack is only as strong as its thinnest layer.
+
+## Where Tools Sit
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 760 230" role="img" aria-labelledby="tool-title">
+  <title id="tool-title">Tool categories mapped onto the agent pipeline</title>
+  <defs>
+    <marker id="tl-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <!-- pipeline spine -->
+  <rect class="node band-safety stroke-safety" x="30"  y="90" width="120" height="44" rx="5"/>
+  <text class="node-label" x="90" y="115" text-anchor="middle">Input</text>
+  <rect class="node band-agentic stroke-agentic" x="220" y="90" width="120" height="44" rx="5"/>
+  <text class="node-label" x="280" y="115" text-anchor="middle">Model / agent</text>
+  <rect class="node band-security stroke-security" x="410" y="90" width="120" height="44" rx="5"/>
+  <text class="node-label" x="470" y="115" text-anchor="middle">Tools / env</text>
+  <rect class="node band-systemic stroke-systemic" x="600" y="90" width="130" height="44" rx="5"/>
+  <text class="node-label" x="665" y="115" text-anchor="middle">Action / output</text>
+
+  <path class="axis" d="M150,112 L220,112" marker-end="url(#tl-arr)"/>
+  <path class="axis" d="M340,112 L410,112" marker-end="url(#tl-arr)"/>
+  <path class="axis" d="M530,112 L600,112" marker-end="url(#tl-arr)"/>
+
+  <!-- guardrails above input/output -->
+  <text class="era-label" x="90" y="60" text-anchor="middle">Guardrails</text>
+  <text class="node-label" x="90" y="76" text-anchor="middle">NeMo · Llama Guard</text>
+  <path class="axis" stroke-dasharray="3 2" d="M90,80 L90,90"/>
+
+  <text class="era-label" x="665" y="60" text-anchor="middle">Guardrails / schema</text>
+  <text class="node-label" x="665" y="76" text-anchor="middle">output validation</text>
+  <path class="axis" stroke-dasharray="3 2" d="M665,80 L665,90"/>
+
+  <!-- interp below model -->
+  <text class="era-label" x="280" y="170" text-anchor="middle">Interpretability</text>
+  <text class="node-label" x="280" y="186" text-anchor="middle">TransformerLens · SAEs</text>
+  <path class="axis" stroke-dasharray="3 2" d="M280,134 L280,158"/>
+
+  <!-- eval / redteam below tools -->
+  <text class="era-label" x="470" y="170" text-anchor="middle">Eval / red-team</text>
+  <text class="node-label" x="470" y="186" text-anchor="middle">Inspect · AgentDojo · garak</text>
+  <path class="axis" stroke-dasharray="3 2" d="M470,134 L470,158"/>
+
+  <!-- provenance over action -->
+  <text class="era-label" x="665" y="210" text-anchor="middle">Provenance — C2PA · watermarking</text>
+</svg>
+<figcaption>Tool categories map onto distinct points of the agent pipeline; defense-in-depth means covering every point, not hardening one.</figcaption>
+</figure>
+```
+
+## Guardrails & Runtime
+
+Inline controls screening inputs, outputs, and actions at deployment — the L1/L5 layers of
+the [defensive stack](../topics/robustness-security.qmd).
+
+| Tool | Does | Maturity |
+|---|---|---|
+| **Llama Guard** [@inan2023llamaguard] | LLM classifier scoring prompts/responses against a configurable harm taxonomy | Production |
+| **NeMo Guardrails** | Programmable rails (topical, safety, execution) around an LLM app via a dialog/flow spec | Production |
+| **ShieldGemma / Guardrails AI** | Open content-safety classifiers and a validation framework for structured/safe output | Production |
+| **Constitutional Classifiers** [@sharma2025constitutional] | Classifiers trained on adversarial jailbreak variants against natural-language policies | Emerging |
+| **Interface firewalls** [@huang2025firewalls] | Dual-LLM / policy-model isolation so the primary model never sees raw untrusted content | Research → early adoption |
+
+## Evaluation Harnesses
+
+Infrastructure for measuring safety and capability — the runnable side of
+[Evaluation](../topics/evaluation.qmd).
+
+| Tool | Does | Maturity |
+|---|---|---|
+| **Inspect** (UK AISI) | Framework for building and running model evaluations, incl. agentic and dangerous-capability evals | Production (institutional) |
+| **AgentDojo** [@debenedetti2024agentdojo] | Dynamic benchmark for prompt-injection attacks/defenses on tool-using agents | Research standard |
+| **Agent Security Bench** [@zhang2024asb] | Formalized attack/defense evaluation across agent operation stages | Research standard |
+| **HELM** [@liang2022holistic] | Multi-metric holistic evaluation across scenarios (accuracy, robustness, fairness, …) | Established |
+| **lm-evaluation-harness** | Standardized capability benchmarking across many tasks/models | De facto standard |
+
+## Red-Teaming & Attack
+
+Offensive tooling for probing systems before adversaries do — standing
+[oversight](../topics/monitoring-oversight.qmd) rather than one-time testing.
+
+| Tool | Does | Maturity |
+|---|---|---|
+| **garak** | Vulnerability scanner probing LLMs for jailbreaks, leakage, injection, toxicity | Production |
+| **PyRIT** | Risk-identification framework for automating red-team attack generation against GenAI | Production |
+| **Giskard** | Testing/scanning for ML and LLM apps (bias, robustness, injection) | Production |
+
+## Interpretability
+
+The instrumentation behind [Interpretability](../topics/interpretability.qmd) — turning
+mechanistic analysis into shared infrastructure.
+
+| Tool | Does | Maturity |
+|---|---|---|
+| **TransformerLens** | Library for mechanistic-interpretability experiments (activation caching, patching, hooks) | Research standard |
+| **Gemma Scope** [@lieberum2024gemmascope] | Open suite of sparse autoencoders across every layer of an open model | Research standard |
+
+## Provenance & Content Authenticity
+
+The ecosystem-governance tooling from [Systemic Safety](../topics/systemic-safety.qmd) —
+keeping the information environment legible as synthetic content scales.
+
+| Tool | Does | Maturity |
+|---|---|---|
+| **C2PA** | Open standard for cryptographically signed content provenance/edit history | Emerging (industry adoption) |
+| **Watermarking toolkits** | Embed detectable statistical signals in model outputs for attribution | Research → early deployment |
+
+## Selection Notes
+
+- **Match the tool to the layer, not the brand.** A guardrail model and a sandbox defend
+  different threats; deploying two tools at the same layer leaves others bare.
+- **Maturity is a deployment gate.** Production tools have stable interfaces and operational
+  track records; research tools are validated in papers, not at scale.
+- **Evaluation tooling is itself a control.** Harnesses and red-team frameworks are how the
+  other layers get verified; an unevaluated guardrail is an assumption, not a defense.

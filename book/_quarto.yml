@@ -29,13 +29,14 @@ book:
         - topics/systemic-safety.qmd
         - topics/evaluation.qmd
         - topics/agentic-safety-security.qmd
-        - topics/tooling.qmd
     - part: "III — Frontier"
       chapters:
         - frontier/index.qmd
     - part: "IV — Supplementary"
       chapters:
         - supplement/technical-notes.qmd
+        - supplement/benchmarks.qmd
+        - supplement/tooling.qmd
     - references.qmd
 
 bibliography: references.bib

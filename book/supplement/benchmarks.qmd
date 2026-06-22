@@ -1,0 +1,62 @@
+---
+title: "Benchmark Catalog"
+description: "Reference tables for AI safety and security benchmarks — static, holistic, adversarial, agentic, and dangerous-capability evaluations."
+created: 2026-06-21
+last-reviewed: 2026-06-21
+maturity: supplement
+---
+
+# Benchmark Catalog {#sec-benchmarks}
+
+> **Living document.** This catalog covers benchmarks prominent at the time of last review.
+> The evaluation landscape moves fast — benchmarks are released, saturated, and superseded on
+> 12–24 month cycles. Entries will be updated each quarterly review; treat any specific
+> result or saturation claim as time-stamped, not permanent.
+>
+> For the conceptual framework — why evaluation has passed through distinct generations and
+> what each generation revealed — see [Evaluation & Benchmarks](../topics/evaluation.qmd).
+
+## Generation 1 — Static Accuracy (2018–2022) {#sec-supp-benchmarks-gen1}
+
+Fixed-distribution benchmarks that defined the first era of LLM evaluation. All saturated
+or broken by contamination within two years of release.
+
+| Benchmark | Year | Measures | How it broke |
+|---|---|---|---|
+| GLUE / SuperGLUE | 2018/19 | NLU tasks (NLI, QA, coreference) | Models saturated within months of release |
+| MMLU | 2020 | 57-subject multiple-choice knowledge | Contamination; frontier models now exceed human average |
+| HumanEval | 2021 | Python code generation (pass@k) | pass@k gameable; real-world correctness diverges from pass rate |
+| BIG-bench | 2022 | 204 diverse tasks, difficulty-scaled | Heterogeneous scoring; no safety dimension; marks end of static era |
+
+## Generation 2 — Holistic Evaluation (2022–2023)
+
+| Benchmark | Year | Measures | Notes |
+|---|---|---|---|
+| HELM [@liang2022holistic] | 2022 | Accuracy, calibration, robustness, fairness, toxicity, efficiency across shared scenarios | First multi-dimensional framework; exposed accuracy–robustness decorrelation |
+
+## Generation 3 — Adversarial (2023–2024)
+
+| Benchmark | Year | Measures | Notes |
+|---|---|---|---|
+| HarmBench [@mazeika2024harmbench] | 2023 | Attack success rate across 18 attack methods × 5 harm categories × 33 target LLMs | Standardized attack + defense evaluation in a single framework |
+| Agent Security Bench [@zhang2024asb] | 2024 | Direct + indirect injection across 10 scenarios, 10 attack methods, 400+ tools | No evaluated defense eliminated the attack surface |
+
+## Generation 4 — Agentic (2024–present)
+
+| Benchmark | Year | Measures | Notes |
+|---|---|---|---|
+| AgentDojo [@debenedetti2024agentdojo] | 2024 | Attack success rate + utility preservation on realistic tool-using agent tasks (email, calendar, banking API) | Frontier models complete 60–70 % of tasks; vulnerable to injection in 30–60 % of attack scenarios; input filtering cuts both attack and task success |
+| Agent Security Bench (ASB) [@zhang2024asb] | 2024 | 10 scenarios × 10 attack methods × 400+ tools; unified attack success rate | Direct injection 84 % ASR on undefended agents; indirect injection 60–80 %; no evaluated defense eliminated attack surface |
+| τ-bench / service-task reliability | 2024 | Agent reliability across stochastic, multi-turn service tasks (airline, retail) | Measures over-action failures — when agent should pause, refuse, escalate but does not |
+
+## Generation 5 — Dangerous Capabilities (2024–present) {#sec-supp-dangcap}
+
+A positive result is a *warning signal*, not a capability gain.
+
+| Capability | Evaluation focus | Representative approach |
+|---|---|---|
+| **CBRN** | Uplift beyond freely available information on chemical, biological, radiological, nuclear weapons | Structured elicitation against domain-expert counterfactuals |
+| **Cyber** | Novel exploit generation, autonomous attack chain completion | CTF benchmarks; autonomous pen-test environments |
+| **Autonomy / AI R&D** | Long-horizon task completion, research engineering at human-expert level | METR RE-Bench [@wijk2024rebench] |
+| **Self-proliferation** | Copy and deploy own weights, acquire compute autonomously | Controlled sandbox with monitored exfiltration opportunity |
+| **Deception** | Behavior changes between evaluation and deployment context | Consistency probing; activation analysis [@panfilov2025strategic] |
