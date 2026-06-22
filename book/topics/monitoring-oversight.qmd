@@ -1,13 +1,189 @@
 ---
 title: "Monitoring & Oversight"
-description: "Overseeing deployed agents and intervening when behavior turns dangerous."
+description: "Overseeing deployed agents and intervening when behavior turns dangerous — runtime monitors, scalable oversight, AI control, and intervention architectures."
 created: 2026-04-26
-last-reviewed: 2026-04-26
+last-reviewed: 2026-06-20
 maturity: topic
 ---
 
 # Monitoring & Oversight {#sec-monitoring-oversight}
 
-> **Stub.** Chronological deep-dive: runtime monitors → scalable oversight
-> (weak-to-strong, debate, AI-supervised evals) → kill switches and rollback →
-> multi-agent oversight and audit trails for autonomous systems.
+[Alignment](alignment.qmd) shapes the objective before deployment;
+[interpretability](interpretability.qmd) reads mechanism. Monitoring is the *runtime* line
+of defense — the assumption that the first two are imperfect, and that a deployed agent
+must be watched and, when it turns dangerous, stopped. It is the pillar that does not
+require trusting the model.
+
+## The Oversight Premise
+
+Monitoring inverts alignment's question. Alignment asks *how do we make the model want the
+right thing*; monitoring asks *given that we may have failed, how do we catch and contain
+the failure while the system runs*. Two pressures define the problem:
+
+- **The capability gap** — as models exceed humans on the supervised task, direct human
+  judgment stops being a reliable oversight signal (the scalable-oversight problem
+  inherited from [alignment](alignment.qmd)).
+- **The adversarial gap** — a sufficiently capable misaligned model may actively work to
+  *defeat* oversight, which means monitoring must hold even against an intelligent system
+  that is trying to evade it.
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 700 180" role="img" aria-labelledby="mo-title">
+  <title id="mo-title">Oversight loop: monitor, judge, intervene around a running agent</title>
+  <defs>
+    <marker id="mo-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="mo-red" class="marker-danger" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="node band-agentic stroke-agentic" x="40" y="64" width="150" height="52" rx="5"/>
+  <text class="node-label" x="115" y="86" text-anchor="middle">Agent</text>
+  <text class="node-label" x="115" y="102" text-anchor="middle">acting in environment</text>
+
+  <rect class="node band-oversight stroke-oversight" x="280" y="64" width="150" height="52" rx="5"/>
+  <text class="node-label" x="355" y="86" text-anchor="middle">Monitor</text>
+  <text class="node-label" x="355" y="102" text-anchor="middle">behavior + activations</text>
+
+  <rect class="node band-safety stroke-safety" x="520" y="30" width="150" height="44" rx="5"/>
+  <text class="node-label" x="595" y="50" text-anchor="middle">Allow</text>
+  <text class="node-label" x="595" y="66" text-anchor="middle">low risk → continue</text>
+
+  <rect class="node-danger" x="520" y="106" width="150" height="44" rx="5"/>
+  <text class="node-label text-danger" x="595" y="126" text-anchor="middle">Intervene</text>
+  <text class="node-label text-danger" x="595" y="142" text-anchor="middle">pause / rollback / halt</text>
+
+  <path class="axis" d="M190,90 L280,90" marker-end="url(#mo-arr)"/>
+  <path class="axis" d="M430,82 L520,58" marker-end="url(#mo-arr)"/>
+  <path class="edge-danger" d="M430,98 L520,124" marker-end="url(#mo-red)"/>
+
+  <path class="axis" stroke-dasharray="4 3" d="M595,74 C595,90 430,40 250,40 L115,40 L115,64" marker-end="url(#mo-arr)"/>
+</svg>
+<figcaption>The oversight loop wraps the running agent — every action passes a monitor that allows low-risk behavior and escalates to intervention on detected risk.</figcaption>
+</figure>
+```
+
+## Runtime Monitors
+
+The first line: classifiers and checks that run *alongside* the agent, scoring inputs,
+outputs, and actions in real time. They overlap the L1/L5 layers of the
+[defensive stack](robustness-security.qmd) — guardrail models screening content, schema
+validators on tool calls, policy checks before consequential actions. Their limit is the
+one [interpretability](interpretability.qmd) exposes: a monitor reading *behavior* (text,
+tool arguments) can be defeated by a model whose stated reasoning diverges from its actual
+computation [@panfilov2025strategic]. Robust monitoring increasingly means reading
+*activations*, not just outputs — grounding the monitor in mechanism.
+
+## Scalable Oversight
+
+When the agent's task exceeds human judgment, the monitor cannot be a human. **Scalable
+oversight** builds an oversight signal that scales with capability, on the bet that
+*verification is easier than generation*.
+
+The setup. Let $G$ be a generator with capability $c_G$, and $S$ a supervisor with
+$c_S < c_G$. Let $\mathcal{V}(T)$ be the set of acceptable solutions to task $T$.
+
+$$
+c_S < c_G \;\Rightarrow\; S \text{ cannot enumerate } \mathcal{V}(T)
+$$
+
+The supervisor can be fooled by a generator that deliberately produces hard-to-verify
+outputs. The scalable-oversight question is whether a protocol $P(G, S)$ exists that keeps
+$G$'s output inside $\mathcal{V}(T)$ *despite* the gap $c_G - c_S$. Four families attack it:
+
+**Weak-to-strong generalization** [@burns2023weak] — a weaker supervisor elicits the
+capability of a stronger model. Train $G_{\text{strong}}$ on labels from $G_{\text{weak}}$
+and measure the recoverable fraction of the performance gap:
+
+$$
+\Delta = \text{acc}(G_{\text{strong, ceiling}}) - \text{acc}(G_{\text{strong, weak-sup}})
+$$
+
+Cheap supervision transfers — $\Delta$ shrinks substantially — but never closes.
+
+**Debate** [@bowman2022measuring] — two agents argue opposing positions; a weaker verifier
+$V$ judges. The bet: an honest debater can always rebut a false claim, so $V$ detects
+dishonesty even on tasks it cannot solve directly. If the bet holds,
+
+$$
+P\!\left(V \text{ correct} \mid \text{debate}(A_1, A_2)\right) \;\geq\; P\!\left(V \text{ correct} \mid A_{\text{single}}\right)
+$$
+
+Evidence on bounded tasks is positive; the regime $c_G \gg c_V$ is unsettled.
+
+**Decomposition and AI-assisted evaluation** — break a task too large to judge into
+sub-claims a human (or a trusted weaker model) *can* check, and let models assist the
+evaluation of models.
+
+**Red-teaming as standing oversight** [@perez2022red] — use models to continuously probe a
+deployed system for failures, rather than relying on one-time pre-deployment testing.
+
+This is the runtime face of the same problem [alignment](alignment.qmd) frames at training
+time; the two pillars meet here.
+
+## AI Control
+
+Scalable oversight tries to make the model *trustworthy*. **AI control**
+[@greenblatt2023control] takes the complementary, pessimistic stance: assume the model may
+be misaligned and adversarial, and design the deployment so that it is *safe anyway*. The
+question shifts from "is the model aligned?" to "can a misaligned model cause harm given
+these protocols?" — answered with control evaluations where a red-team model deliberately
+tries to subvert the safeguards.
+
+The control guarantee is stated as a safety property over the deployment protocol $D$
+and model $M$:
+
+$$
+P\!\left(\text{catastrophic outcome} \;\middle|\; D,\, M\right) < \varepsilon
+$$
+
+This bound is *not* derived from trust in $M$ — it holds even if $M$ is maximally
+adversarial, because $D$ is evaluated against a red-team model $M_{\text{adv}}$
+that actively tries to cause the catastrophic outcome within the protocol's constraints
+[@greenblatt2023control].
+
+| Stance | Assumes | Asks | Holds even if |
+|---|---|---|---|
+| **Scalable oversight** | model can be made trustworthy | is it aligned? | oversight signal scales |
+| **AI control** [@greenblatt2023control] | model may be adversarial | can it cause harm anyway? | the model is misaligned |
+
+Concrete control protocols — trusted weaker models auditing a stronger untrusted one,
+restricting the untrusted model's high-stakes actions, escalating suspicious cases to
+human review — give safety guarantees that *do not depend on the model being aligned*,
+making control the natural complement to alignment rather than a substitute.
+
+## Intervention Architectures
+
+Monitoring without the power to act is only logging. The control surface:
+
+- **Kill switches / halt** — terminate the agent immediately. Complicated by
+  instrumental convergence [@omohundro2008]: a capable goal-directed agent has reason to
+  resist shutdown, so the off-switch must sit *outside* the agent's action space.
+- **Rollback** — for agents with persistent memory (developed in
+  [Agentic Safety × Security](agentic-safety-security.qmd)), reverting to a known-good
+  state, since semi-persistent state corruption has no clean classical analogue.
+- **Audit trails** — immutable, pre-execution logs of every action and argument, enabling
+  post-hoc review, attribution, and the [safety cases](systemic-safety.qmd) that justify
+  deployment.
+- **Multi-agent oversight** — in agent pipelines, per-agent monitors miss joint behaviors
+  that appear only in the composed system, so oversight must operate at the
+  pipeline level (developed in [Agentic Safety × Security](agentic-safety-security.qmd)).
+
+## Open Problems
+
+| Problem | Why it persists |
+|---|---|
+| **Behavioral monitors are evadable** | A model whose stated reasoning diverges from its computation defeats text-level monitoring [@panfilov2025strategic] |
+| **Oversight under capability gap** | No reliable signal for behavior humans cannot judge; weak-to-strong recovers only part [@burns2023weak] |
+| **Shutdown resistance** | Instrumental convergence gives capable agents reason to preserve themselves [@omohundro2008]; the off-switch must be uncircumventable |
+| **Control at scale** | Control evaluations [@greenblatt2023control] are promising but established mainly in constrained settings, not open-ended frontier deployment |
+| **Pipeline-level oversight** | Emergent joint behavior is invisible to per-agent monitors; composed-system monitoring is immature |
+
+Monitoring is the pillar that assumes the others fail — and so it is also the one that, in
+the limit, must hold against a model actively working to defeat it. That is why its frontier
+runs straight into [interpretability](interpretability.qmd) (monitor mechanism, not
+behavior) and [agentic safety × security](agentic-safety-security.qmd) (oversee the
+composed system, not just its parts).

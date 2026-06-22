@@ -1,22 +1,172 @@
 ---
 title: "Systemic Safety & Governance"
-description: "Society-scale risk, governance frameworks, and the policy/standards layer around deployed AI."
+description: "Society-scale risk and the governance layer around deployed AI — catastrophic risk, frontier safety frameworks, standards and regulation, disclosure, and ecosystem governance."
 created: 2026-05-26
-last-reviewed: 2026-05-26
+last-reviewed: 2026-06-20
 maturity: topic
 ---
 
 # Systemic Safety & Governance {#sec-systemic-safety}
 
-> **Stub.** The fifth core pillar — risk beyond a single model or agent. Chronological
-> deep-dive:
->
-> - **Catastrophic & systemic risk** — malicious use (CBRN, cyber), malfunction, and
->   structural societal risk [@hendrycks2023catastrophic; @intlaisafety2025].
-> - **Frontier safety frameworks** — Anthropic Responsible Scaling Policy, OpenAI
->   Preparedness Framework, DeepMind Frontier Safety Framework; capability thresholds and
->   commitments.
-> - **Standards & regulation** — NIST AI RMF (+ GenAI Profile), ISO/IEC 42001, EU AI Act;
->   *US EO 14110 (2023) rescinded Jan 2025 → NIST/CAISI track*.
-> - **Disclosure** — model cards, system cards, safety cases [@hilton2025safetycases].
-> - **Compute & ecosystem governance** — provenance/watermarking, hardware-enabled mechanisms.
+The four preceding pillars work at the level of a model or an agent.
+Systemic safety is the fifth: risk that is *not* contained in any single system — harm
+that emerges from deployment at scale, from interaction with society, and from the
+incentives of the actors who build and run these systems. Its toolkit is not loss
+functions and monitors but frameworks, standards, and disclosure — the layer that decides
+*whether and how* a capable system reaches the world.
+
+## Why a Separate Pillar
+
+A perfectly [aligned](alignment.qmd), [robust](robustness-security.qmd), well-[monitored](monitoring-oversight.qmd)
+model can still produce society-scale harm. Standard risk decomposition makes the
+aggregate exposure explicit:
+
+$$
+\mathcal{R} = \sum_i P(\text{hazard}_i) \times P(\text{safeguard fails} \mid \text{hazard}_i) \times \text{Severity}_i
+$$
+
+Technical safety work primarily reduces $P(\text{safeguard fails})$ for a *single
+deployment*. Systemic risk is the residual: hazard probability, the tail of severity, and
+the cross-deployment sum $\sum_i$ — all of which governance, not engineering, controls.
+
+- **Malicious use** — a capable, working-as-intended model lowers the cost of CBRN
+  uplift, offensive cyber operations, or mass disinformation. The harm is in *who wields
+  the capability*, not in a model failure.
+- **Structural / systemic risk** — diffuse effects no single deployment is responsible
+  for: labor displacement, erosion of the information ecosystem, concentration of power,
+  automation of high-stakes decisions [@hendrycks2023catastrophic; @intlaisafety2025].
+- **Malfunction at scale** — a single fault replicated across millions of deployments
+  becomes a societal exposure, echoing the system-safety lineage of complex socio-technical
+  failure [@leveson1995; @dobbe2022].
+
+These cut across the technical pillars rather than sitting beside them — which is why
+governance, not engineering, is the operative instrument.
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 760 220" role="img" aria-labelledby="gov-title">
+  <title id="gov-title">Governance layers from lab commitments to law</title>
+  <defs>
+    <marker id="gv-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <text class="era-label" x="380" y="20" text-anchor="middle">soft ← bindingness → hard</text>
+
+  <rect class="node band-agentic stroke-agentic" x="20" y="40" width="170" height="150" rx="6"/>
+  <text class="era-label" x="105" y="64" text-anchor="middle">Lab-side</text>
+  <text class="node-label" x="105" y="92" text-anchor="middle">Frontier safety</text>
+  <text class="node-label" x="105" y="108" text-anchor="middle">frameworks (RSP,</text>
+  <text class="node-label" x="105" y="124" text-anchor="middle">Preparedness, FSF)</text>
+  <text class="node-label" x="105" y="152" text-anchor="middle">voluntary</text>
+  <text class="node-label" x="105" y="168" text-anchor="middle">capability thresholds</text>
+
+  <rect class="node band-interp stroke-interp" x="210" y="40" width="170" height="150" rx="6"/>
+  <text class="era-label" x="295" y="64" text-anchor="middle">Standards</text>
+  <text class="node-label" x="295" y="92" text-anchor="middle">NIST AI RMF</text>
+  <text class="node-label" x="295" y="108" text-anchor="middle">ISO/IEC 42001</text>
+  <text class="node-label" x="295" y="152" text-anchor="middle">consensus</text>
+  <text class="node-label" x="295" y="168" text-anchor="middle">best practice</text>
+
+  <rect class="node band-oversight stroke-oversight" x="400" y="40" width="170" height="150" rx="6"/>
+  <text class="era-label" x="485" y="64" text-anchor="middle">Disclosure</text>
+  <text class="node-label" x="485" y="92" text-anchor="middle">model + system cards</text>
+  <text class="node-label" x="485" y="108" text-anchor="middle">safety cases</text>
+  <text class="node-label" x="485" y="152" text-anchor="middle">transparency</text>
+  <text class="node-label" x="485" y="168" text-anchor="middle">accountability</text>
+
+  <rect class="node band-theory stroke-theory" x="590" y="40" width="150" height="150" rx="6"/>
+  <text class="era-label" x="665" y="64" text-anchor="middle">Regulation</text>
+  <text class="node-label" x="665" y="92" text-anchor="middle">EU AI Act</text>
+  <text class="node-label" x="665" y="108" text-anchor="middle">NIST / CAISI track</text>
+  <text class="node-label" x="665" y="152" text-anchor="middle">legally</text>
+  <text class="node-label" x="665" y="168" text-anchor="middle">binding</text>
+
+  <path class="axis" d="M190,115 L210,115" marker-end="url(#gv-arr)"/>
+  <path class="axis" d="M380,115 L400,115" marker-end="url(#gv-arr)"/>
+  <path class="axis" d="M570,115 L590,115" marker-end="url(#gv-arr)"/>
+</svg>
+<figcaption>Governance runs from voluntary lab commitments through consensus standards and disclosure to binding regulation — increasing bindingness, decreasing agility.</figcaption>
+</figure>
+```
+
+## Frontier Safety Frameworks
+
+The lab-side response: voluntary commitments tying deployment to *capability thresholds*.
+Anthropic's Responsible Scaling Policy, OpenAI's Preparedness Framework, and DeepMind's
+Frontier Safety Framework share a structure — define dangerous-capability levels (CBRN,
+cyber, autonomy), commit to evaluations that detect when a model crosses one, and gate
+deployment on safeguards matched to that level. The [evaluation](evaluation.qmd) chapter
+covers the measurement side; here the point is governance: thresholds turn an open-ended
+risk question into a pre-committed *if-capability-then-safeguard* rule. Their weakness is
+also structural — voluntary, self-assessed, and only as strong as the evaluations that
+trigger them.
+
+## Standards & Regulation
+
+> **Time-sensitive.** The regulatory landscape is moving faster than the publication
+> cycle. Entries below reflect status as of last review; check primary sources for
+> current status before citing in policy or compliance contexts.
+
+Where frameworks are voluntary, standards and law are not.
+
+| Instrument | Type | Jurisdiction | Scope | Status (as of last review) |
+|---|---|---|---|---|
+| **NIST AI RMF** + GenAI Profile [@nist2023airmf] | Framework | US | Lifecycle risk management (govern, map, measure, manage) | Active; GenAI Profile published 2024 |
+| **ISO/IEC 42001** [@iso42001] | Standard | International | AI management system (certifiable, like ISO 27001) | Published 2023; certifications emerging |
+| **EU AI Act** [@euaiact2024] | Regulation | EU | Risk-tiered; unacceptable uses prohibited; high-risk uses require conformity assessment; GPAI/systemic-risk obligations | In force 2024; phased compliance 2025–27 |
+| **US — EO 14110** | Executive order | US | Safety evaluation, red-teaming, reporting requirements | *Rescinded January 2025* |
+| **US — NIST/CAISI track** | Standards track | US | Successor posture; AI safety standards via CAISI | Active; evolving |
+
+The through-line: standards convert the technical pillars into *auditable process* and
+regulation makes some of that process mandatory — the mechanism by which safety research
+becomes deployment constraint.
+
+## Disclosure & Safety Cases
+
+Governance needs evidence. The disclosure layer supplies it:
+
+- **Model & system cards** — documented capabilities, limitations, evaluations, and
+  intended use; the baseline transparency artifact.
+- **Safety cases** [@hilton2025safetycases] — structured, auditable arguments that a
+  specific system is safe enough to deploy in a specific context. The formal structure:
+  given evidence set $E$ and assumptions $A$, demonstrate that safety claim $C$ follows:
+
+  $$
+  (E,\, A) \;\vdash\; C
+  $$
+
+  $E$ assembles the technical results — an [interpretability](interpretability.qmd)
+  finding, a [control evaluation](monitoring-oversight.qmd) bound, an
+  [eval](evaluation.qmd) score; $A$ makes assumptions explicit (deployment context,
+  threat model, capability ceiling); $C$ is a specific deployment-context safety
+  property. Safety cases fail when $A$ drifts — capability improvement can invalidate
+  a previously-sound case — making them living artifacts, not one-time arguments.
+
+## Ecosystem & Compute Governance
+
+Governance also targets the supply chain and the information environment:
+
+- **Provenance & content authenticity** — watermarking and C2PA-style signed provenance to
+  keep the information ecosystem legible as synthetic content scales (tooled in
+  [Tools & Frameworks](../supplement/tooling.qmd)).
+- **Compute & hardware-enabled mechanisms** — using the concentration of frontier training
+  in identifiable compute as a governance lever (reporting thresholds, hardware-level
+  verification).
+
+## Open Problems
+
+| Problem | Why it persists |
+|---|---|
+| **Voluntary-framework enforceability** | Frontier frameworks are self-assessed; commitments bind only as far as the triggering evaluations are valid and honored |
+| **Pace mismatch** | Capability moves faster than standards and law; binding instruments lag the systems they govern |
+| **Threshold validity** | Capability thresholds are only as good as the [evals](evaluation.qmd) that detect them — and evals degrade as the subject improves |
+| **Diffuse / structural harm** | Systemic risks have no single responsible deployment, so no single actor or control internalizes them [@hendrycks2023catastrophic] |
+| **Provenance robustness** | Watermarks and provenance signals are removable or forgeable; the authenticity problem outpaces its tooling |
+
+Systemic safety is where the book's technical content meets the world: it is the layer that
+decides whether an [aligned](alignment.qmd), [secure](robustness-security.qmd),
+[interpretable](interpretability.qmd), [monitored](monitoring-oversight.qmd) system is
+actually allowed to act — and the layer that must absorb the harms no single system was
+built to prevent.

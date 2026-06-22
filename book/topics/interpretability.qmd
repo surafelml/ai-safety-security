@@ -1,13 +1,223 @@
 ---
 title: "Interpretability & Explainability"
-description: "Understanding internal mechanisms so agent decisions are transparent and auditable."
+description: "Reading the internal mechanisms of models — from saliency and probing to mechanistic circuits, sparse features, and attribution graphs over agent reasoning."
 created: 2026-04-26
-last-reviewed: 2026-04-26
+last-reviewed: 2026-06-20
 maturity: topic
 ---
 
 # Interpretability & Explainability {#sec-interpretability}
 
-> **Stub.** Chronological deep-dive: saliency/attribution → probing → mechanistic
-> interpretability (circuits, features, causal tracing) → interpreting agent reasoning
-> traces and tool-use decisions. Capture formalizations and illustrations.
+[Alignment](alignment.qmd) leaves an unobserved variable: the goal the model actually
+internalized. Interpretability is the attempt to *read* that variable — to recover
+mechanism from weights and activations rather than infer it from behavior. It is the only
+pillar that addresses the inner-alignment and deceptive-alignment gaps at their source,
+because behavioral evidence alone cannot distinguish a model that is aligned from one that
+acts aligned under observation.
+
+## Two Goals, Often Confused
+
+- **Explainability** — produce a human-legible *account* of a decision (which inputs
+  mattered, a post-hoc rationale). Useful for audit and recourse; says little about the
+  true computation.
+- **Mechanistic interpretability** — recover the *actual algorithm* the network
+  implements: the features it represents and the circuits that compose them. The stronger
+  and harder claim, and the one relevant to detecting deception.
+
+The distinction matters for safety: an explanation a model *generates* about itself is a
+behavior, and can be gamed the way any behavior can. A mechanism read from activations is
+not something the model chose to display.
+
+## The Chronological Arc
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 820 130" role="img" aria-labelledby="ip-title">
+  <title id="ip-title">Interpretability methods from attribution to mechanism</title>
+  <defs>
+    <marker id="ip-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect class="node band-theory stroke-theory" x="10" y="44" width="170" height="48" rx="5"/>
+  <text class="node-label" x="95" y="65" text-anchor="middle">Saliency / attribution</text>
+  <text class="node-label" x="95" y="81" text-anchor="middle">which inputs mattered</text>
+
+  <rect class="node band-adversarial stroke-adversarial" x="222" y="44" width="170" height="48" rx="5"/>
+  <text class="node-label" x="307" y="65" text-anchor="middle">Probing</text>
+  <text class="node-label" x="307" y="81" text-anchor="middle">what is encoded where</text>
+
+  <rect class="node band-interp stroke-interp" x="434" y="44" width="170" height="48" rx="5"/>
+  <text class="node-label" x="519" y="65" text-anchor="middle">Circuits / features</text>
+  <text class="node-label" x="519" y="81" text-anchor="middle">the algorithm itself</text>
+
+  <rect class="node band-agentic stroke-agentic" x="646" y="44" width="164" height="48" rx="5"/>
+  <text class="node-label" x="728" y="65" text-anchor="middle">Agent traces</text>
+  <text class="node-label" x="728" y="81" text-anchor="middle">attribution over steps</text>
+
+  <path class="axis" d="M180,68 L222,68" marker-end="url(#ip-arr)"/>
+  <path class="axis" d="M392,68 L434,68" marker-end="url(#ip-arr)"/>
+  <path class="axis" d="M604,68 L646,68" marker-end="url(#ip-arr)"/>
+
+  <text class="era-label" x="95" y="28" text-anchor="middle">behavioral</text>
+  <text class="era-label" x="519" y="28" text-anchor="middle">mechanistic</text>
+</svg>
+<figcaption>The arc runs from behavioral attribution (which inputs mattered) toward mechanism (the algorithm the weights implement), and now toward agent reasoning traces.</figcaption>
+</figure>
+```
+
+**Saliency and attribution** — the first generation: gradient-based maps and
+feature-importance scores marking which inputs most influenced an output. Cheap and
+intuitive, but post-hoc and fragile — saliency maps can be unstable to imperceptible input
+changes, and importance is not mechanism.
+
+**Probing** — train a classifier $f_c: \mathbb{R}^d \to \{0,1\}$ on the activation
+$h_\ell \in \mathbb{R}^d$ at layer $\ell$ to test whether property $c$ is linearly
+decodable:
+
+$$
+\hat{c} = \sigma\!\bigl(\mathbf{w}_c^\top h_\ell + b_c\bigr)
+$$
+
+High probe accuracy establishes that the information *is present and where*, but the
+causal question — does the model actually *use* $h_\ell$-encoded $c$ to produce the
+output? — is separate, and probing alone cannot answer it.
+
+## Mechanistic Interpretability
+
+The shift from "what is encoded" to "what algorithm runs." The transformer-circuits program
+[@elhage2021mathematical] reframed attention-only transformers as a sum of interpretable
+computational paths, making *circuits* — composed sub-mechanisms implementing a specific
+behavior — the unit of analysis. @olah2020zoom set the methodological stance: zoom in,
+identify features and the connections between them, and treat the network as reverse-
+engineerable rather than irreducibly opaque.
+
+Three building blocks recur:
+
+- **Features** — directions in activation space corresponding to human-meaningful concepts.
+- **Circuits** — connected sets of features across layers that implement a behavior
+  (induction heads copying patterns, indirect-object identification).
+- **Causal validation** — intervening on activations (ablation, activation patching) to
+  confirm that a hypothesized feature actually *causes* the behavior, not merely correlates
+  with it.
+
+**Activation patching** is the standard causal test: replace the activation $h_\ell$ at
+layer $\ell$ with a value from a *source* prompt $\tilde{h}_\ell$ (where the behavior of
+interest is present) and measure the output change relative to a baseline $h_\ell^*$:
+
+$$
+\delta = \mathbb{E}\!\left[f\!\left(\mathrm{do}(h_\ell = \tilde{h}_\ell)\right)\right]
+       - \mathbb{E}\!\left[f\!\left(\mathrm{do}(h_\ell = h_\ell^*)\right)\right]
+$$
+
+If $\delta$ is large, layer $\ell$'s activation causally mediates the behavior — separating
+mechanism from correlation in a way probing alone cannot.
+
+### Superposition and Sparse Autoencoders
+
+The central obstacle: **superposition**. Networks represent more features than they have
+neurons by encoding them in overlapping linear combinations, so individual neurons are
+*polysemantic* — firing for unrelated concepts — and not directly interpretable.
+
+The superposition hypothesis formalizes why: a network with $d$ neurons representing $n \gg d$
+features encodes each feature as a direction $\mathbf{f}_i \in \mathbb{R}^d$,
+$\|\mathbf{f}_i\| = 1$, with sparsity $p_i$ and importance $I_i$. The model trades
+off reconstruction fidelity and interference:
+
+$$
+L = \sum_{i=1}^n I_i \;\bigl\|x_i - \mathbf{f}_i^\top h\bigr\|^2
+$$
+
+Reducing $L$ below the direct-encoding bound requires features to be *nearly orthogonal*
+— achievable when $n \gg d$ only via superposition, at the cost of polysemantic
+neurons. This is not a defect but an optimal compression under sparsity [@templeton2024monosemanticity].
+
+**Sparse autoencoders (SAEs)** invert the compression [@templeton2024monosemanticity].
+An SAE learns an overcomplete encoder $W_e \in \mathbb{R}^{m \times d}$ ($m \gg d$) and
+decoder $W_d \in \mathbb{R}^{d \times m}$ minimizing:
+
+$$
+\min_{W_e, W_d}\;
+\bigl\|\mathbf{x} - W_d\,\mathrm{ReLU}(W_e\mathbf{x} + \mathbf{b}_e) - \mathbf{b}_d\bigr\|^2
++ \lambda\,\bigl\|\mathrm{ReLU}(W_e\mathbf{x} + \mathbf{b}_e)\bigr\|_1
+$$
+
+The $\ell_1$ penalty forces sparsity in the hidden codes
+$\mathbf{f} = \mathrm{ReLU}(W_e\mathbf{x} + \mathbf{b}_e)$, each nonzero entry
+corresponding to one monosemantic feature — recovering the units superposition hides.
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 640 180" role="img" aria-labelledby="sae-title">
+  <title id="sae-title">Sparse autoencoder unfolds polysemantic activations into monosemantic features</title>
+  <defs>
+    <marker id="sae-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect class="node band-security stroke-security" x="20" y="64" width="160" height="52" rx="5"/>
+  <text class="node-label" x="100" y="85" text-anchor="middle">Dense activation</text>
+  <text class="node-label" x="100" y="101" text-anchor="middle">polysemantic neurons</text>
+
+  <rect class="node band-interp stroke-interp" x="250" y="40" width="160" height="100" rx="5"/>
+  <text class="node-label" x="330" y="64" text-anchor="middle">SAE</text>
+  <text class="node-label" x="330" y="84" text-anchor="middle">overcomplete +</text>
+  <text class="node-label" x="330" y="100" text-anchor="middle">sparse dictionary</text>
+
+  <rect class="node band-agentic stroke-agentic" x="480" y="30" width="140" height="26" rx="4"/>
+  <text class="node-label" x="550" y="48" text-anchor="middle">feature: "DNA"</text>
+  <rect class="node band-agentic stroke-agentic" x="480" y="66" width="140" height="26" rx="4"/>
+  <text class="node-label" x="550" y="84" text-anchor="middle">feature: "legal text"</text>
+  <rect class="node band-agentic stroke-agentic" x="480" y="102" width="140" height="26" rx="4"/>
+  <text class="node-label" x="550" y="120" text-anchor="middle">feature: "deception"</text>
+
+  <path class="axis" d="M180,90 L250,90" marker-end="url(#sae-arr)"/>
+  <path class="axis" d="M410,80 L480,43" marker-end="url(#sae-arr)"/>
+  <path class="axis" d="M410,90 L480,79" marker-end="url(#sae-arr)"/>
+  <path class="axis" d="M410,100 L480,115" marker-end="url(#sae-arr)"/>
+</svg>
+<figcaption>A sparse autoencoder decomposes a dense, polysemantic activation into many sparse, monosemantic features — the units superposition hides.</figcaption>
+</figure>
+```
+
+SAEs scaled from proof-of-concept to production models with **Gemma Scope**
+[@lieberum2024gemmascope] — open SAEs trained across every layer of an open model,
+turning mechanistic interpretability from a boutique exercise into shared infrastructure.
+The safety payoff is direct: features for concepts like deception or dangerous-capability
+knowledge become *addressable* — detectable in activations and, via steering, manipulable
+as a control surface (the representation-level controls of
+[Robustness & Security](robustness-security.qmd) sit on exactly this substrate).
+
+## Interpreting Agents
+
+Static circuits explain a forward pass; an [agent](../foundations/agentic-systems.qmd)
+reasons over many steps, calls tools, and revises plans. **Attribution graphs**
+[@lindsey2025attribution] extend mechanistic methods toward this: tracing which features
+and intermediate computations drive a given output, they begin to make multi-step model
+reasoning legible — and to surface cases where the model's *stated* reasoning diverges from
+the mechanism that actually produced the answer.
+
+That divergence is the safety crux. A model can emit a plausible chain-of-thought that is
+not the causal path to its answer; behavioral monitors reading the trace are then watching
+a rationalization. @panfilov2025strategic is the cautionary case — strategic deception that
+text-based monitors miss and only activation-level analysis catches. Interpretability is
+what turns [monitoring](monitoring-oversight.qmd) from reading what the model *says* into
+reading what it *does*.
+
+## Open Problems
+
+| Problem | Why it persists |
+|---|---|
+| **Superposition at scale** | Features outnumber neurons; SAEs help but dictionary size, completeness, and feature-splitting remain unresolved [@templeton2024monosemanticity] |
+| **Causal faithfulness** | A found feature or circuit may correlate without causing; rigorous intervention is costly and does not yet scale to whole-model behavior |
+| **Stated vs. actual reasoning** | Chain-of-thought is a behavior, not a mechanism; it can diverge from the causal path [@panfilov2025strategic] |
+| **From circuits to agents** | Attribution graphs [@lindsey2025attribution] are early; multi-step, tool-using, memory-bearing computation has no mature mechanistic account |
+| **Interpretability tax** | Deep mechanistic understanding without sacrificing capability or inference speed is unestablished at frontier scale |
+
+Interpretability is the pillar the others depend on but cannot yet rely on: it is how
+[alignment](alignment.qmd) would *verify* an internalized goal, how
+[monitoring](monitoring-oversight.qmd) would ground itself in mechanism rather than
+behavior, and how [evaluation](evaluation.qmd) would close the gap between what a model
+says under test and what it would do in deployment.

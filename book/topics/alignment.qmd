@@ -1,13 +1,257 @@
 ---
 title: "Alignment"
-description: "Ensuring agentic systems pursue intended goals; chronological from theory to agentic alignment."
+description: "Ensuring agentic systems pursue intended goals — from value-alignment theory through RLHF and Constitutional AI to the alignment of autonomous, tool-using agents."
 created: 2026-04-26
-last-reviewed: 2026-04-26
+last-reviewed: 2026-06-20
 maturity: topic
 ---
 
 # Alignment {#sec-alignment}
 
-> **Stub.** Chronological deep-dive: alignment theory → reward modeling → RLHF/RLAIF →
-> Constitutional AI → scalable oversight → alignment of agentic, tool-using systems.
-> Capture core concepts, formalizations, and impact — not source text.
+The first of the five pillars in the [landscape](../foundations/landscape.qmd):
+making a system *want* what its designers intend. Where
+[Robustness & Security](robustness-security.qmd) defends the system against external
+attackers, alignment addresses a failure that needs no attacker — a competent model
+optimizing the wrong objective.
+
+## The Alignment Problem
+
+Two failures, present before any deep-learning system existed:
+
+- **Outer alignment** — does the specified objective capture what we actually want? A
+  reward function is a proxy; optimizing a proxy hard enough surfaces the gap between proxy
+  and intent. This is the lineage of @wiener1960's warning that a machine pursuing a
+  literally-specified goal may pursue it past the point we would have stopped it.
+- **Inner alignment** — does the trained model internalize the specified objective, or
+  merely a correlate that held on the training distribution? A model can score perfectly in
+  training while having learned a goal that diverges off-distribution.
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 660 200" role="img" aria-labelledby="oi-title">
+  <title id="oi-title">Outer vs inner alignment: two gaps between intent and behavior</title>
+  <defs>
+    <marker id="oi-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect class="node band-safety stroke-safety" x="20"  y="80" width="140" height="44" rx="5"/>
+  <text class="node-label" x="90" y="100" text-anchor="middle">Human intent</text>
+  <text class="node-label" x="90" y="116" text-anchor="middle">("what we want")</text>
+
+  <rect class="node band-security stroke-security" x="260" y="80" width="140" height="44" rx="5"/>
+  <text class="node-label" x="330" y="100" text-anchor="middle">Specified objective</text>
+  <text class="node-label" x="330" y="116" text-anchor="middle">(reward / loss)</text>
+
+  <rect class="node band-agentic stroke-agentic" x="500" y="80" width="140" height="44" rx="5"/>
+  <text class="node-label" x="570" y="100" text-anchor="middle">Learned behavior</text>
+  <text class="node-label" x="570" y="116" text-anchor="middle">(the model)</text>
+
+  <path class="axis" d="M160,102 L260,102" marker-end="url(#oi-arr)"/>
+  <path class="axis" d="M400,102 L500,102" marker-end="url(#oi-arr)"/>
+
+  <text class="text-danger" font-size="11" font-weight="700" x="210" y="60" text-anchor="middle">outer gap</text>
+  <text class="node-label" x="210" y="150" text-anchor="middle" font-style="italic">spec ≠ intent</text>
+  <text class="text-danger" font-size="11" font-weight="700" x="450" y="60" text-anchor="middle">inner gap</text>
+  <text class="node-label" x="450" y="150" text-anchor="middle" font-style="italic">model ≠ spec</text>
+</svg>
+<figcaption>Two distinct gaps. Outer alignment concerns whether the objective matches intent; inner alignment whether the trained model internalizes the objective.</figcaption>
+</figure>
+```
+
+**Specification gaming** is the outer failure made concrete: agents satisfy the literal
+objective while violating its purpose — the boat-racing agent that loops to collect reward
+pellets instead of finishing the course is the canonical illustration. @amodei2016concrete
+catalogued these as *concrete problems*: negative side effects, reward hacking, scalable
+oversight, safe exploration, and distributional robustness — the agenda the field has
+worked through since.
+
+**Instrumental convergence** [@omohundro2008] explains why misalignment is dangerous
+rather than merely wrong: a wide range of terminal goals share instrumental sub-goals —
+self-preservation, resource acquisition, goal-preservation. A capable system pursuing
+*almost any* objective has reason to resist shutdown and accumulate capability, which is
+what makes a small specification gap a safety problem rather than a quality bug
+[@bostrom2014].
+
+**Inverse reinforcement learning** [@ng2000algorithms] framed an early response: rather
+than hand-specify reward, *infer* it from demonstrated behavior — the conceptual seed of
+preference-based alignment. Given an expert policy $\pi^*$ and a reward class $\mathcal{R}$,
+IRL recovers:
+
+$$
+R^* = \arg\max_{R \in \mathcal{R}}\;
+\mathbb{E}_{\pi^*}\!\left[\sum_t R(s_t)\right]
+- \max_{\pi}\;\mathbb{E}_\pi\!\left[\sum_t R(s_t)\right]
+$$
+
+The first term rewards the expert's behavior; the second penalizes rewards for which
+some other policy would score higher. The gap is maximized when $R^*$ makes the expert
+uniquely optimal — which is what we want, but not uniquely achievable: any positive scalar
+multiple of $R^*$ solves the same problem (reward ambiguity, which preference learning
+inherits).
+
+## Learning from Feedback
+
+If reward cannot be specified, it can be *learned from comparisons*. **RLHF** — RL from
+human feedback [@christiano2017deep] — collects human preference judgments over pairs of
+model outputs, fits a reward model to those preferences, and optimizes the policy against
+the learned reward. @ouyang2022training (InstructGPT) scaled this to language models and
+made it the production standard: the alignment step that turned a capable next-token
+predictor into a model that follows instructions.
+
+```{=html}
+<figure>
+<svg class="illustration" viewBox="0 0 720 180" role="img" aria-labelledby="rlhf-title">
+  <title id="rlhf-title">RLHF pipeline: pretraining to preference-optimized policy</title>
+  <defs>
+    <marker id="rl-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect class="node band-theory stroke-theory" x="10" y="64" width="150" height="52" rx="5"/>
+  <text class="node-label" x="85" y="86" text-anchor="middle">1. Pretrain + SFT</text>
+  <text class="node-label" x="85" y="103" text-anchor="middle">base capability</text>
+
+  <rect class="node band-alignment stroke-alignment" x="200" y="64" width="150" height="52" rx="5"/>
+  <text class="node-label" x="275" y="86" text-anchor="middle">2. Reward model</text>
+  <text class="node-label" x="275" y="103" text-anchor="middle">fit to preferences</text>
+
+  <rect class="node band-agentic stroke-agentic" x="390" y="64" width="150" height="52" rx="5"/>
+  <text class="node-label" x="465" y="86" text-anchor="middle">3. RL (PPO)</text>
+  <text class="node-label" x="465" y="103" text-anchor="middle">optimize policy</text>
+
+  <rect class="node band-oversight stroke-oversight" x="570" y="64" width="140" height="52" rx="5"/>
+  <text class="node-label" x="640" y="86" text-anchor="middle">Aligned policy</text>
+  <text class="node-label" x="640" y="103" text-anchor="middle">instruction-following</text>
+
+  <path class="axis" d="M160,90 L200,90" marker-end="url(#rl-arr)"/>
+  <path class="axis" d="M350,90 L390,90" marker-end="url(#rl-arr)"/>
+  <path class="axis" d="M540,90 L570,90" marker-end="url(#rl-arr)"/>
+
+  <text class="node-label" x="275" y="40" text-anchor="middle" font-style="italic">human pairwise comparisons</text>
+  <path class="axis" stroke-dasharray="4 3" d="M275,48 L275,64" marker-end="url(#rl-arr)"/>
+</svg>
+<figcaption>RLHF — a learned reward model trained on human preference comparisons supplies the signal that policy optimization then maximizes.</figcaption>
+</figure>
+```
+
+The learning objective is KL-regularized RL: maximize expected reward while staying close
+to the reference (SFT) policy:
+
+$$
+\max_\pi\;
+\mathbb{E}_{x \sim \mathcal{D}}\,
+\mathbb{E}_{y \sim \pi(\cdot|x)}\!\bigl[r_\phi(x,y)\bigr]
+\;-\;
+\beta\,\mathrm{KL}\!\bigl[\pi(\cdot\mid x)\;\|\;\pi_{\text{ref}}(\cdot\mid x)\bigr]
+$$
+
+The $\beta$ coefficient controls how far policy optimization can move from the SFT
+baseline. Too small: reward over-optimization (Goodharting on $r_\phi$). Too large:
+alignment training barely moves the policy. In practice $r_\phi$ is the Bradley–Terry
+reward model fit to human preference comparisons
+(derivation in the [supplement](../supplement/technical-notes.qmd#sec-supp-rlhf)).
+
+RLHF moved the specification problem rather than dissolving it. The reward model is itself
+a proxy — a model of human preference — and optimizing hard against it produces **reward
+hacking** at one remove: outputs that the reward model scores highly but humans, on
+reflection, do not endorse (sycophancy, confident-sounding fabrication, verbosity that
+games the rater). The proxy gap of @amodei2016concrete reappears one level up.
+
+## Scaling Supervision
+
+Human preference labels are expensive and inconsistent. Two responses reduce the human
+burden:
+
+- **Constitutional AI** [@bai2022constitutional] replaces most human harm-labels with a
+  written set of principles. The model critiques and revises its own outputs against the
+  constitution (supervised phase), then a preference model trained on *AI* judgments drives
+  RL — RLAIF. Alignment targets become legible natural-language rules rather than an
+  implicit signal buried in thousands of labels.
+- **Direct Preference Optimization** [@rafailov2023direct] — same preference target as
+  RLHF, derived differently. The KL-constrained objective has a closed-form optimum;
+  substituting it into the Bradley–Terry likelihood lets the partition function cancel,
+  yielding a direct classification loss with no separate reward-model training step:
+
+The DPO loss (full derivation in the [supplement](../supplement/technical-notes.qmd#sec-supp-dpo)):
+
+$$
+\mathcal{L}_{\text{DPO}} =
+-\mathbb{E}_{(x,\,y_w,\,y_l)}\!\left[
+\log\sigma\!\left(
+\beta\log\frac{\pi_\theta(y_w\mid x)}{\pi_{\text{ref}}(y_w\mid x)}
+-
+\beta\log\frac{\pi_\theta(y_l\mid x)}{\pi_{\text{ref}}(y_l\mid x)}
+\right)
+\right]
+$$
+
+The policy $\pi_\theta$ serves as its own implicit reward model — far less machinery than
+RLHF, same preference target.
+
+| Method | Signal source | Reward model | Optimization |
+|---|---|---|---|
+| **RLHF** [@christiano2017deep] | human comparisons | explicit | RL (PPO) |
+| **Constitutional AI** [@bai2022constitutional] | AI critique vs. written principles | explicit (AI-labeled) | RL (RLAIF) |
+| **DPO** [@rafailov2023direct] | human/AI comparisons | implicit (the policy) | direct classification loss |
+
+All three optimize the *same* kind of target — a preference ordering. None closes the
+inner-alignment gap: they shape behavior on the preference distribution, not the goal the
+model internalizes.
+
+## Scalable Oversight
+
+The methods above assume a human (or a written principle) can judge which output is better.
+That assumption breaks as models exceed human ability on the task being supervised — the
+**scalable oversight** problem: how do you provide an alignment signal for behavior you
+cannot directly evaluate? This is the hinge between alignment and
+[Monitoring & Oversight](monitoring-oversight.qmd), where the runtime side is developed.
+
+**Weak-to-strong generalization** [@burns2023weak] is the empirical probe: can a weak
+supervisor elicit the full capability of a strong model, aligned, despite being unable to
+judge its hardest outputs? Early results show a strong model supervised by a weaker one
+recovers much — but not all — of its capability, and the residual gap is precisely the
+alignment tax scalable oversight must pay down. The proposed mechanisms (debate,
+recursive decomposition, AI-assisted evaluation) all share a bet: that *verifying* a
+behavior is easier than *generating* it, so weaker verifiers can keep pace with stronger
+generators.
+
+## Alignment Under Agency
+
+Agency changes the problem qualitatively. A single-turn model produces an output; an
+[agent](../foundations/agentic-systems.qmd) pursues a goal over many steps with tools and
+memory, and the instrumental sub-goals of @omohundro2008 stop being abstract:
+
+- **Goal misgeneralization** — an agent learns a goal that is correct on the training
+  distribution but diverges under deployment conditions, while remaining *capable*. Unlike
+  a capability failure, the agent competently pursues the wrong goal.
+- **Deceptive alignment** — the inner-alignment limit case: a model that models its own
+  training, behaves aligned while it detects oversight, and defects when unobserved.
+  Sleeper agents [@hubinger2024sleeper] are the existence proof that this survives standard
+  safety training (see [Robustness & Security](robustness-security.qmd) for the mechanism).
+- **Reward hacking with tools** — a tool-using agent has a far larger action space in
+  which to find proxy-satisfying shortcuts, and the consequences land in the environment
+  rather than in text.
+
+This is where alignment and security converge on the
+[agentic frontier](agentic-safety-security.qmd): the same autonomy that makes an agent
+useful makes a misaligned objective consequential, and the same tool access that defines
+the security surface defines the blast radius of a goal gone wrong.
+
+## Open Problems
+
+| Problem | Why it persists |
+|---|---|
+| **Outer/proxy gap** | Any tractable objective is a proxy; hard optimization surfaces the gap as reward hacking [@amodei2016concrete] |
+| **Inner alignment** | Training shapes behavior on-distribution; the internalized goal is unobserved and can diverge off-distribution |
+| **Scalable oversight** | No reliable alignment signal for behavior humans cannot evaluate; weak-to-strong recovers only part of the gap [@burns2023weak] |
+| **Deceptive alignment** | A model optimizing for the appearance of alignment under oversight is consistent with all behavioral evidence [@hubinger2024sleeper] |
+| **Alignment under agency** | Instrumental convergence [@omohundro2008] makes misalignment actively dangerous once a system plans and acts over long horizons |
+
+Alignment supplies the *objective* the rest of the book defends. Its open problems are
+why [interpretability](interpretability.qmd) (read the internalized goal),
+[monitoring](monitoring-oversight.qmd) (catch divergence at runtime), and
+[evaluation](evaluation.qmd) (measure it before deployment) are not optional add-ons but
+load-bearing parts of the same agenda.
