@@ -6,11 +6,15 @@ last-reviewed: 2026-04-26
 
 # Preface {.unnumbered}
 
-*Published May 27, 2026 (updated: May 29, 2026)*
+*Published May 27, 2026 (updated: June 21, 2026)*
 
-::: {.callout-tip title="Status — May 2026"}
-**Part I (Foundations) is now available.** Parts II (Topics) and III (Frontier) roll out in
-weekly increments — check back.
+::: {.callout-tip title="Update log"}
+- **2026-06-21** — Part II (Topics) complete: Alignment, Interpretability, Monitoring &
+  Oversight, Evaluation, Systemic Safety, and Agentic Safety × Security, each with core
+  formalizations and illustrations. Benchmark catalog and tooling moved to a Supplement.
+  Part III (Frontier) reframed around cross-cutting concepts.
+- **2026-05-29** — Foundation fixes (EO 14110, GCG), sub-sections, references; site published.
+- **2026-05-27** — Part I (Foundations) available; initial publication.
 :::
 
 **AI Safety & Security** is a living, continuously evolving reference for the
