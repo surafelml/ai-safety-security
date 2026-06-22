@@ -207,7 +207,7 @@ case; the agentic loop gives attackers compounding leverage.
 ### 3.1 Injection entry points across the loop
 
 ```{=html}
-<svg class="illustration" viewBox="0 0 680 320" role="img" aria-labelledby="inject-title">
+<svg class="illustration" viewBox="-30 -12 800 360" role="img" aria-labelledby="inject-title">
   <title id="inject-title">Injection entry points and propagation through the agent loop</title>
   <defs>
     <marker id="inj-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
