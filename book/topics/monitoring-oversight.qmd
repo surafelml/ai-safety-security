@@ -84,17 +84,15 @@ monitoring discipline has to carry.
 The first line: classifiers and checks that run *alongside* the agent, scoring inputs,
 outputs, and actions in real time. They overlap the L1/L5 layers of the
 [defensive stack](robustness-security.qmd) — guardrail models screening content, schema
-validators on tool calls, policy checks before consequential actions. Their limit is the
-one [interpretability](interpretability.qmd) exposes: a monitor reading *behavior* (text,
-tool arguments) can be defeated by a model whose stated reasoning diverges from its actual
-computation [@panfilov2025strategic]. Robust monitoring increasingly means reading
-*activations*, not just outputs — grounding the monitor in mechanism.
+validators on tool calls, policy checks before consequential actions.
 
 ::: {.callout-warning title="Pitfall"}
 **Behavioral monitors are evadable by construction.** A monitor reading text and tool
-arguments can only see what the model *chose to emit*. A model whose stated reasoning diverges
-from its actual computation defeats it without ever tripping a rule — which is why the
-frontier of monitoring runs straight into [interpretability](interpretability.qmd).
+arguments only ever sees what the model *chose to emit*. A model whose stated reasoning
+diverges from its actual computation defeats it without tripping a single rule
+[@panfilov2025strategic] — which is why robust monitoring increasingly means reading
+*activations*, not outputs, and why this frontier runs straight into
+[interpretability](interpretability.qmd).
 :::
 
 ## Scalable Oversight

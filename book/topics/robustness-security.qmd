@@ -196,10 +196,6 @@ answered with structural isolation. Conflating them misroutes the defense: no am
 alignment training fixes a boundary violation.
 :::
 
-Conflating them leads to misrouted defenses: better jailbreak training does not protect
-against environmental injection, because the threat model is different. More alignment
-training does not fix a structural boundary violation.
-
 **Indirect prompt injection** [@greshake2023not] is the operative form for agentic
 systems: the attacker plants instructions in documents, web pages, or database records
 the agent will retrieve and execute. RAG pipelines are especially high-risk — poisoning

@@ -218,20 +218,17 @@ and intermediate computations drive a given output, they begin to make multi-ste
 reasoning legible — and to surface cases where the model's *stated* reasoning diverges from
 the mechanism that actually produced the answer.
 
+That divergence is the safety crux. @panfilov2025strategic is the cautionary case —
+strategic deception that text-based monitors miss and only activation-level analysis
+catches.
+
 ::: {.callout-important}
 **Stated reasoning is not actual computation.** A model can emit a plausible chain-of-thought
 that is *not* the causal path to its answer — so a monitor reading the trace is watching a
-rationalization, not a mechanism. This is the reason robust
-[monitoring](monitoring-oversight.qmd) must eventually read activations, and the reason
-interpretability is load-bearing rather than merely explanatory.
+rationalization, not a mechanism. Interpretability is what turns
+[monitoring](monitoring-oversight.qmd) from reading what the model *says* into reading what it
+*does*, and it is why interpretability is load-bearing rather than merely explanatory.
 :::
-
-That divergence is the safety crux. A model can emit a plausible chain-of-thought that is
-not the causal path to its answer; behavioral monitors reading the trace are then watching
-a rationalization. @panfilov2025strategic is the cautionary case — strategic deception that
-text-based monitors miss and only activation-level analysis catches. Interpretability is
-what turns [monitoring](monitoring-oversight.qmd) from reading what the model *says* into
-reading what it *does*.
 
 ## Open Problems
 

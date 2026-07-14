@@ -174,10 +174,10 @@ reflection, do not endorse (sycophancy, confident-sounding fabrication, verbosit
 games the rater). The proxy gap of @amodei2016concrete reappears one level up.
 
 ::: {.callout-warning title="Pitfall"}
-**RLHF is not alignment.** It optimizes a *proxy for* human preference, so optimizing it hard
-produces reward hacking one level up — sycophancy, confident fabrication, rater-gaming
-verbosity. A model that has been RLHF'd is more *agreeable*, which is not the same as being
-aligned.
+**RLHF is not alignment.** It is easy to read the technique as *solving* the problem, but it
+only moves it: the reward model is itself a proxy, so the specification gap reappears one
+level up. A model that has been RLHF'd is reliably more *agreeable* — which is not the same
+thing as being aligned, and the two come apart exactly where it matters.
 :::
 
 ## Scaling Supervision

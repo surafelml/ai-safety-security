@@ -56,9 +56,9 @@ misaligned one.
 
 ::: {.callout-important}
 This split is the **book's spine**. Safety asks *did we build the right objective?*; security
-asks *can an adversary make it do something else?* Treating either in isolation is what leaves
-agentic systems undefended — **an aligned agent with a compromised tool is as dangerous as a
-misaligned one**.
+asks *can an adversary make it do something else?* The two fields grew up separately, with
+separate literatures and separate defenses — and agentic systems are where that separation
+stops being tenable.
 :::
 
 ```{=html}

@@ -111,10 +111,10 @@ Two properties of this surface distinguish it from a single-model system:
    authorize further actions, expanding the blast radius without additional attacker effort.
 
 ::: {.callout-important}
-**The threat is not in the parts — it is in the connections.** Every row above is a channel
-that exists *because* the agent is useful. You cannot audit your way to safety by reviewing
-the model, the tools, and the retrieval pipeline separately: the failure modes only appear
-once they are wired together.
+**Component-wise review cannot find these failures.** Every row above is a channel that exists
+*because* the agent is useful, so auditing the model, the tools, and the retrieval pipeline
+separately will clear all three — and miss the vulnerability entirely. The unit of security
+analysis for an agent is the **loop**, not the component.
 :::
 
 The [dissolved code/data boundary](../foundations/security-foundations.qmd) is the root
@@ -783,12 +783,6 @@ defense has empirically been bypassed [@zhang2024asb]. Defense-in-depth raises t
 successful attack; it does not make attack impossible. This is the frontier's honest position
 as of last review — and the gap the [Frontier](../frontier/index.qmd) chapter tracks.
 :::
-
-The honest summary: the defense stack described above reduces the attack surface
-significantly at every layer. It does not close it. A sophisticated adversary with
-adaptive attacks against any fixed defense can, empirically, find a bypass
-[@zhang2024asb]. Defense-in-depth raises the cost of successful attack; it does not
-make attack impossible.
 
 The research program — scalable oversight, interpretability, safety cases, AI control —
 is the attempt to close the remaining gaps. The evaluation program measures whether

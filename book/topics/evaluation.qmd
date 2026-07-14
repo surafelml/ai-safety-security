@@ -281,8 +281,7 @@ dangerous regardless of intent.
 ## Generation 5 — Dangerous-Capability Evaluations (2024–present)
 
 The question shifts from "can the model do X usefully?" to "can the model do X
-dangerously?" A positive result is a *warning signal*, not a capability gain. The
-evaluation's job is to detect before deployment, not to measure after.
+dangerously?" The evaluation's job is to detect before deployment, not to measure after.
 
 ::: {.callout-important}
 **Read the scoreboard backwards.** In every other generation, a higher score is better. Here a
