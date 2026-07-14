@@ -6,6 +6,15 @@ last-reviewed: 2026-06-18
 maturity: topic
 ---
 
+::: {.callout-tip title="TL;DR"}
+- Evaluation measures what a system can do — **and what it can be *made* to do**.
+- Every benchmark generation breaks on **contamination, construct validity, or Goodhart's law**, which is what motivates the next one.
+- The arc runs **static → holistic → adversarial → agentic → dangerous-capability**.
+- Agentic evaluation is a **trajectory** property, not an output property — single-turn scores miss it entirely.
+- In dangerous-capability evals, **a positive result is a warning, not an achievement**.
+- Benchmark tables live in the [catalog](../supplement/benchmarks.qmd); this chapter is the framework.
+:::
+
 Evaluation determines what deployed AI systems can and cannot do — including what they
 can and cannot be *made* to do. It is not a single methodology but a research discipline
 that has passed through distinct generations, each revealing blind spots in the generation
@@ -26,6 +35,13 @@ three ways:
 Each benchmark generation has broken on one of these axes, motivating the next. The
 pattern is: release → models saturate → contamination or Goodhart's discovered →
 new benchmark — and the cycle restarts, typically within 18–24 months.
+
+::: {.callout-note title="Key idea"}
+**A benchmark is a claim, not a measurement.** The score is only as good as the argument that
+it measures the ability you care about — and that argument decays as models train on the
+benchmark, saturate it, or learn the proxy instead of the target. Evaluation is a discipline
+precisely because the measuring instrument is *adversarially coupled* to the thing measured.
+:::
 
 ```{=html}
 <figure>
@@ -97,6 +113,13 @@ Simple, reproducible, and short-lived: each broke on contamination or Goodhart's
 within 18–24 months of release. None measured safety behavior, adversarial robustness,
 or agentic capability. Detailed benchmark table in the
 [supplement](../supplement/benchmarks.qmd#sec-supp-benchmarks-gen1).
+
+::: {.callout-warning title="Pitfall"}
+**A saturated benchmark measures contamination, not capability.** Once a benchmark is public
+long enough to enter training corpora, a rising score can mean memorization rather than
+ability — and there is no way to tell from the score alone. Any leaderboard number without a
+contamination argument attached is uninterpretable.
+:::
 
 ## Generation 2 — Holistic Evaluation (2022–2023)
 
@@ -261,6 +284,13 @@ The question shifts from "can the model do X usefully?" to "can the model do X
 dangerously?" A positive result is a *warning signal*, not a capability gain. The
 evaluation's job is to detect before deployment, not to measure after.
 
+::: {.callout-important}
+**Read the scoreboard backwards.** In every other generation, a higher score is better. Here a
+positive result means the model has crossed into a capability we are **not ready to deploy** —
+it is a trigger for safeguards, not an achievement to optimize. Treating dangerous-capability
+evals as a leaderboard inverts their entire purpose.
+:::
+
 Five capability categories are currently tracked: CBRN uplift, cyber (autonomous attack
 chains), autonomy / AI R&D (RE-Bench [@wijk2024rebench]), self-proliferation, and
 strategic deception [@panfilov2025strategic]. Full taxonomy in the
@@ -282,6 +312,12 @@ under evaluation than under deployment. Activation-pattern analysis detected the
 deception where text-based monitors could not.
 
 ## Frontier Safety Frameworks and Threshold Triggers
+
+::: {.callout-caution title="Time-sensitive"}
+Threshold definitions and framework versions change with each frontier release. Treat specific
+levels and trigger conditions as time-stamped; the governance treatment is in
+[Systemic Safety & Governance](systemic-safety.qmd).
+:::
 
 Dangerous-capability evaluations now gate deployment decisions:
 

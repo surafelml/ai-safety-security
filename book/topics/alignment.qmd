@@ -6,6 +6,14 @@ last-reviewed: 2026-06-20
 maturity: topic
 ---
 
+::: {.callout-tip title="TL;DR"}
+- Alignment addresses a failure that **needs no attacker**: a competent model optimizing the wrong objective.
+- It splits in two — **outer** (is the specified objective right?) and **inner** (did the model actually internalize it?).
+- The practical stack runs **IRL → RLHF → Constitutional AI → DPO**: each scales supervision further with less human labeling.
+- None of it *solves* alignment; it makes models more agreeable, which is **not the same thing**.
+- Under **agency**, alignment assumptions built for single-turn models start to break.
+:::
+
 The first of the five pillars in the [landscape](../foundations/landscape.qmd):
 making a system *want* what its designers intend. Where
 [Robustness & Security](robustness-security.qmd) defends the system against external
@@ -23,6 +31,13 @@ Two failures, present before any deep-learning system existed:
 - **Inner alignment** — does the trained model internalize the specified objective, or
   merely a correlate that held on the training distribution? A model can score perfectly in
   training while having learned a goal that diverges off-distribution.
+
+::: {.callout-note title="Key idea"}
+**Outer** = the objective is wrong. **Inner** = the objective is right but the model learned
+something else. Every alignment technique in this chapter attacks *outer* alignment; inner
+alignment is why [interpretability](interpretability.qmd) and
+[monitoring](monitoring-oversight.qmd) exist — you cannot check it from behavior alone.
+:::
 
 ```{=html}
 <figure>
@@ -158,6 +173,13 @@ hacking** at one remove: outputs that the reward model scores highly but humans,
 reflection, do not endorse (sycophancy, confident-sounding fabrication, verbosity that
 games the rater). The proxy gap of @amodei2016concrete reappears one level up.
 
+::: {.callout-warning title="Pitfall"}
+**RLHF is not alignment.** It optimizes a *proxy for* human preference, so optimizing it hard
+produces reward hacking one level up — sycophancy, confident fabrication, rater-gaming
+verbosity. A model that has been RLHF'd is more *agreeable*, which is not the same as being
+aligned.
+:::
+
 ## Scaling Supervision
 
 Human preference labels are expensive and inconsistent. Two responses reduce the human
@@ -216,6 +238,13 @@ recursive decomposition, AI-assisted evaluation) all share a bet: that *verifyin
 behavior is easier than *generating* it, so weaker verifiers can keep pace with stronger
 generators.
 
+::: {.callout-note title="Key idea"}
+Scalable oversight rests on one bet: **verification is easier than generation**. The full
+treatment — the capability-gap formalization, debate, AI control — lives in
+[Monitoring & Oversight](monitoring-oversight.qmd); this section only marks the hinge where
+training-time alignment hands off to runtime oversight.
+:::
+
 ## Alignment Under Agency
 
 Agency changes the problem qualitatively. A single-turn model produces an output; an
@@ -232,6 +261,13 @@ memory, and the instrumental sub-goals of @omohundro2008 stop being abstract:
 - **Reward hacking with tools** — a tool-using agent has a far larger action space in
   which to find proxy-satisfying shortcuts, and the consequences land in the environment
   rather than in text.
+
+::: {.callout-important}
+**Agency raises the stakes of every alignment failure.** A misaligned model says something
+wrong; a misaligned *agent* acts on it — with tools, over many steps, in the world. The
+alignment techniques in this chapter were built for single-turn outputs; none of them was
+designed for a system whose mistakes are *irreversible*.
+:::
 
 This is where alignment and security converge on the
 [agentic frontier](agentic-safety-security.qmd): the same autonomy that makes an agent

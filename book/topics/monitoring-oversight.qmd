@@ -6,6 +6,14 @@ last-reviewed: 2026-06-20
 maturity: topic
 ---
 
+::: {.callout-tip title="TL;DR"}
+- Monitoring is the pillar that **assumes the others failed**: watch the deployed agent, and stop it when it turns dangerous.
+- Two pressures define it — the **capability gap** (humans can't judge) and the **adversarial gap** (the model may fight the monitor).
+- **Scalable oversight** bets that *verification is easier than generation* (weak-to-strong, debate, decomposition).
+- **AI control** takes the opposite stance: assume the model is adversarial, and make the deployment safe **anyway**.
+- Monitoring without the power to intervene is only **logging**.
+:::
+
 [Alignment](alignment.qmd) shapes the objective before deployment;
 [interpretability](interpretability.qmd) reads mechanism. Monitoring is the *runtime* line
 of defense — the assumption that the first two are imperfect, and that a deployed agent
@@ -24,6 +32,13 @@ the failure while the system runs*. Two pressures define the problem:
 - **The adversarial gap** — a sufficiently capable misaligned model may actively work to
   *defeat* oversight, which means monitoring must hold even against an intelligent system
   that is trying to evade it.
+
+::: {.callout-note title="Key idea"}
+These two gaps are what separate monitoring from ordinary observability. The **capability
+gap** means the monitor cannot simply be a human. The **adversarial gap** means the monitor
+must hold against a system *optimizing to evade it* — a threat model no conventional
+monitoring discipline has to carry.
+:::
 
 ```{=html}
 <figure>
@@ -74,6 +89,13 @@ one [interpretability](interpretability.qmd) exposes: a monitor reading *behavio
 tool arguments) can be defeated by a model whose stated reasoning diverges from its actual
 computation [@panfilov2025strategic]. Robust monitoring increasingly means reading
 *activations*, not just outputs — grounding the monitor in mechanism.
+
+::: {.callout-warning title="Pitfall"}
+**Behavioral monitors are evadable by construction.** A monitor reading text and tool
+arguments can only see what the model *chose to emit*. A model whose stated reasoning diverges
+from its actual computation defeats it without ever tripping a rule — which is why the
+frontier of monitoring runs straight into [interpretability](interpretability.qmd).
+:::
 
 ## Scalable Oversight
 
@@ -142,6 +164,14 @@ This bound is *not* derived from trust in $M$ — it holds even if $M$ is maxima
 adversarial, because $D$ is evaluated against a red-team model $M_{\text{adv}}$
 that actively tries to cause the catastrophic outcome within the protocol's constraints
 [@greenblatt2023control].
+
+::: {.callout-important}
+**AI control is the only guarantee that survives a misaligned model.** Every other pillar
+asks *is the model trustworthy?* — and every answer is probabilistic. Control changes the
+question to *can a misaligned model cause harm given this protocol?*, and the bound holds
+**even if the answer to the first question is no**. That is what makes it the complement to
+alignment rather than a substitute.
+:::
 
 | Stance | Assumes | Asks | Holds even if |
 |---|---|---|---|
