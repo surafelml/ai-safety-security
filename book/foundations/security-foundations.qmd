@@ -7,6 +7,13 @@ maturity: foundations
 jupyter: python3
 ---
 
+::: {.callout-tip title="TL;DR"}
+- **Safety** = the system does the *intended* thing. **Security** = the system resists *adversaries*. They converge on agentic systems.
+- In an agent, **the line between code and data dissolves** — a malicious prompt is not text, it is an executable instruction.
+- Security reduces to an **integrity invariant**: untrusted content must not change which action the agent takes.
+- The dominant failure mode shifts from "model says something wrong" to **system-level compromise**.
+:::
+
 The structural baseline for the rest of the book — where [landscape](landscape.qmd) gave chronology, this gives the taxonomy topic chapters build on:
 
 - safety vs. security — how they divide and interlock
@@ -46,6 +53,13 @@ systemic risk. **Security** concerns defending the system against *adversaries* 
 confidentiality, integrity, and availability of the AI stack. They overlap precisely at
 agentic systems, where an aligned agent with a compromised tool is as dangerous as a
 misaligned one.
+
+::: {.callout-important}
+This split is the **book's spine**. Safety asks *did we build the right objective?*; security
+asks *can an adversary make it do something else?* Treating either in isolation is what leaves
+agentic systems undefended — **an aligned agent with a compromised tool is as dangerous as a
+misaligned one**.
+:::
 
 ```{=html}
 <svg class="illustration" viewBox="0 0 760 190" role="img" aria-labelledby="tt-title">
@@ -135,27 +149,33 @@ $$
 Prompt injection is exactly a violation of this invariant; the defenses below are mechanisms
 for restoring it. Formal treatment as an information-flow condition: [@sec-supp-integrity].
 
+::: {.callout-note title="Key idea"}
+**Security reduces to one invariant:** untrusted content may shape *what the agent says*, but
+must never determine *what the agent does*. Every defense in this book — the dual-LLM
+firewall, pre-action validation, trust tiers — is a mechanism for restoring it. Carried
+forward to [Agentic Safety × Security](../topics/agentic-safety-security.qmd).
+:::
+
 ## Three architectural truths
 
 These hold across nearly every real deployment and shape the rest of the book.
 
-::: {.callout-note}
-**1. The orchestration layer is the primary attack surface.** Modern risk rarely lives in
-the weights. It emerges where the model meets external data, memory, and tools — the
-orchestration layer (LangChain, LlamaIndex, AutoGen-style frameworks) [@kim2026landscape].
-:::
+1. **The orchestration layer is the primary attack surface.** Modern risk rarely lives in
+   the weights. It emerges where the model meets external data, memory, and tools — the
+   orchestration layer (LangChain, LlamaIndex, AutoGen-style frameworks) [@kim2026landscape].
+2. **Deterministic wrappers around a stochastic core.** Because the model is
+   non-deterministic, safety cannot come from tuning alone. Rigid, deterministic controls —
+   schema enforcement, input validation, output firewalls — must bracket the model
+   [@huang2025firewalls].
+3. **State corruption is semi-permanent.** Classical security resets to a known-good state.
+   RAG systems and dynamic vector stores can be poisoned such that malicious data persists and
+   is re-retrieved, making incident response far harder [@chang2026retrieval].
 
-::: {.callout-note}
-**2. Deterministic wrappers around a stochastic core.** Because the model is
-non-deterministic, safety cannot come from tuning alone. Rigid, deterministic controls —
-schema enforcement, input validation, output firewalls — must bracket the model
-[@huang2025firewalls].
-:::
-
-::: {.callout-warning}
-**3. State corruption is semi-permanent.** Classical security resets to a known-good state.
-RAG systems and dynamic vector stores can be poisoned such that malicious data persists and
-is re-retrieved, making incident response far harder [@chang2026retrieval].
+::: {.callout-warning title="Pitfall"}
+**A model cannot police its own context.** The instinct is to ask the model to detect and
+ignore malicious content. But filter and payload share the same context window, and the model
+has no privileged channel telling it which text carries authority. Defense must be
+*structural* (isolation, enforcement) — never a plea in the prompt.
 :::
 
 ### The attack surface

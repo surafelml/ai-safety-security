@@ -6,6 +6,14 @@ last-reviewed: 2026-05-26
 maturity: foundations
 ---
 
+::: {.callout-tip title="TL;DR"}
+- AI safety is not new — the problem was **named decades before the methods** existed.
+- **Control & alignment** (Wiener, Good): a machine optimizing a literal goal faster than we can follow.
+- **System safety** (Leveson): safety is a *system* property, not a component one.
+- **Philosophy & x-risk** (Omohundro, Bostrom): capable agents converge on self-preservation *regardless* of goal.
+- All three hand off to *Concrete Problems in AI Safety* (2016), where the empirical era begins.
+:::
+
 AI safety is not new — the problem was named decades before the methods. Three lineages
 converge into today's field.
 
@@ -16,6 +24,12 @@ literal goal faster than we can follow, which "we may not know, until too late, 
 off" [@wiener1960]. Good (1965) added the *intelligence explosion* — the last invention
 "provided the machine is docile enough… to keep under control" [@good1965] — the direct
 ancestor of recursive self-improvement.
+
+::: {.callout-note title="Key idea"}
+The alignment problem **predates deep learning by half a century**. Wiener's control problem
+and Good's intelligence explosion are the direct ancestors of today's scalable oversight and
+recursive self-improvement concerns — the methods changed, the problem did not.
+:::
 
 ## System-safety engineering
 
@@ -87,3 +101,9 @@ frames every problem in this book.
 These threads hand off to **Concrete Problems in AI Safety** [@amodei2016concrete], which
 reframed them as tractable empirical ML problems — where the
 [modern landscape](landscape.qmd) and its timeline begin.
+
+::: {.callout-important}
+The 2016 shift from *philosophical* to *empirical* framing is what made the field
+tractable — and what makes every later chapter possible. Problems that were arguments
+became problems that could be **measured, benchmarked, and defended against**.
+:::
