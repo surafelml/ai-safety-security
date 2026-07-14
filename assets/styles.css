@@ -162,6 +162,18 @@ p, li, td, th { font-size: 0.82rem; }
 .illustration .separator      { stroke: var(--separator); stroke-width: 1; fill: none; }
 .illustration .separator-dash { stroke: var(--separator); stroke-width: 1; stroke-dasharray: 3 2; fill: none; }
 
+/* ── Callouts — match the body scale; colors inherit from the Bootstrap theme so
+   they track light/dark automatically. Only sizing + the TL;DR emphasis here. ── */
+.callout { margin: 1.25rem 0; }
+.callout .callout-title { font-size: 0.82rem; font-weight: 600; }
+.callout .callout-body,
+.callout .callout-body p,
+.callout .callout-body li { font-size: 0.8rem; line-height: 1.55; }
+.callout .callout-body > :last-child { margin-bottom: 0; }
+
+/* TL;DR sits at the top of every chapter — give it a little more presence */
+.callout.callout-tip { margin-bottom: 1.75rem; }
+
 /* Figure captions */
 figure { margin: 1.5rem 0; }
 figcaption {

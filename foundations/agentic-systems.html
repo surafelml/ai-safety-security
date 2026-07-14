@@ -555,6 +555,24 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>A <strong>model</strong> maps input to output. An <strong>agent</strong> wraps it in a loop with <strong>autonomy, tools, memory, and an environment</strong>.</li>
+<li>Each of those four is simultaneously a <strong>capability and an attack surface</strong>. That is the whole thesis.</li>
+<li>Autonomy is <strong>not one dial</strong> but seven dimensions (input trust, action power, memory, …) that jointly set risk.</li>
+<li>Trust <strong>does not compose</strong>: safe components can assemble into an unsafe multi-agent system.</li>
+</ul>
+</div>
+</div>
 <p>The object the whole book is about. An agent is where autonomy (a safety problem) meets external action (a security problem) — so it is the seam, not a side topic.</p>
 <ul>
 <li>agent vs.&nbsp;model — what the promotion adds</li>
@@ -569,6 +587,19 @@ window.Quarto = {
 a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 \]</span></p>
 <p>where <span class="math inline">\(o_t\)</span> is the observation, <span class="math inline">\(m_t\)</span> the memory/state, <span class="math inline">\(\mathcal{T}\)</span> the available tools, <span class="math inline">\(a_t\)</span> the action, and <span class="math inline">\(u\)</span> the memory update. The promotion from <span class="math inline">\(f\)</span> to <span class="math inline">\(\pi\)</span> adds four things — <strong>autonomy, tools, memory, and an environment</strong> — and every one is simultaneously a capability and a new attack surface.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The promotion from <span class="math inline">\(f\)</span> to <span class="math inline">\(\pi\)</span> is the entire subject of this book. A model can only <em>say</em> something wrong; an agent can <em>do</em> something wrong, and then act on the consequences.</p>
+</div>
+</div>
 </section>
 <section id="autonomy-is-multi-dimensional" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="autonomy-is-multi-dimensional"><span class="header-section-number">5.2</span> Autonomy is multi-dimensional</h2>
@@ -675,6 +706,19 @@ a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 <li><strong>Other agents</strong> — enable collaboration <em>and</em> propagate compromise.</li>
 </ul>
 <p>The dissolved code/data boundary <span class="citation" data-cites="greshake2023not">(<a href="../references.html#ref-greshake2023not" role="doc-biblioref">Greshake et al., 2023</a>)</span> means any of these channels can carry an <em>instruction</em>, not just data — which is exactly the integrity problem from the <a href="../foundations/security-foundations.html">two-track foundation</a>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Every interface is an attack surface.</strong> This is the bridge thesis in one line: the same channel that makes an agent <em>useful</em> (tools, retrieval, memory, peers) is the channel that makes it <em>attackable</em>. You cannot add capability without adding surface. You can only decide how that surface is defended.</p>
+</div>
+</div>
 </section>
 <section id="multi-agent-systems" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="multi-agent-systems"><span class="header-section-number">5.5</span> Multi-agent systems</h2>
@@ -683,6 +727,19 @@ a_t = \pi\big(o_t,\, m_t;\, \mathcal{T}\big), \qquad m_{t+1} = u(m_t, o_t, a_t),
 <section id="trust-boundaries" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="trust-boundaries"><span class="header-section-number">5.6</span> Trust boundaries</h2>
 <p>The central design question of an agent is <strong>which inputs are trusted</strong>. The instruction from the operator is trusted; retrieved documents and tool outputs are not. Keeping that boundary intact through the loop — so untrusted data shapes content but never control — is what the defense patterns in the topic chapters enforce. Defenses themselves are deferred to <a href="../topics/robustness-security.html">Robustness &amp; Security</a> and <a href="../topics/monitoring-oversight.html">Monitoring &amp; Oversight</a>; this chapter only frames the problem.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Trust does not compose.</strong> A safe model, a correct tool, and a sound retrieval pipeline can still assemble into an unsafe agent. Security properties of the parts say almost nothing about the whole. The threat lives in the <em>connections</em>, which is why per-component review misses agentic failures entirely.</p>
+</div>
+</div>
 </section>
 <section id="what-this-unlocks" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="what-this-unlocks"><span class="header-section-number">5.7</span> What this unlocks</h2>

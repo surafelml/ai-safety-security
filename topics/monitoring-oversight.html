@@ -519,6 +519,25 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Monitoring is the pillar that <strong>assumes the others failed</strong>: watch the deployed agent, and stop it when it turns dangerous.</li>
+<li>Two pressures define it. The <strong>capability gap</strong> (humans cannot judge) and the <strong>adversarial gap</strong> (the model may fight the monitor).</li>
+<li><strong>Scalable oversight</strong> bets that <em>verification is easier than generation</em> (weak-to-strong, debate, decomposition).</li>
+<li><strong>AI control</strong> takes the opposite stance: assume the model is adversarial, and make the deployment safe <strong>anyway</strong>.</li>
+<li>Monitoring without the power to intervene is only <strong>logging</strong>.</li>
+</ul>
+</div>
+</div>
 <p><a href="../topics/alignment.html">Alignment</a> shapes the objective before deployment; <a href="../topics/interpretability.html">interpretability</a> reads mechanism. Monitoring is the <em>runtime</em> line of defense — the assumption that the first two are imperfect, and that a deployed agent must be watched and, when it turns dangerous, stopped. It is the pillar that does not require trusting the model.</p>
 <section id="the-oversight-premise" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="the-oversight-premise"><span class="header-section-number">9.1</span> The Oversight Premise</h2>
@@ -527,6 +546,19 @@ window.Quarto = {
 <li><strong>The capability gap</strong> — as models exceed humans on the supervised task, direct human judgment stops being a reliable oversight signal (the scalable-oversight problem inherited from <a href="../topics/alignment.html">alignment</a>).</li>
 <li><strong>The adversarial gap</strong> — a sufficiently capable misaligned model may actively work to <em>defeat</em> oversight, which means monitoring must hold even against an intelligent system that is trying to evade it.</li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These two gaps are what separate monitoring from ordinary observability. The <strong>capability gap</strong> means the monitor cannot simply be a human. The <strong>adversarial gap</strong> means the monitor must hold against a system <em>optimizing to evade it</em>, a threat model no conventional monitoring discipline has to carry.</p>
+</div>
+</div>
 <figure class="figure">
 <svg class="illustration" viewbox="0 0 700 180" role="img" aria-labelledby="mo-title">
   <title id="mo-title">Oversight loop: monitor, judge, intervene around a running agent</title>
@@ -566,7 +598,20 @@ window.Quarto = {
 </section>
 <section id="runtime-monitors" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="runtime-monitors"><span class="header-section-number">9.2</span> Runtime Monitors</h2>
-<p>The first line: classifiers and checks that run <em>alongside</em> the agent, scoring inputs, outputs, and actions in real time. They overlap the L1/L5 layers of the <a href="../topics/robustness-security.html">defensive stack</a> — guardrail models screening content, schema validators on tool calls, policy checks before consequential actions. Their limit is the one <a href="../topics/interpretability.html">interpretability</a> exposes: a monitor reading <em>behavior</em> (text, tool arguments) can be defeated by a model whose stated reasoning diverges from its actual computation <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>. Robust monitoring increasingly means reading <em>activations</em>, not just outputs — grounding the monitor in mechanism.</p>
+<p>The first line: classifiers and checks that run <em>alongside</em> the agent, scoring inputs, outputs, and actions in real time. They overlap the L1/L5 layers of the <a href="../topics/robustness-security.html">defensive stack</a> — guardrail models screening content, schema validators on tool calls, policy checks before consequential actions.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Behavioral monitors are evadable by construction.</strong> A monitor reading text and tool arguments only ever sees what the model <em>chose to emit</em>. A model whose stated reasoning diverges from its actual computation defeats it without tripping a single rule <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>. This is why robust monitoring increasingly means reading <em>activations</em> instead of outputs, and why the frontier here runs straight into <a href="../topics/interpretability.html">interpretability</a>.</p>
+</div>
+</div>
 </section>
 <section id="scalable-oversight" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="scalable-oversight"><span class="header-section-number">9.3</span> Scalable Oversight</h2>
@@ -598,6 +643,19 @@ P\!\left(V \text{ correct} \mid \text{debate}(A_1, A_2)\right) \;\geq\; P\!\left
 P\!\left(\text{catastrophic outcome} \;\middle|\; D,\, M\right) &lt; \varepsilon
 \]</span></p>
 <p>This bound is <em>not</em> derived from trust in <span class="math inline">\(M\)</span> — it holds even if <span class="math inline">\(M\)</span> is maximally adversarial, because <span class="math inline">\(D\)</span> is evaluated against a red-team model <span class="math inline">\(M_{\text{adv}}\)</span> that actively tries to cause the catastrophic outcome within the protocol’s constraints <span class="citation" data-cites="greenblatt2023control">(<a href="../references.html#ref-greenblatt2023control" role="doc-biblioref">Greenblatt et al., 2023</a>)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>AI control is the only guarantee that survives a misaligned model.</strong> Every other pillar asks <em>is the model trustworthy?</em>, and every answer is probabilistic. Control changes the question to <em>can a misaligned model cause harm given this protocol?</em>, and the bound holds <strong>even if the answer to the first question is no</strong>. That is what makes it the complement to alignment rather than a substitute.</p>
+</div>
+</div>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">

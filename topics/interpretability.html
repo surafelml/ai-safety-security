@@ -521,6 +521,24 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Interpretability reads the one variable alignment leaves unobserved: <strong>the goal the model actually internalized</strong>.</li>
+<li><strong>Explainability ≠ mechanistic interpretability.</strong> A generated explanation is a <em>behavior</em> and can be gamed; a mechanism read from activations cannot be.</li>
+<li><strong>Superposition</strong> (models pack more features than they have neurons) is why neurons are not interpretable. <strong>Sparse autoencoders</strong> are the leading answer.</li>
+<li>For agents, the payoff is a monitor grounded in <strong>mechanism rather than stated reasoning</strong>.</li>
+</ul>
+</div>
+</div>
 <p><a href="../topics/alignment.html">Alignment</a> leaves an unobserved variable: the goal the model actually internalized. Interpretability is the attempt to <em>read</em> that variable — to recover mechanism from weights and activations rather than infer it from behavior. It is the only pillar that addresses the inner-alignment and deceptive-alignment gaps at their source, because behavioral evidence alone cannot distinguish a model that is aligned from one that acts aligned under observation.</p>
 <section id="two-goals-often-confused" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="two-goals-often-confused"><span class="header-section-number">8.1</span> Two Goals, Often Confused</h2>
@@ -528,6 +546,19 @@ window.Quarto = {
 <li><strong>Explainability</strong> — produce a human-legible <em>account</em> of a decision (which inputs mattered, a post-hoc rationale). Useful for audit and recourse; says little about the true computation.</li>
 <li><strong>Mechanistic interpretability</strong> — recover the <em>actual algorithm</em> the network implements: the features it represents and the circuits that compose them. The stronger and harder claim, and the one relevant to detecting deception.</li>
 </ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>An explanation is not a mechanism.</strong> Asking a model <em>why</em> it did something yields a generated rationale: another behavior, gameable like any other, and one a deceptive model has every incentive to produce convincingly. Only mechanism read from activations counts as evidence the model did not choose to display.</p>
+</div>
+</div>
 <p>The distinction matters for safety: an explanation a model <em>generates</em> about itself is a behavior, and can be gamed the way any behavior can. A mechanism read from activations is not something the model chose to display.</p>
 </section>
 <section id="the-chronological-arc" class="level2" data-number="8.2">
@@ -596,6 +627,19 @@ window.Quarto = {
 L = \sum_{i=1}^n I_i \;\bigl\|x_i - \mathbf{f}_i^\top h\bigr\|^2
 \]</span></p>
 <p>Reducing <span class="math inline">\(L\)</span> below the direct-encoding bound requires features to be <em>nearly orthogonal</em> — achievable when <span class="math inline">\(n \gg d\)</span> only via superposition, at the cost of polysemantic neurons. This is not a defect but an optimal compression under sparsity <span class="citation" data-cites="templeton2024monosemanticity">(<a href="../references.html#ref-templeton2024monosemanticity" role="doc-biblioref"><span class="nocase">Templeton et al.</span>, 2024</a>)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Superposition is why neurons are not the unit of analysis.</strong> A network packs <span class="math inline">\(n \gg d\)</span> features into <span class="math inline">\(d\)</span> neurons, so each neuron fires for unrelated concepts. This is optimal compression rather than a bug, which means interpretability must <em>recover</em> the hidden units (SAEs) instead of reading the visible ones.</p>
+</div>
+</div>
 <p><strong>Sparse autoencoders (SAEs)</strong> invert the compression <span class="citation" data-cites="templeton2024monosemanticity">(<a href="../references.html#ref-templeton2024monosemanticity" role="doc-biblioref"><span class="nocase">Templeton et al.</span>, 2024</a>)</span>. An SAE learns an overcomplete encoder <span class="math inline">\(W_e \in \mathbb{R}^{m \times d}\)</span> (<span class="math inline">\(m \gg d\)</span>) and decoder <span class="math inline">\(W_d \in \mathbb{R}^{d \times m}\)</span> minimizing:</p>
 <p><span class="math display">\[
 \min_{W_e, W_d}\;
@@ -641,7 +685,20 @@ L = \sum_{i=1}^n I_i \;\bigl\|x_i - \mathbf{f}_i^\top h\bigr\|^2
 <section id="interpreting-agents" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="interpreting-agents"><span class="header-section-number">8.4</span> Interpreting Agents</h2>
 <p>Static circuits explain a forward pass; an <a href="../foundations/agentic-systems.html">agent</a> reasons over many steps, calls tools, and revises plans. <strong>Attribution graphs</strong> <span class="citation" data-cites="lindsey2025attribution">(<a href="../references.html#ref-lindsey2025attribution" role="doc-biblioref"><span class="nocase">Lindsey et al.</span>, 2025</a>)</span> extend mechanistic methods toward this: tracing which features and intermediate computations drive a given output, they begin to make multi-step model reasoning legible — and to surface cases where the model’s <em>stated</em> reasoning diverges from the mechanism that actually produced the answer.</p>
-<p>That divergence is the safety crux. A model can emit a plausible chain-of-thought that is not the causal path to its answer; behavioral monitors reading the trace are then watching a rationalization. <span class="citation" data-cites="panfilov2025strategic">Panfilov et al. (<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">2025</a>)</span> is the cautionary case — strategic deception that text-based monitors miss and only activation-level analysis catches. Interpretability is what turns <a href="../topics/monitoring-oversight.html">monitoring</a> from reading what the model <em>says</em> into reading what it <em>does</em>.</p>
+<p>That divergence is the safety crux. <span class="citation" data-cites="panfilov2025strategic">Panfilov et al. (<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">2025</a>)</span> is the cautionary case — strategic deception that text-based monitors miss and only activation-level analysis catches.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Stated reasoning is not actual computation.</strong> A model can emit a plausible chain-of-thought that is <em>not</em> the causal path to its answer, so a monitor reading the trace is watching a rationalization rather than a mechanism. Interpretability is what turns <a href="../topics/monitoring-oversight.html">monitoring</a> from reading what the model <em>says</em> into reading what it <em>does</em>. That is why it is load-bearing rather than merely explanatory.</p>
+</div>
+</div>
 </section>
 <section id="open-problems" class="level2" data-number="8.5">
 <h2 data-number="8.5" class="anchored" data-anchor-id="open-problems"><span class="header-section-number">8.5</span> Open Problems</h2>

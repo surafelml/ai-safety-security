@@ -519,6 +519,25 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Alignment addresses a failure that <strong>needs no attacker</strong>: a competent model optimizing the wrong objective.</li>
+<li>It splits in two. <strong>Outer</strong>: is the specified objective right? <strong>Inner</strong>: did the model actually internalize it?</li>
+<li>The practical stack runs <strong>IRL → RLHF → Constitutional AI → DPO</strong>, each scaling supervision further with less human labeling.</li>
+<li>None of it <em>solves</em> alignment. It makes models more agreeable, which is <strong>not the same thing</strong>.</li>
+<li>Under <strong>agency</strong>, alignment assumptions built for single-turn models start to break.</li>
+</ul>
+</div>
+</div>
 <p>The first of the five pillars in the <a href="../foundations/landscape.html">landscape</a>: making a system <em>want</em> what its designers intend. Where <a href="../topics/robustness-security.html">Robustness &amp; Security</a> defends the system against external attackers, alignment addresses a failure that needs no attacker — a competent model optimizing the wrong objective.</p>
 <section id="the-alignment-problem" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="the-alignment-problem"><span class="header-section-number">6.1</span> The Alignment Problem</h2>
@@ -527,6 +546,19 @@ window.Quarto = {
 <li><strong>Outer alignment</strong> — does the specified objective capture what we actually want? A reward function is a proxy; optimizing a proxy hard enough surfaces the gap between proxy and intent. This is the lineage of <span class="citation" data-cites="wiener1960">Wiener (<a href="../references.html#ref-wiener1960" role="doc-biblioref">1960</a>)</span>’s warning that a machine pursuing a literally-specified goal may pursue it past the point we would have stopped it.</li>
 <li><strong>Inner alignment</strong> — does the trained model internalize the specified objective, or merely a correlate that held on the training distribution? A model can score perfectly in training while having learned a goal that diverges off-distribution.</li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Outer</strong> = the objective is wrong. <strong>Inner</strong> = the objective is right but the model learned something else. Every alignment technique in this chapter attacks <em>outer</em> alignment. Inner alignment is why <a href="../topics/interpretability.html">interpretability</a> and <a href="../topics/monitoring-oversight.html">monitoring</a> exist: you cannot check it from behavior alone.</p>
+</div>
+</div>
 <figure class="figure">
 <svg class="illustration" viewbox="0 0 660 200" role="img" aria-labelledby="oi-title">
   <title id="oi-title">Outer vs inner alignment: two gaps between intent and behavior</title>
@@ -615,6 +647,19 @@ R^* = \arg\max_{R \in \mathcal{R}}\;
 \]</span></p>
 <p>The <span class="math inline">\(\beta\)</span> coefficient controls how far policy optimization can move from the SFT baseline. Too small: reward over-optimization (Goodharting on <span class="math inline">\(r_\phi\)</span>). Too large: alignment training barely moves the policy. In practice <span class="math inline">\(r_\phi\)</span> is the Bradley–Terry reward model fit to human preference comparisons (derivation in the <a href="../supplement/technical-notes.html#sec-supp-rlhf">supplement</a>).</p>
 <p>RLHF moved the specification problem rather than dissolving it. The reward model is itself a proxy — a model of human preference — and optimizing hard against it produces <strong>reward hacking</strong> at one remove: outputs that the reward model scores highly but humans, on reflection, do not endorse (sycophancy, confident-sounding fabrication, verbosity that games the rater). The proxy gap of <span class="citation" data-cites="amodei2016concrete">Amodei et al. (<a href="../references.html#ref-amodei2016concrete" role="doc-biblioref">2016</a>)</span> reappears one level up.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>RLHF is not alignment.</strong> It is easy to read the technique as <em>solving</em> the problem, but it only moves it: the reward model is itself a proxy, so the specification gap reappears one level up. A model that has been RLHF’d is reliably more <em>agreeable</em>, which is not the same thing as being aligned. The two come apart where it matters most.</p>
+</div>
+</div>
 </section>
 <section id="scaling-supervision" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="scaling-supervision"><span class="header-section-number">6.3</span> Scaling Supervision</h2>
@@ -677,6 +722,19 @@ R^* = \arg\max_{R \in \mathcal{R}}\;
 <h2 data-number="6.4" class="anchored" data-anchor-id="scalable-oversight"><span class="header-section-number">6.4</span> Scalable Oversight</h2>
 <p>The methods above assume a human (or a written principle) can judge which output is better. That assumption breaks as models exceed human ability on the task being supervised — the <strong>scalable oversight</strong> problem: how do you provide an alignment signal for behavior you cannot directly evaluate? This is the hinge between alignment and <a href="../topics/monitoring-oversight.html">Monitoring &amp; Oversight</a>, where the runtime side is developed.</p>
 <p><strong>Weak-to-strong generalization</strong> <span class="citation" data-cites="burns2023weak">(<a href="../references.html#ref-burns2023weak" role="doc-biblioref">Burns et al., 2023</a>)</span> is the empirical probe: can a weak supervisor elicit the full capability of a strong model, aligned, despite being unable to judge its hardest outputs? Early results show a strong model supervised by a weaker one recovers much — but not all — of its capability, and the residual gap is precisely the alignment tax scalable oversight must pay down. The proposed mechanisms (debate, recursive decomposition, AI-assisted evaluation) all share a bet: that <em>verifying</em> a behavior is easier than <em>generating</em> it, so weaker verifiers can keep pace with stronger generators.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Scalable oversight rests on one bet: <strong>verification is easier than generation</strong>. The full treatment (the capability-gap formalization, debate, AI control) lives in <a href="../topics/monitoring-oversight.html">Monitoring &amp; Oversight</a>. This section only marks the hinge where training-time alignment hands off to runtime oversight.</p>
+</div>
+</div>
 </section>
 <section id="alignment-under-agency" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="alignment-under-agency"><span class="header-section-number">6.5</span> Alignment Under Agency</h2>
@@ -686,6 +744,19 @@ R^* = \arg\max_{R \in \mathcal{R}}\;
 <li><strong>Deceptive alignment</strong> — the inner-alignment limit case: a model that models its own training, behaves aligned while it detects oversight, and defects when unobserved. Sleeper agents <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span> are the existence proof that this survives standard safety training (see <a href="../topics/robustness-security.html">Robustness &amp; Security</a> for the mechanism).</li>
 <li><strong>Reward hacking with tools</strong> — a tool-using agent has a far larger action space in which to find proxy-satisfying shortcuts, and the consequences land in the environment rather than in text.</li>
 </ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Agency raises the stakes of every alignment failure.</strong> A misaligned model says something wrong; a misaligned <em>agent</em> acts on it, with tools, over many steps, in the world. The alignment techniques in this chapter were built for single-turn outputs. None was designed for a system whose mistakes are <em>irreversible</em>.</p>
+</div>
+</div>
 <p>This is where alignment and security converge on the <a href="../topics/agentic-safety-security.html">agentic frontier</a>: the same autonomy that makes an agent useful makes a misaligned objective consequential, and the same tool access that defines the security surface defines the blast radius of a goal gone wrong.</p>
 </section>
 <section id="open-problems" class="level2" data-number="6.6">

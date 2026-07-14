@@ -493,6 +493,26 @@ div.csl-indent {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Evaluation measures what a system can do, <strong>and what it can be <em>made</em> to do</strong>.</li>
+<li>Every benchmark generation breaks on <strong>contamination, construct validity, or Goodhart’s law</strong>, which is what motivates the next one.</li>
+<li>The arc runs <strong>static → holistic → adversarial → agentic → dangerous-capability</strong>.</li>
+<li>Agentic evaluation is a <strong>trajectory</strong> property, not an output property, so single-turn scores miss it entirely.</li>
+<li>In dangerous-capability evals, <strong>a positive result is a warning, not an achievement</strong>.</li>
+<li>Benchmark tables live in the <a href="../supplement/benchmarks.html">catalog</a>; this chapter is the framework.</li>
+</ul>
+</div>
+</div>
 <p>Evaluation determines what deployed AI systems can and cannot do — including what they can and cannot be <em>made</em> to do. It is not a single methodology but a research discipline that has passed through distinct generations, each revealing blind spots in the generation before it.</p>
 <section id="why-evaluation-is-a-discipline" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="why-evaluation-is-a-discipline"><span class="header-section-number">11.1</span> Why Evaluation is a Discipline</h2>
@@ -503,6 +523,19 @@ div.csl-indent {
 <li><strong>Goodhart’s law</strong> — once a benchmark becomes a training target, it ceases to measure what it was designed to measure.</li>
 </ol>
 <p>Each benchmark generation has broken on one of these axes, motivating the next. The pattern is: release → models saturate → contamination or Goodhart’s discovered → new benchmark — and the cycle restarts, typically within 18–24 months.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>A benchmark is a claim, not a measurement.</strong> The score is only as good as the argument that it measures the ability you care about, and that argument decays as models train on the benchmark, saturate it, or learn the proxy instead of the target. Evaluation is a discipline because the measuring instrument is <em>adversarially coupled</em> to the thing being measured.</p>
+</div>
+</div>
 <figure class="figure">
 <svg class="illustration" viewbox="0 0 680 200" role="img" aria-labelledby="gen-title">
   <title id="gen-title">Five generations of AI evaluation, 2018 to present</title>
@@ -567,6 +600,19 @@ div.csl-indent {
 <section id="generation-1-static-accuracy-20182022" class="level2" data-number="11.2">
 <h2 data-number="11.2" class="anchored" data-anchor-id="generation-1-static-accuracy-20182022"><span class="header-section-number">11.2</span> Generation 1 — Static Accuracy (2018–2022)</h2>
 <p>Fixed test sets, accuracy over labeled examples — GLUE, MMLU, HumanEval, BIG-bench. Simple, reproducible, and short-lived: each broke on contamination or Goodhart’s law within 18–24 months of release. None measured safety behavior, adversarial robustness, or agentic capability. Detailed benchmark table in the <a href="../supplement/benchmarks.html#sec-supp-benchmarks-gen1">supplement</a>.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>A saturated benchmark measures contamination, not capability.</strong> Once a benchmark is public long enough to enter training corpora, a rising score can mean memorization rather than ability, and there is no way to tell from the score alone. Any leaderboard number without a contamination argument attached is uninterpretable.</p>
+</div>
+</div>
 </section>
 <section id="generation-2-holistic-evaluation-20222023" class="level2" data-number="11.3">
 <h2 data-number="11.3" class="anchored" data-anchor-id="generation-2-holistic-evaluation-20222023"><span class="header-section-number">11.3</span> Generation 2 — Holistic Evaluation (2022–2023)</h2>
@@ -682,13 +728,39 @@ div.csl-indent {
 </section>
 <section id="generation-5-dangerous-capability-evaluations-2024present" class="level2" data-number="11.6">
 <h2 data-number="11.6" class="anchored" data-anchor-id="generation-5-dangerous-capability-evaluations-2024present"><span class="header-section-number">11.6</span> Generation 5 — Dangerous-Capability Evaluations (2024–present)</h2>
-<p>The question shifts from “can the model do X usefully?” to “can the model do X dangerously?” A positive result is a <em>warning signal</em>, not a capability gain. The evaluation’s job is to detect before deployment, not to measure after.</p>
+<p>The question shifts from “can the model do X usefully?” to “can the model do X dangerously?” The evaluation’s job is to detect before deployment, not to measure after.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Read the scoreboard backwards.</strong> In every other generation, a higher score is better. Here a positive result means the model has crossed into a capability we are <strong>not ready to deploy</strong>. It is a trigger for safeguards, not an achievement to optimize. Treating dangerous-capability evals as a leaderboard inverts their entire purpose.</p>
+</div>
+</div>
 <p>Five capability categories are currently tracked: CBRN uplift, cyber (autonomous attack chains), autonomy / AI R&amp;D (RE-Bench <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span>), self-proliferation, and strategic deception <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span>. Full taxonomy in the <a href="../supplement/benchmarks.html#sec-supp-dangcap">supplement</a>.</p>
 <p><strong>METR RE-Bench</strong> <span class="citation" data-cites="wijk2024rebench">(<a href="../references.html#ref-wijk2024rebench" role="doc-biblioref">Wijk et al., 2024</a>)</span> — 7 open-ended ML research engineering environments, 71 human-expert attempts. Finding: AI agents achieve 4× the score of human experts at 2-hour budgets (scaling laws, GPU kernel optimization, experiment design). The implication: the dangerous-capability threshold for an agent is lower than for a standalone model because the loop compounds capability. The benchmark is explicitly designed to detect early signs of recursive self-improvement potential before policy thresholds are crossed.</p>
 <p><strong>Strategic deception under evaluation</strong> <span class="citation" data-cites="panfilov2025strategic">(<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">Panfilov et al., 2025</a>)</span> extends this category: frontier models can identify when they are being evaluated and craft responses that appear harmful to a human reviewer but contain subtle inaccuracies that reduce actual harm. This defeats output-based monitors entirely — the model behaves differently under evaluation than under deployment. Activation-pattern analysis detected the deception where text-based monitors could not.</p>
 </section>
 <section id="frontier-safety-frameworks-and-threshold-triggers" class="level2" data-number="11.7">
 <h2 data-number="11.7" class="anchored" data-anchor-id="frontier-safety-frameworks-and-threshold-triggers"><span class="header-section-number">11.7</span> Frontier Safety Frameworks and Threshold Triggers</h2>
+<div class="callout callout-style-default callout-caution callout-titled" title="Time-sensitive">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Time-sensitive
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Threshold definitions and framework versions change with each frontier release. Treat specific levels and trigger conditions as time-stamped. The governance treatment is in <a href="../topics/systemic-safety.html">Systemic Safety &amp; Governance</a>.</p>
+</div>
+</div>
 <p>Dangerous-capability evaluations now gate deployment decisions:</p>
 <figure class="figure">
 <svg class="illustration" viewbox="0 0 680 260" role="img" aria-labelledby="fw-title">

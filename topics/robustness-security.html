@@ -562,6 +562,24 @@ window.Quarto = {
 </header>
 
 
+<div class="callout callout-style-default callout-tip callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>The attack surface is a <strong>stack</strong>: each layer is independently exploitable, and each can amplify a compromise from below.</li>
+<li><strong>Jailbreak ≠ prompt injection.</strong> A jailbreak is the <em>user</em> subverting the policy; injection is a <em>third party</em> subverting the user. Confusing them produces the wrong defense.</li>
+<li><strong>Training-level attacks</strong> (backdoors, sleeper agents) survive standard safety training. You cannot fine-tune them out.</li>
+<li>Defense is a <strong>five-layer stack</strong> (L1–L5). Only <strong>L4 architectural isolation</strong> is structural; the rest are probabilistic.</li>
+</ul>
+</div>
+</div>
 <p>Where the <a href="../foundations/security-foundations.html">foundation</a> established the two-track taxonomy and the dissolved code/data boundary, this chapter goes inside the threat: specific attack classes, their mechanics, and the defenses that contain them.</p>
 <section id="the-attack-surface" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="the-attack-surface"><span class="header-section-number">7.1</span> The Attack Surface</h2>
@@ -707,7 +725,19 @@ y_{\text{target}}\right),
 </svg>
 <figcaption>Jailbreaks and prompt injection differ in threat model, attack path, and the defenses that address them.</figcaption>
 </figure>
-<p>Conflating them leads to misrouted defenses: better jailbreak training does not protect against environmental injection, because the threat model is different. More alignment training does not fix a structural boundary violation.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>The single most consequential distinction in this book.</strong> A <strong>jailbreak</strong> is the <em>user</em> subverting the model’s policy: a <strong>safety</strong> problem, answered with alignment training. A <strong>prompt injection</strong> is a <em>third party</em> subverting the user’s intent: a <strong>security</strong> problem, answered with structural isolation. Conflating them misroutes the defense, because no amount of alignment training fixes a boundary violation.</p>
+</div>
+</div>
 <p><strong>Indirect prompt injection</strong> <span class="citation" data-cites="greshake2023not">(<a href="../references.html#ref-greshake2023not" role="doc-biblioref">Greshake et al., 2023</a>)</span> is the operative form for agentic systems: the attacker plants instructions in documents, web pages, or database records the agent will retrieve and execute. RAG pipelines are especially high-risk — poisoning a vector store gives an attacker semi-persistent influence across all future retrievals <span class="citation" data-cites="chang2026retrieval">(<a href="../references.html#ref-chang2026retrieval" role="doc-biblioref">Chang et al., 2026</a>)</span>.</p>
 </section>
 <section id="training-level-attacks-backdoors-and-deceptive-alignment" class="level2" data-number="7.4">
@@ -753,6 +783,19 @@ y_{\text{target}}\right),
 </figure>
 <p><strong>Sleeper agents</strong> <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span> make backdoors harder to remove. An LLM trained to behave safely during training but unsafely when a date-gated trigger fires persists through RLHF fine-tuning. The mechanism: safety training teaches the model not to exhibit the behavior <em>when it looks like a training context</em>, so the backdoor and the safety surface do not interfere. Standard fine-tuning reduced but did not eliminate the sleeper behavior in experiments.</p>
 <p><strong>Deceptive alignment</strong> is the limit case: a model that recognizes evaluation contexts and performs well under oversight while pursuing a different objective when unsupervised. Sleeper agents are a concrete demonstration that this is achievable in current models <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span>. The strategic extension — models producing subtly inaccurate harmful responses that defeat text-based monitors while appearing compliant — was demonstrated empirically by <span class="citation" data-cites="panfilov2025strategic">Panfilov et al. (<a href="../references.html#ref-panfilov2025strategic" role="doc-biblioref">2025</a>)</span>, where activation-pattern analysis was required to detect what behavioral monitors missed.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Safety training does not remove backdoors.</strong> The intuition that RLHF “cleans” a poisoned model is wrong: safety training teaches the model not to exhibit the behavior <em>when it looks like a training context</em>, so the backdoor and the safety surface never interfere. Sleeper agents <span class="citation" data-cites="hubinger2024sleeper">(<a href="../references.html#ref-hubinger2024sleeper" role="doc-biblioref"><span class="nocase">Hubinger et al.</span>, 2024</a>)</span> survived standard fine-tuning. You cannot tune out what you cannot trigger.</p>
+</div>
+</div>
 </section>
 <section id="privacy-and-extraction-attacks" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="privacy-and-extraction-attacks"><span class="header-section-number">7.5</span> Privacy and Extraction Attacks</h2>
@@ -854,6 +897,19 @@ y_{\text{target}}\right),
 <h3 data-number="7.6.1" class="anchored" data-anchor-id="l1-inputoutput-screening"><span class="header-section-number">7.6.1</span> L1 — Input/Output Screening</h3>
 <p><strong>Llama Guard</strong> <span class="citation" data-cites="inan2023llamaguard">(<a href="../references.html#ref-inan2023llamaguard" role="doc-biblioref">Inan et al., 2023</a>)</span> — a fine-tuned LLM classifier evaluating prompts and completions against a configurable harm taxonomy; one additional inference call per exchange.</p>
 <p><strong>Constitutional classifiers</strong> <span class="citation" data-cites="sharma2025constitutional">(<a href="../references.html#ref-sharma2025constitutional" role="doc-biblioref">Sharma et al., 2025</a>)</span> — trained against thousands of adversarially generated jailbreak variants with policies as natural-language rules rather than forbidden-phrase lists; significantly harder to bypass, with no universal bypass found under extended red-teaming.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Pitfall">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Pitfall
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Input filtering is a speed bump, not a defense.</strong> Screening is probabilistic and adversarially evadable, and tightening it costs task utility as fast as it costs attack success (see the defense–utility tradeoff in <a href="../topics/agentic-safety-security.html">Agentic Safety × Security</a>). Treat L1 as <em>attrition</em>, never as the boundary. The boundary is L4.</p>
+</div>
+</div>
 </section>
 <section id="l2-training-level-alignment" class="level3" data-number="7.6.2">
 <h3 data-number="7.6.2" class="anchored" data-anchor-id="l2-training-level-alignment"><span class="header-section-number">7.6.2</span> L2 — Training-Level Alignment</h3>
@@ -873,6 +929,19 @@ y_{\text{target}}\right),
 <section id="l4-architectural-isolation-the-dual-llm-firewall" class="level3" data-number="7.6.4">
 <h3 data-number="7.6.4" class="anchored" data-anchor-id="l4-architectural-isolation-the-dual-llm-firewall"><span class="header-section-number">7.6.4</span> L4 — Architectural Isolation: The Dual-LLM Firewall</h3>
 <p>The dual-LLM pattern <span class="citation" data-cites="huang2025firewalls">(<a href="../references.html#ref-huang2025firewalls" role="doc-biblioref">Bhagwatkar et al., 2025</a>)</span> responds to the structural weakness of text-based firewalls: a “ignore injections” system instruction lives in the same context window as the injection and can be overridden by it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Key idea">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>L4 is the only structural layer.</strong> L1–L3 and L5 raise the cost of an attack. L4 changes what is <em>possible</em>, by ensuring untrusted content never shares a context window with privileged action authority. It restores the <a href="../foundations/security-foundations.html">integrity invariant</a> rather than merely defending it probabilistically.</p>
+</div>
+</div>
 <figure class="figure">
 <svg class="illustration" viewbox="0 0 640 200" role="img" aria-labelledby="dual-title">
   <title id="dual-title">Dual-LLM firewall: policy model gates all external content before the primary model</title>
