@@ -8,9 +8,9 @@ maturity: topic
 
 ::: {.callout-tip title="TL;DR"}
 - Interpretability reads the one variable alignment leaves unobserved: **the goal the model actually internalized**.
-- **Explainability ≠ mechanistic interpretability.** A generated explanation is a *behavior* and can be gamed; a mechanism read from activations is not.
-- **Superposition** — models pack more features than they have neurons — is why neurons aren't interpretable; **sparse autoencoders** are the leading answer.
-- For agents, the payoff is a monitor grounded in **mechanism, not stated reasoning**.
+- **Explainability ≠ mechanistic interpretability.** A generated explanation is a *behavior* and can be gamed; a mechanism read from activations cannot be.
+- **Superposition** (models pack more features than they have neurons) is why neurons are not interpretable. **Sparse autoencoders** are the leading answer.
+- For agents, the payoff is a monitor grounded in **mechanism rather than stated reasoning**.
 :::
 
 [Alignment](alignment.qmd) leaves an unobserved variable: the goal the model actually
@@ -31,9 +31,9 @@ acts aligned under observation.
 
 ::: {.callout-warning title="Pitfall"}
 **An explanation is not a mechanism.** Asking a model *why* it did something yields a
-generated rationale — another behavior, gameable exactly like any other behavior, and one a
-deceptive model has every incentive to produce convincingly. Only mechanism read from
-activations is evidence the model did not choose to display.
+generated rationale: another behavior, gameable like any other, and one a deceptive model has
+every incentive to produce convincingly. Only mechanism read from activations counts as
+evidence the model did not choose to display.
 :::
 
 The distinction matters for safety: an explanation a model *generates* about itself is a
@@ -148,8 +148,8 @@ neurons. This is not a defect but an optimal compression under sparsity [@temple
 ::: {.callout-note title="Key idea"}
 **Superposition is why neurons are not the unit of analysis.** A network packs $n \gg d$
 features into $d$ neurons, so each neuron fires for unrelated concepts. This is optimal
-compression, not a bug — which means interpretability must *recover* the hidden units (SAEs)
-rather than read the visible ones.
+compression rather than a bug, which means interpretability must *recover* the hidden units
+(SAEs) instead of reading the visible ones.
 :::
 
 **Sparse autoencoders (SAEs)** invert the compression [@templeton2024monosemanticity].
@@ -224,10 +224,10 @@ catches.
 
 ::: {.callout-important}
 **Stated reasoning is not actual computation.** A model can emit a plausible chain-of-thought
-that is *not* the causal path to its answer — so a monitor reading the trace is watching a
-rationalization, not a mechanism. Interpretability is what turns
+that is *not* the causal path to its answer, so a monitor reading the trace is watching a
+rationalization rather than a mechanism. Interpretability is what turns
 [monitoring](monitoring-oversight.qmd) from reading what the model *says* into reading what it
-*does*, and it is why interpretability is load-bearing rather than merely explanatory.
+*does*. That is why it is load-bearing rather than merely explanatory.
 :::
 
 ## Open Problems

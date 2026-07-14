@@ -8,7 +8,7 @@ maturity: topic
 
 ::: {.callout-tip title="TL;DR"}
 - Monitoring is the pillar that **assumes the others failed**: watch the deployed agent, and stop it when it turns dangerous.
-- Two pressures define it — the **capability gap** (humans can't judge) and the **adversarial gap** (the model may fight the monitor).
+- Two pressures define it. The **capability gap** (humans cannot judge) and the **adversarial gap** (the model may fight the monitor).
 - **Scalable oversight** bets that *verification is easier than generation* (weak-to-strong, debate, decomposition).
 - **AI control** takes the opposite stance: assume the model is adversarial, and make the deployment safe **anyway**.
 - Monitoring without the power to intervene is only **logging**.
@@ -36,8 +36,8 @@ the failure while the system runs*. Two pressures define the problem:
 ::: {.callout-note title="Key idea"}
 These two gaps are what separate monitoring from ordinary observability. The **capability
 gap** means the monitor cannot simply be a human. The **adversarial gap** means the monitor
-must hold against a system *optimizing to evade it* — a threat model no conventional
-monitoring discipline has to carry.
+must hold against a system *optimizing to evade it*, a threat model no conventional monitoring
+discipline has to carry.
 :::
 
 ```{=html}
@@ -90,8 +90,8 @@ validators on tool calls, policy checks before consequential actions.
 **Behavioral monitors are evadable by construction.** A monitor reading text and tool
 arguments only ever sees what the model *chose to emit*. A model whose stated reasoning
 diverges from its actual computation defeats it without tripping a single rule
-[@panfilov2025strategic] — which is why robust monitoring increasingly means reading
-*activations*, not outputs, and why this frontier runs straight into
+[@panfilov2025strategic]. This is why robust monitoring increasingly means reading
+*activations* instead of outputs, and why the frontier here runs straight into
 [interpretability](interpretability.qmd).
 :::
 
@@ -165,7 +165,7 @@ that actively tries to cause the catastrophic outcome within the protocol's cons
 
 ::: {.callout-important}
 **AI control is the only guarantee that survives a misaligned model.** Every other pillar
-asks *is the model trustworthy?* — and every answer is probabilistic. Control changes the
+asks *is the model trustworthy?*, and every answer is probabilistic. Control changes the
 question to *can a misaligned model cause harm given this protocol?*, and the bound holds
 **even if the answer to the first question is no**. That is what makes it the complement to
 alignment rather than a substitute.

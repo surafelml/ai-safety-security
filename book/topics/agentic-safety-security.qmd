@@ -9,7 +9,7 @@ jupyter: python3
 
 ::: {.callout-tip title="TL;DR"}
 - **An agentic system introduces failure modes that do not exist in any of its components in isolation.** A correct model, a correct tool, and a correct retrieval pipeline can compose into an unsafe agent.
-- Agentic failures are **trajectory properties** — they emerge across steps, so single-turn evaluation cannot see them.
+- Agentic failures are **trajectory properties**. They emerge across steps, so single-turn evaluation cannot see them.
 - **Text firewalls cannot fix injection.** A model cannot be both executor and trusted auditor of its own context.
 - The fix is **structural**: separate the data channel from the control channel, restoring the integrity invariant.
 - Defense is **layered across the loop** (perceive → plan → act → memory), and every layer trades safety against utility.
@@ -113,7 +113,7 @@ Two properties of this surface distinguish it from a single-model system:
 ::: {.callout-important}
 **Component-wise review cannot find these failures.** Every row above is a channel that exists
 *because* the agent is useful, so auditing the model, the tools, and the retrieval pipeline
-separately will clear all three — and miss the vulnerability entirely. The unit of security
+separately will clear all three and still miss the vulnerability. The unit of security
 analysis for an agent is the **loop**, not the component.
 :::
 
@@ -206,8 +206,8 @@ but no equivalent training signal encodes the cost of irreversible side effects
 ::: {.callout-warning title="Pitfall"}
 **There is no rollback for the real world.** Safety training optimizes a symmetric-looking
 tradeoff (refuse too much vs. comply too much), but the world is not symmetric: an unhelpful
-answer costs a retry, a sent email costs everything after it. Guardrails must be placed
-*before* the irreversible action — no monitor placed after it is a control at all.
+answer costs a retry, a sent email costs everything after it. Guardrails must sit *before* the
+irreversible action. A monitor placed after it is not a control at all.
 :::
 
 ### 2.4 Oversight decay with horizon length
@@ -301,7 +301,7 @@ The underlying issue: **a model cannot be both the executor and the trusted audi
 ::: {.callout-warning title="Pitfall"}
 **"Just tell the model to ignore injections" is not a defense.** It is the field's most common
 mistake. The instruction to ignore malicious content and the malicious content itself occupy
-the *same context window*, with no channel marking which one holds authority — so a
+the *same context window*, with no channel marking which one holds authority, so a
 sufficiently crafted payload overrides the guard. A text firewall is subject to the very
 attack it exists to block.
 :::
@@ -327,10 +327,10 @@ are mechanisms that restore this invariant.
 
 ::: {.callout-note title="Key idea"}
 **The fix is structural, not linguistic.** Injection is not solved by better wording, better
-filters, or a more obedient model — it is solved by ensuring untrusted content *cannot reach*
-the channel that authorizes actions. Every guardrail in the next section is an implementation
-of this one principle: **untrusted content may shape what the agent says; it must never
-determine what the agent does.**
+filters, or a more obedient model. It is solved by ensuring untrusted content *cannot reach*
+the channel that authorizes actions. Every guardrail in the next section implements one
+principle: **untrusted content may shape what the agent says; it must never determine what the
+agent does.**
 :::
 
 ## 4. Guardrail Architectures for Agentic Systems
@@ -776,12 +776,12 @@ The table above is aspirational in three cells:
 | Activation-based deception detection | Research demonstrations only; not production-ready [@panfilov2025strategic; @hubinger2024sleeper] | Attribution graphs [@lindsey2025attribution]; interpretability at scale |
 | Multi-agent trust enforcement | Trust-tier architectures are specified but not standardized; most frameworks use soft trust | AI Control [@greenblatt2023control]; safety cases [@hilton2025safetycases] |
 
-::: {.callout-caution title="State of the art — time-sensitive"}
+::: {.callout-caution title="Time-sensitive"}
 **No current system achieves a defended agentic deployment.** The stack above reduces the
 attack surface at every layer but does not close it: against adaptive attacks, any *fixed*
 defense has empirically been bypassed [@zhang2024asb]. Defense-in-depth raises the cost of a
-successful attack; it does not make attack impossible. This is the frontier's honest position
-as of last review — and the gap the [Frontier](../frontier/index.qmd) chapter tracks.
+successful attack; it does not make attack impossible. That is the frontier's honest position
+as of last review, and the gap the [Frontier](../frontier/index.qmd) chapter tracks.
 :::
 
 The research program — scalable oversight, interpretability, safety cases, AI control —

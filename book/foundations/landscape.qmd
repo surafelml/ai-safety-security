@@ -9,7 +9,7 @@ maturity: foundations
 ::: {.callout-tip title="TL;DR"}
 - The field rests on **five pillars**: alignment, robustness & security, interpretability, systemic safety, monitoring & control.
 - Its history runs **theory → adversarial ML → alignment → interpretability → oversight → the agentic frontier**.
-- The eras are *threads*, not a partition — the safety and security lineages run in parallel.
+- The eras are *threads*, not a partition: the safety and security lineages run in parallel.
 - Everything deployed today (RLHF, CAI, guardrails, red-teaming) is **partial**; the open problems are what motivate the rest of the book.
 :::
 
@@ -37,7 +37,7 @@ The panoramic map of the field — read once to orient; topic chapters deepen ea
 ::: {.callout-note title="Key idea"}
 These five pillars are the **book's spine**. Each gets a Part II chapter, and the flagship
 [Agentic Safety × Security](../topics/agentic-safety-security.qmd) chapter is where they
-converge — because an agent fails across all five at once, not one at a time.
+converge, because an agent fails across all five at once rather than one at a time.
 :::
 
 For the deeper lineage these areas grew from, see [Historical Roots (1950–2015)](historical-roots.qmd).
@@ -59,8 +59,8 @@ safety and security lineages), which is why the field has more than a single lin
 ## State of Practice (2025)
 
 ::: {.callout-caution title="Time-sensitive"}
-State of practice reflects the last review. Deployed technique moves on 12–24 month cycles —
-treat the list below as a snapshot, not a standing claim.
+State of practice reflects the last review. Deployed technique moves on 12–24 month cycles, so
+treat the list below as a snapshot rather than a standing claim.
 :::
 
 - **RLHF & RLAIF** — reinforcement learning from human/AI feedback is the standard for
@@ -174,7 +174,7 @@ treat the list below as a snapshot, not a standing claim.
 
 ::: {.callout-caution title="Time-sensitive"}
 Regulation moves faster than the publication cycle. Entries below reflect status as of last
-review — verify against primary sources before relying on them. Tracked in
+review, so verify against primary sources before relying on them. Tracked in
 [Systemic Safety & Governance](../topics/systemic-safety.qmd).
 :::
 

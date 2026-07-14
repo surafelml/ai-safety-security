@@ -11,10 +11,10 @@ chapter's chronological timeline (Part II) once superseded or matured — keepin
 continuously evolving.
 
 > **Living chapter.** Part III is the book's leading edge and the most volatile part of it.
-> The concepts below are framed to *outlast* the specific papers under them — but the
-> frontier itself will move: by this time next year this chapter will likely carry new
-> concepts, and today's will have matured into Part II. Treat it as a snapshot of where the
-> open problems sit now, not a fixed table of contents.
+> The concepts below are framed to *outlast* the specific papers under them, but the frontier
+> itself will move: by this time next year this chapter will likely carry new concepts, and
+> today's will have matured into Part II. Treat it as a snapshot of where the open problems
+> sit now, not a fixed table of contents.
 
 ## Cross-cutting concepts {#sec-frontier-signposts}
 

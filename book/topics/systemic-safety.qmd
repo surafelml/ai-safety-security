@@ -7,10 +7,10 @@ maturity: topic
 ---
 
 ::: {.callout-tip title="TL;DR"}
-- Systemic safety is risk **not contained in any single system** — malicious use, structural harm, malfunction at scale.
-- Technical safety reduces *one deployment's* failure probability; governance controls the **hazard rate and the cross-deployment sum**.
+- Systemic safety is risk **not contained in any single system**: malicious use, structural harm, malfunction at scale.
+- Technical safety reduces *one deployment's* failure probability. Governance controls the **hazard rate and the cross-deployment sum**.
 - The instruments run **soft → hard**: frontier frameworks (voluntary) → standards → disclosure → regulation (binding).
-- **Safety cases** make the argument auditable — and expire when their assumptions drift.
+- **Safety cases** make the argument auditable, and expire when their assumptions drift.
 :::
 
 The four preceding pillars work at the level of a model or an agent.
@@ -38,7 +38,7 @@ the cross-deployment sum $\sum_i$ — all of which governance, not engineering, 
 Read the decomposition as a division of labor: **engineering owns one term**
 ($P(\text{safeguard fails})$), **governance owns the rest** (hazard rate, severity tail, the
 sum over deployments). This is why a perfectly aligned, robust, monitored model can still
-produce society-scale harm — and why the fifth pillar cannot be solved with a loss function.
+produce society-scale harm, and why the fifth pillar cannot be solved with a loss function.
 :::
 
 - **Malicious use** — a capable, working-as-intended model lowers the cost of CBRN
@@ -117,16 +117,16 @@ trigger them.
 
 ::: {.callout-warning title="Pitfall"}
 **A frontier framework binds only as far as its own evaluations do.** These commitments are
-voluntary and self-assessed, and they trigger on capability thresholds detected by evals — so
-an eval that fails to detect a crossed threshold silently voids the commitment. The framework
-is never stronger than the measurement underneath it.
+voluntary and self-assessed, and they trigger on capability thresholds detected by evals. An
+eval that fails to detect a crossed threshold silently voids the commitment. The framework is
+never stronger than the measurement underneath it.
 :::
 
 ## Standards & Regulation
 
 ::: {.callout-caution title="Time-sensitive"}
 The regulatory landscape moves faster than the publication cycle. Entries below reflect status
-as of last review — check primary sources before citing in policy or compliance contexts.
+as of last review, so check primary sources before citing in policy or compliance contexts.
 :::
 
 Where frameworks are voluntary, standards and law are not.
@@ -165,10 +165,10 @@ Governance needs evidence. The disclosure layer supplies it:
   a previously-sound case — making them living artifacts, not one-time arguments.
 
 ::: {.callout-important}
-**A safety case expires.** $(E, A) \vdash C$ holds only while the assumptions $A$ hold — and
+**A safety case expires.** $(E, A) \vdash C$ holds only while the assumptions $A$ hold, and
 capability improvement invalidates assumptions *silently*, without any evidence in $E$
-changing. A safety case is a claim with a shelf life, not a certificate; treating a past
-approval as standing authorization is the governance analogue of trusting a stale eval.
+changing. A safety case is a claim with a shelf life rather than a certificate. Treating a
+past approval as standing authorization is the governance analogue of trusting a stale eval.
 :::
 
 ## Ecosystem & Compute Governance

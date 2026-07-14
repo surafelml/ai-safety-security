@@ -8,10 +8,10 @@ jupyter: python3
 ---
 
 ::: {.callout-tip title="TL;DR"}
-- The attack surface is a **stack** — each layer independently exploitable, each able to amplify a compromise from below.
+- The attack surface is a **stack**: each layer is independently exploitable, and each can amplify a compromise from below.
 - **Jailbreak ≠ prompt injection.** A jailbreak is the *user* subverting the policy; injection is a *third party* subverting the user. Confusing them produces the wrong defense.
-- **Training-level attacks** (backdoors, sleeper agents) survive standard safety training — you cannot fine-tune them out.
-- Defense is a **five-layer stack** (L1–L5); only **L4 architectural isolation** is structural — the rest are probabilistic.
+- **Training-level attacks** (backdoors, sleeper agents) survive standard safety training. You cannot fine-tune them out.
+- Defense is a **five-layer stack** (L1–L5). Only **L4 architectural isolation** is structural; the rest are probabilistic.
 :::
 
 Where the [foundation](../foundations/security-foundations.qmd) established the
@@ -190,10 +190,10 @@ requiring different defenses:
 
 ::: {.callout-important}
 **The single most consequential distinction in this book.** A **jailbreak** is the *user*
-subverting the model's policy — a **safety** problem, answered with alignment training. A
-**prompt injection** is a *third party* subverting the user's intent — a **security** problem,
-answered with structural isolation. Conflating them misroutes the defense: no amount of
-alignment training fixes a boundary violation.
+subverting the model's policy: a **safety** problem, answered with alignment training. A
+**prompt injection** is a *third party* subverting the user's intent: a **security** problem,
+answered with structural isolation. Conflating them misroutes the defense, because no amount
+of alignment training fixes a boundary violation.
 :::
 
 **Indirect prompt injection** [@greshake2023not] is the operative form for agentic
@@ -276,7 +276,7 @@ was required to detect what behavioral monitors missed.
 **Safety training does not remove backdoors.** The intuition that RLHF "cleans" a poisoned
 model is wrong: safety training teaches the model not to exhibit the behavior *when it looks
 like a training context*, so the backdoor and the safety surface never interfere. Sleeper
-agents [@hubinger2024sleeper] survived standard fine-tuning — you cannot tune out what you
+agents [@hubinger2024sleeper] survived standard fine-tuning. You cannot tune out what you
 cannot trigger.
 :::
 
@@ -370,7 +370,7 @@ rather than forbidden-phrase lists; significantly harder to bypass, with no univ
 bypass found under extended red-teaming.
 
 ::: {.callout-warning title="Pitfall"}
-**Input filtering is not a defense — it is a speed bump.** Screening is probabilistic and
+**Input filtering is a speed bump, not a defense.** Screening is probabilistic and
 adversarially evadable, and tightening it costs task utility as fast as it costs attack
 success (see the defense–utility tradeoff in
 [Agentic Safety × Security](agentic-safety-security.qmd)). Treat L1 as *attrition*, never as
@@ -410,9 +410,9 @@ text-based firewalls: a "ignore injections" system instruction lives in the same
 window as the injection and can be overridden by it.
 
 ::: {.callout-note title="Key idea"}
-**L4 is the only structural layer.** L1–L3 and L5 raise the cost of an attack; L4 changes what
+**L4 is the only structural layer.** L1–L3 and L5 raise the cost of an attack. L4 changes what
 is *possible*, by ensuring untrusted content never shares a context window with privileged
-action authority. It is the layer that restores the
+action authority. It restores the
 [integrity invariant](../foundations/security-foundations.qmd) rather than merely defending it
 probabilistically.
 :::

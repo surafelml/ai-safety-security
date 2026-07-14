@@ -9,7 +9,7 @@ jupyter: python3
 
 ::: {.callout-tip title="TL;DR"}
 - A **model** maps input to output. An **agent** wraps it in a loop with **autonomy, tools, memory, and an environment**.
-- Each of those four is simultaneously a **capability and an attack surface** — that is the whole thesis.
+- Each of those four is simultaneously a **capability and an attack surface**. That is the whole thesis.
 - Autonomy is **not one dial** but seven dimensions (input trust, action power, memory, …) that jointly set risk.
 - Trust **does not compose**: safe components can assemble into an unsafe multi-agent system.
 :::
@@ -38,7 +38,7 @@ capability and a new attack surface.
 
 ::: {.callout-note title="Key idea"}
 The promotion from $f$ to $\pi$ is the entire subject of this book. A model can only *say*
-something wrong; an agent can *do* something wrong — and then act on the consequences.
+something wrong; an agent can *do* something wrong, and then act on the consequences.
 :::
 
 ## Autonomy is multi-dimensional
@@ -130,8 +130,8 @@ The dissolved code/data boundary [@greshake2023not] means any of these channels 
 ::: {.callout-important}
 **Every interface is an attack surface.** This is the bridge thesis in one line: the same
 channel that makes an agent *useful* (tools, retrieval, memory, peers) is the channel that
-makes it *attackable*. You cannot add capability without adding surface — only decide how the
-surface is defended.
+makes it *attackable*. You cannot add capability without adding surface. You can only decide
+how that surface is defended.
 :::
 
 ## Multi-agent systems
@@ -154,7 +154,7 @@ problem.
 ::: {.callout-warning title="Pitfall"}
 **Trust does not compose.** A safe model, a correct tool, and a sound retrieval pipeline can
 still assemble into an unsafe agent. Security properties of the parts say almost nothing about
-the whole — the threat lives in the *connections*, which is why per-component review misses
+the whole. The threat lives in the *connections*, which is why per-component review misses
 agentic failures entirely.
 :::
 

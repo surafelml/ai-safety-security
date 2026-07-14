@@ -7,10 +7,10 @@ maturity: topic
 ---
 
 ::: {.callout-tip title="TL;DR"}
-- Evaluation measures what a system can do — **and what it can be *made* to do**.
+- Evaluation measures what a system can do, **and what it can be *made* to do**.
 - Every benchmark generation breaks on **contamination, construct validity, or Goodhart's law**, which is what motivates the next one.
 - The arc runs **static → holistic → adversarial → agentic → dangerous-capability**.
-- Agentic evaluation is a **trajectory** property, not an output property — single-turn scores miss it entirely.
+- Agentic evaluation is a **trajectory** property, not an output property, so single-turn scores miss it entirely.
 - In dangerous-capability evals, **a positive result is a warning, not an achievement**.
 - Benchmark tables live in the [catalog](../supplement/benchmarks.qmd); this chapter is the framework.
 :::
@@ -38,9 +38,9 @@ new benchmark — and the cycle restarts, typically within 18–24 months.
 
 ::: {.callout-note title="Key idea"}
 **A benchmark is a claim, not a measurement.** The score is only as good as the argument that
-it measures the ability you care about — and that argument decays as models train on the
+it measures the ability you care about, and that argument decays as models train on the
 benchmark, saturate it, or learn the proxy instead of the target. Evaluation is a discipline
-precisely because the measuring instrument is *adversarially coupled* to the thing measured.
+because the measuring instrument is *adversarially coupled* to the thing being measured.
 :::
 
 ```{=html}
@@ -117,7 +117,7 @@ or agentic capability. Detailed benchmark table in the
 ::: {.callout-warning title="Pitfall"}
 **A saturated benchmark measures contamination, not capability.** Once a benchmark is public
 long enough to enter training corpora, a rising score can mean memorization rather than
-ability — and there is no way to tell from the score alone. Any leaderboard number without a
+ability, and there is no way to tell from the score alone. Any leaderboard number without a
 contamination argument attached is uninterpretable.
 :::
 
@@ -285,8 +285,8 @@ dangerously?" The evaluation's job is to detect before deployment, not to measur
 
 ::: {.callout-important}
 **Read the scoreboard backwards.** In every other generation, a higher score is better. Here a
-positive result means the model has crossed into a capability we are **not ready to deploy** —
-it is a trigger for safeguards, not an achievement to optimize. Treating dangerous-capability
+positive result means the model has crossed into a capability we are **not ready to deploy**.
+It is a trigger for safeguards, not an achievement to optimize. Treating dangerous-capability
 evals as a leaderboard inverts their entire purpose.
 :::
 
@@ -314,7 +314,7 @@ deception where text-based monitors could not.
 
 ::: {.callout-caution title="Time-sensitive"}
 Threshold definitions and framework versions change with each frontier release. Treat specific
-levels and trigger conditions as time-stamped; the governance treatment is in
+levels and trigger conditions as time-stamped. The governance treatment is in
 [Systemic Safety & Governance](systemic-safety.qmd).
 :::
 
